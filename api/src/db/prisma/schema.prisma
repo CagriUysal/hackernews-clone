@@ -1,0 +1,64 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Post {
+  @@map("posts") 
+  id Int @id @default(autoincrement()) 
+  link String 
+  title String
+  upvote Int @default(0)
+  createdAt DateTime @default(now())
+
+  author User @relation("Posts", fields: [authorId], references: [id])
+  authorId Int
+
+  favoritedBy User[] @relation("Favorites") 
+  upvotedBy User[] @relation("Upvotes") 
+  hiddenBy User[] @relation("Hidden")
+
+  comments Comment[]
+}
+
+model User {
+  @@map("users")
+  id Int @default(autoincrement()) @id
+  name String @unique
+  email String? @unique
+  createdAt DateTime @default(now())
+  karma Int @default(0) 
+
+  posts Post[] @relation("Posts") 
+
+  favorites Post[] @relation("Favorites") 
+  upvotes Post[] @relation("Upvotes")
+  hidden Post[] @relation("Hidden")
+
+  comments Comment[]
+}
+
+model Comment {
+  @@map("comments")
+  id Int @default(autoincrement()) @id
+  message String
+  upvotes Int @default(0)
+  createdAt DateTime @default(now())
+
+  post Post @relation(fields: [postId], references: [id])
+  postId Int
+
+  author User @relation(fields: [authorId], references: [id])
+  authorId Int
+
+  parentId Int?
+  parent Comment? @relation("ParentChildren", fields:[parentId], references: [id])
+  children Comment[] @relation("ParentChildren")
+}
