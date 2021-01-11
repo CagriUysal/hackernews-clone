@@ -36,5 +36,18 @@ export const resolvers = {
         post: newPost,
       };
     },
+
+    addUser: async (_, { user: { name } }) => {
+      const newUser = await prisma.user.create({
+        data: { name },
+      });
+
+      return {
+        code: "200",
+        success: true,
+        message: "user created succesfully.",
+        user: newUser,
+      };
+    },
   },
 };
