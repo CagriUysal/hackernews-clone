@@ -22,13 +22,14 @@ export const typeDefs = gql`
   input AddPostInput {
     link: String!
     title: String!
+    authorName: String!
   }
 
   type AddPostResponse implements MutationResponse {
     code: String!
     success: Boolean!
     message: String!
-    post: Post
+    post: Post!
   }
 
   """
@@ -55,7 +56,7 @@ export const typeDefs = gql`
   }
 
   type Mutation {
-    addPost(post: AddPostInput): AddPostResponse
-    addAuthor(author: AddAuthorInput): AddAuthorResponse
+    addPost(post: AddPostInput!): AddPostResponse
+    addAuthor(author: AddAuthorInput!): AddAuthorResponse
   }
 `;
