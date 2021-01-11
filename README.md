@@ -26,3 +26,17 @@ First create `.env` file in the root folder.
 To crate migrations, run:
 
 `yarn migrate`
+
+then to generate `prisma client`, run:
+
+`yarn generate`
+
+## Mocking Database
+
+To fill database with fake values, run:
+
+`yarn fillDB`
+
+To delete all records, run:
+
+`yarn wipeDB`
