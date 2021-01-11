@@ -1,6 +1,9 @@
 import { gql } from "apollo-server";
 
 export const typeDefs = gql`
+  """
+  Interfaces
+  """
   interface MutationResponse {
     code: String!
     success: Boolean!
@@ -16,13 +19,13 @@ export const typeDefs = gql`
     title: String!
     upvote: Int!
     createdAt: String!
-    author: Author!
+    author: User!
   }
 
   input AddPostInput {
     link: String!
     title: String!
-    authorName: String!
+    userName: String!
   }
 
   type AddPostResponse implements MutationResponse {
@@ -33,30 +36,36 @@ export const typeDefs = gql`
   }
 
   """
-  Author
+  User
   """
-  type Author {
+  type User {
     id: ID!
     name: String!
   }
 
-  input AddAuthorInput {
+  input AddUserInput {
     name: String!
   }
 
-  type AddAuthorResponse implements MutationResponse {
+  type AddUserResponse implements MutationResponse {
     code: String!
     success: Boolean!
     message: String!
-    author: Author
+    user: User!
   }
 
+  """
+  Queries
+  """
   type Query {
     posts: [Post]!
   }
 
+  """
+  Mutations
+  """
   type Mutation {
     addPost(post: AddPostInput!): AddPostResponse
-    addAuthor(author: AddAuthorInput!): AddAuthorResponse
+    addUser(user: AddUserInput!): AddUserResponse
   }
 `;
