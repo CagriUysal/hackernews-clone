@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { css } from "@emotion/react";
 import { Link } from "@reach/router";
@@ -29,62 +29,88 @@ const styles = {
   `,
 };
 
+const navigationMaps = [
+  {
+    name: "new",
+    path: "/newest",
+  },
+  {
+    name: "past",
+    path: "/front",
+  },
+  {
+    name: "comments",
+    path: "/newcomments",
+  },
+  {
+    name: "ask",
+    path: "/ask",
+  },
+  {
+    name: "show",
+    path: "/show",
+  },
+  {
+    name: "jobs",
+    path: "/jobs",
+  },
+  {
+    name: "submit",
+    path: "/submit",
+  },
+];
+
 const Header = (): React.ReactElement => {
+  const currentPath = window.location.pathname;
+
   return (
     <header>
       <div css={styles.container}>
-        <img
-          src={logo}
-          width="20px"
-          height="20px"
-          alt="hackernews logo"
-          css={styles.logo}
-        />
+        <Link
+          to="/"
+          css={css`
+            display: flex;
+            align-items: center;
+          `}
+        >
+          <img
+            src={logo}
+            width="20px"
+            height="20px"
+            alt="hackernews logo"
+            css={styles.logo}
+          />
+        </Link>
+
         <Link
           to="/"
           css={css`
             ${styles.link};
             margin-left: 0.5em;
+            margin-right: 0.5em;
             font-weight: bold;
           `}
         >
           Hacker News
         </Link>
 
-        <div>
-          <Link
-            to="/newest"
-            css={css`
-              ${styles.link} margin-left: 1em
-            `}
-          >
-            new
-          </Link>
-          {" | "}
-          <Link to="/front" css={styles.link}>
-            past
-          </Link>
-          {" | "}
-          <Link to="/newcomments" css={styles.link}>
-            comments
-          </Link>
-          {" | "}
-          <Link to="/ask" css={styles.link}>
-            ask
-          </Link>
-          {" | "}
-          <Link to="/show" css={styles.link}>
-            show
-          </Link>
-          {" | "}
-          <Link to="/jobs" css={styles.link}>
-            jobs
-          </Link>
-          {" | "}
-          <Link to="/submit" css={styles.link}>
-            submit
-          </Link>
-        </div>
+        <nav>
+          {navigationMaps.map(({ name, path }, i) => (
+            <>
+              <Link
+                to={path}
+                key={path}
+                css={css`
+                  ${styles.link}
+                  color: ${currentPath === path ? "#FFF" : undefined}
+                `}
+              >
+                {name}
+              </Link>
+              {i !== navigationMaps.length - 1 ? " | " : ""}
+            </>
+          ))}
+        </nav>
 
         <Link
           to="/login"

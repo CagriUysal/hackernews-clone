@@ -4,6 +4,13 @@ import { Router } from "@reach/router";
 import { Global, css } from "@emotion/react";
 
 import Home from "./pages/Home";
+import New from "./pages/New";
+import Past from "./pages/Past";
+import Comments from "./pages/Comments";
+import Ask from "./pages/Ask";
+import Show from "./pages/Show";
+import Jobs from "./pages/Jobs";
+import Submit from "./pages/Submit";
 
 const App = (): React.ReactElement => {
   return (
@@ -26,6 +33,13 @@ const App = (): React.ReactElement => {
       />
       <Router>
         <Home path="/" />
+        <New path="/newest" />
+        <Past path="/front" />
+        <Comments path="/newcomments" />
+        <Ask path="/ask" />
+        <Show path="/show" />
+        <Jobs path="/jobs" />
+        <Submit path="/submit" />
       </Router>
     </>
   );
