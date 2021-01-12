@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-const faker = require("faker");
+const faker = require("faker"); // eslint-disable-line
 
 const prisma = new PrismaClient();
 
@@ -15,9 +15,9 @@ const getRandom = (arr: any[]) => {
  * Fill database with fake data.
  */
 const fillDatabase = async (
-  userCount: Number = 10,
-  postCount: Number = 20,
-  commentsCount: Number = 100
+  userCount = 10,
+  postCount = 20,
+  commentsCount = 100
 ) => {
   const users = [];
   for (let i = 1; i <= userCount; i++) {
