@@ -1,8 +1,9 @@
 import React from "react";
 
+import { Router } from "@reach/router";
 import { Global, css } from "@emotion/react";
 
-import Header from "./Header";
+import Home from "./pages/Home";
 
 const App = (): React.ReactElement => {
   return (
@@ -23,7 +24,9 @@ const App = (): React.ReactElement => {
           }
         `}
       />
-      <Header />
+      <Router>
+        <Home path="/" />
+      </Router>
     </>
   );
 };
