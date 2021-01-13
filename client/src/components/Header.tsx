@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { css } from "@emotion/react";
 import { Link } from "@reach/router";
@@ -96,19 +96,18 @@ const Header = (): React.ReactElement => {
 
         <nav>
           {navigationMaps.map(({ name, path }, i) => (
-            <>
+            <React.Fragment key={path}>
               <Link
                 to={path}
-                key={path}
                 css={css`
                   ${styles.link}
-                  color: ${currentPath === path ? "#FFF" : undefined}
+                  color: ${currentPath === path ? "#FFF" : undefined};
                 `}
               >
                 {name}
               </Link>
-              {i !== navigationMaps.length - 1 ? " | " : ""}
-            </>
+              <span>{i !== navigationMaps.length - 1 ? " | " : ""}</span>
+            </React.Fragment>
           ))}
         </nav>
 
