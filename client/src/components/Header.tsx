@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FunctionComponent } from "react";
 
 import { css } from "@emotion/react";
 import { Link } from "@reach/router";
@@ -8,7 +8,7 @@ import logo from "../assets/y18.gif";
 const styles = {
   container: css`
     margin: 0.5em auto;
-    margin-bottom: 0;
+    margin-bottom: 0; // clear margin-bottom
     padding: 2px;
     background-color: #ff6600;
     width: 85%;
@@ -60,7 +60,7 @@ const navigationMaps = [
   },
 ];
 
-const Header = (): React.ReactElement => {
+const Header: FunctionComponent = () => {
   const currentPath = window.location.pathname;
 
   return (
