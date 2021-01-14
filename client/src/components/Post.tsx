@@ -1,5 +1,7 @@
 import React, { FunctionComponent } from "react";
 
+import TimeAgo from "javascript-time-ago";
+import en from "javascript-time-ago/locale/en";
 import { css } from "@emotion/react";
 
 // @ts-ignore
@@ -43,8 +45,13 @@ const Post: FunctionComponent<ComponentProps> = ({ post, rank }) => {
     title,
     link,
     upvote,
+    createdAt,
     author: { name },
   } = post;
+
+  // @ts-ignore
+  TimeAgo.addDefaultLocale(en);
+  const timeAgo = new TimeAgo("en-US");
 
   return (
     <div css={styles.container}>
@@ -69,7 +76,7 @@ const Post: FunctionComponent<ComponentProps> = ({ post, rank }) => {
       {/* bottom row */}
       <div>
         <span css={styles.bottom}>
-          {upvote} points by {name}
+          {upvote} points by {name} {timeAgo.format(createdAt)}
         </span>
       </div>
     </div>
@@ -82,6 +89,7 @@ export interface IPost {
   title: string;
   link: string;
   upvote: number;
+  createdAt: number;
   author: {
     name: string;
   };

@@ -11,6 +11,7 @@ const ALL_POSTS = gql`
       title
       link
       upvote
+      createdAt
       author {
         name
       }

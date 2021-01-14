@@ -18,7 +18,7 @@ export const typeDefs = gql`
     link: String!
     title: String!
     upvote: Int!
-    createdAt: String!
+    createdAt: Float!
     author: User!
   }
 
