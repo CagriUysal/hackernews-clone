@@ -19,7 +19,13 @@ type ComponentProps = {
 const Posts: FunctionComponent<ComponentProps> = ({ posts }) => {
   return (
     <main css={styles.container}>
-      <Post post={posts[0]} rank={1} />
+      {posts.map((post, index) => (
+        <Post
+          post={post}
+          rank={index + 1}
+          key={`${post.createdAt}-${post.title}`}
+        />
+      ))}
     </main>
   );
 };

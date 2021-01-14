@@ -7,6 +7,9 @@ import { css } from "@emotion/react";
 // @ts-ignore
 import upArrow from "../assets/grayarrow2x.gif";
 
+// @ts-ignore
+TimeAgo.addDefaultLocale(en);
+
 const styles = {
   container: css`
     color: #000;
@@ -49,8 +52,6 @@ const Post: FunctionComponent<ComponentProps> = ({ post, rank }) => {
     author: { name },
   } = post;
 
-  // @ts-ignore
-  TimeAgo.addDefaultLocale(en);
   const timeAgo = new TimeAgo("en-US");
 
   return (
