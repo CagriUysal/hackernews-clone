@@ -3,6 +3,7 @@ import React, { FunctionComponent } from "react";
 import { css } from "@emotion/react";
 import { Link } from "@reach/router";
 
+// @ts-ignore
 import logo from "../assets/y18.gif";
 
 const styles = {
@@ -18,10 +19,6 @@ const styles = {
   `,
   logo: css`
     border: 1px white solid;
-  `,
-  link: css`
-    text-decoration: none;
-    color: #000;
   `,
   login: css`
     position: absolute;
@@ -85,7 +82,6 @@ const Header: FunctionComponent = () => {
         <Link
           to="/"
           css={css`
-            ${styles.link};
             margin-left: 0.5em;
             margin-right: 0.5em;
             font-weight: bold;
@@ -100,7 +96,6 @@ const Header: FunctionComponent = () => {
               <Link
                 to={path}
                 css={css`
-                  ${styles.link}
                   color: ${currentPath === path ? "#FFF" : undefined};
                 `}
               >

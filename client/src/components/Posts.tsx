@@ -19,7 +19,7 @@ type ComponentProps = {
 const Posts: FunctionComponent<ComponentProps> = ({ posts }) => {
   return (
     <main css={styles.container}>
-      <Post post={posts[0]} />
+      <Post post={posts[0]} rank={1} />
     </main>
   );
 };

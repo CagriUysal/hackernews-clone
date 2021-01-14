@@ -31,6 +31,10 @@ const App: FunctionComponent = () => {
             font-size: 16px;
             line-height: 1.4;
           }
+          a {
+            text-decoration: none;
+            color: inherit;
+          }
         `}
       />
       <ApolloProvider client={client}>

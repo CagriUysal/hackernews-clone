@@ -10,6 +10,7 @@ const ALL_POSTS = gql`
     posts {
       title
       link
+      upvote
       author {
         name
       }

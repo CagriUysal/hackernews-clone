@@ -18,6 +18,7 @@
   },
   "plugins": ["react", "@typescript-eslint"],
   "rules": {
-    "react/prop-types": "off"
+    "react/prop-types": "off",
+    "@typescript-eslint/ban-ts-comment": "off"
   }
 }
