@@ -13,6 +13,7 @@ import Ask from "./pages/Ask";
 import Show from "./pages/Show";
 import Jobs from "./pages/Jobs";
 import Submit from "./pages/Submit";
+import Login from "./pages/Login";
 
 const App: FunctionComponent = () => {
   return (
@@ -47,6 +48,7 @@ const App: FunctionComponent = () => {
           <Show path="/show" />
           <Jobs path="/jobs" />
           <Submit path="/submit" />
+          <Login path="/login" />
         </Router>
       </ApolloProvider>
     </>
