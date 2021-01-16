@@ -45,10 +45,10 @@ export const resolvers = {
 
     addUser: async (
       _,
-      { user: { name } }: { user: { name: string } }
+      { user: { name, password } }: { user: IAddUser }
     ): Promise<IMutationResponse> => {
       const newUser = await prisma.user.create({
-        data: { name },
+        data: { name, password },
       });
 
       return {
@@ -67,4 +67,9 @@ interface IMutationResponse {
   message: string;
   post?: Post;
   user?: User;
+}
+
+interface IAddUser {
+  name: string;
+  password: string;
 }

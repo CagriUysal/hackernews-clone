@@ -45,6 +45,7 @@ export const typeDefs = gql`
 
   input AddUserInput {
     name: String!
+    password: String!
   }
 
   type AddUserResponse implements MutationResponse {

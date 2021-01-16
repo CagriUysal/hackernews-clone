@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useState } from "react";
 
 import { css } from "@emotion/react";
+import { gql, useMutation } from "@apollo/client";
 
 const styles = {
   container: css`
@@ -16,18 +17,36 @@ const styles = {
   `,
 };
 
+const REGISTER = gql`
+  mutation AddUser($user: AddUserInput!) {
+    addUser(user: $user) {
+      code
+      success
+      message
+      user {
+        id
+        name
+      }
+    }
+  }
+`;
+
 const Login: FunctionComponent = () => {
   const [loginName, setLoginName] = useState("");
   const [loginPass, setLoginPass] = useState("");
   const [registerName, setRegisterName] = useState("");
   const [registerPass, setRegisterPass] = useState("");
 
+  const [addUser, { data }] = useMutation(REGISTER);
+
+  console.log(data);
+
   const handleLoginClick = () => {
     console.log("login");
   };
 
-  const handleRegisterClick = () => {
-    console.log("register");
+  const handleRegisterClick = (user: IAddUser) => {
+    addUser({ variables: { user } });
   };
 
   return (
@@ -55,7 +74,7 @@ const Login: FunctionComponent = () => {
             {" "}
             password:{" "}
             <input
-              type="text"
+              type="password"
               minLength={8}
               maxLength={72}
               value={loginPass}
@@ -91,7 +110,7 @@ const Login: FunctionComponent = () => {
             {" "}
             password:{" "}
             <input
-              type="text"
+              type="password"
               minLength={8}
               maxLength={72}
               value={registerPass}
@@ -99,7 +118,12 @@ const Login: FunctionComponent = () => {
             />
           </label>
         </div>
-        <button css={styles.button} onClick={handleRegisterClick}>
+        <button
+          css={styles.button}
+          onClick={() =>
+            handleRegisterClick({ name: registerName, password: registerPass })
+          }
+        >
           create account
         </button>
       </div>
@@ -108,3 +132,8 @@ const Login: FunctionComponent = () => {
 };
 
 export default Login;
+
+interface IAddUser {
+  name: string;
+  password: string;
+}
