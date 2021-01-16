@@ -1,7 +1,10 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { User, Post } from "@prisma/client/index";
 
+const bcrypt = require("bcrypt"); //eslint-disable-line
+
 const prisma = new PrismaClient();
+const SALT_ROUNDS = 10;
 
 export const resolvers = {
   MutationResponse: {
@@ -45,10 +48,12 @@ export const resolvers = {
 
     addUser: async (
       _,
-      { user: { name, password } }: { user: IAddUser }
+      { user: { name, password } }: { user: Prisma.UserCreateInput }
     ): Promise<IMutationResponse> => {
+      const hash = await bcrypt.hash(password, SALT_ROUNDS);
+
       const newUser = await prisma.user.create({
-        data: { name, password },
+        data: { name, password: hash },
       });
 
       return {
@@ -67,9 +72,4 @@ interface IMutationResponse {
   message: string;
   post?: Post;
   user?: User;
-}
-
-interface IAddUser {
-  name: string;
-  password: string;
 }
