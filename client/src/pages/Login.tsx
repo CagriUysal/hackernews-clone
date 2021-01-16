@@ -21,8 +21,8 @@ const styles = {
 };
 
 const REGISTER = gql`
-  mutation AddUser($user: AddUserInput!) {
-    addUser(user: $user) {
+  mutation Register($user: RegisterInput!) {
+    register(user: $user) {
       code
       success
       message
@@ -40,19 +40,19 @@ const Login: FunctionComponent = () => {
   const [registerName, setRegisterName] = useState("");
   const [registerPass, setRegisterPass] = useState("");
 
-  const [addUser, { data }] = useMutation(REGISTER);
+  const [register, { data }] = useMutation(REGISTER);
 
   const handleLoginClick = () => {
     console.log("login");
   };
 
-  const handleRegisterClick = (user: IAddUser) => {
-    addUser({ variables: { user } });
+  const handleRegisterClick = (user: IRegister) => {
+    register({ variables: { user } });
   };
 
   return (
     <div css={styles.container}>
-      {data && <p css={styles.feedback}>{data.addUser.message}</p>}
+      {data && <p css={styles.feedback}>{data.register.message}</p>}
       {/* login form */}
       <div>
         <b>Login</b>
@@ -135,7 +135,7 @@ const Login: FunctionComponent = () => {
 
 export default Login;
 
-interface IAddUser {
+interface IRegister {
   name: string;
   password: string;
 }

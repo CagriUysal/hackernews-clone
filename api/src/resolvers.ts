@@ -46,7 +46,7 @@ export const resolvers = {
       };
     },
 
-    addUser: async (
+    register: async (
       _,
       { user: { name, password } }: { user: Prisma.UserCreateInput }
     ): Promise<IMutationResponse> => {

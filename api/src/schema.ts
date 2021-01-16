@@ -43,12 +43,12 @@ export const typeDefs = gql`
     name: String!
   }
 
-  input AddUserInput {
+  input RegisterInput {
     name: String!
     password: String!
   }
 
-  type AddUserResponse implements MutationResponse {
+  type RegisterResponse implements MutationResponse {
     code: String!
     success: Boolean!
     message: String!
@@ -67,6 +67,6 @@ export const typeDefs = gql`
   """
   type Mutation {
     addPost(post: AddPostInput!): AddPostResponse
-    addUser(user: AddUserInput!): AddUserResponse
+    register(user: RegisterInput!): RegisterResponse
   }
 `;
