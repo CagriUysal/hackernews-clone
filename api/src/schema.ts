@@ -55,6 +55,18 @@ export const typeDefs = gql`
     user: User
   }
 
+  input LoginInput {
+    name: String!
+    password: String!
+  }
+
+  type LoginResponse implements MutationResponse {
+    code: String!
+    success: Boolean!
+    message: String!
+    accessToken: String
+  }
+
   """
   Queries
   """
@@ -68,5 +80,6 @@ export const typeDefs = gql`
   type Mutation {
     addPost(post: AddPostInput!): AddPostResponse
     register(user: RegisterInput!): RegisterResponse
+    login(user: LoginInput!): LoginResponse
   }
 `;

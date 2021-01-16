@@ -34,16 +34,28 @@ const REGISTER = gql`
   }
 `;
 
+const LOGIN = gql`
+  mutation Login($user: LoginInput!) {
+    login(user: $user) {
+      code
+      success
+      message
+      accessToken
+    }
+  }
+`;
+
 const Login: FunctionComponent = () => {
   const [loginName, setLoginName] = useState("");
   const [loginPass, setLoginPass] = useState("");
   const [registerName, setRegisterName] = useState("");
   const [registerPass, setRegisterPass] = useState("");
 
-  const [register, { data }] = useMutation(REGISTER);
+  const [register, { data: registerData }] = useMutation(REGISTER);
+  const [login, { data: loginData }] = useMutation(LOGIN);
 
-  const handleLoginClick = () => {
-    console.log("login");
+  const handleLoginClick = (user: ILogin) => {
+    login({ variables: { user } });
   };
 
   const handleRegisterClick = (user: IRegister) => {
@@ -52,7 +64,12 @@ const Login: FunctionComponent = () => {
 
   return (
     <div css={styles.container}>
-      {data && <p css={styles.feedback}>{data.register.message}</p>}
+      {/* feedback */}
+      {registerData && (
+        <p css={styles.feedback}>{registerData.register.message}</p>
+      )}
+      {loginData && <p css={styles.feedback}>{loginData.login.message}</p>}
+
       {/* login form */}
       <div>
         <b>Login</b>
@@ -84,7 +101,12 @@ const Login: FunctionComponent = () => {
             />
           </label>
         </div>
-        <button css={styles.button} onClick={handleLoginClick}>
+        <button
+          css={styles.button}
+          onClick={() =>
+            handleLoginClick({ name: loginName, password: loginPass })
+          }
+        >
           login
         </button>
       </div>
@@ -136,6 +158,11 @@ const Login: FunctionComponent = () => {
 export default Login;
 
 interface IRegister {
+  name: string;
+  password: string;
+}
+
+interface ILogin {
   name: string;
   password: string;
 }
