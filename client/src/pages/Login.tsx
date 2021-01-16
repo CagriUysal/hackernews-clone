@@ -15,6 +15,9 @@ const styles = {
     margin-top: 1em;
     margin-bottom: 1em;
   `,
+  feedback: css`
+    margin-bottom: 1em;
+  `,
 };
 
 const REGISTER = gql`
@@ -39,8 +42,6 @@ const Login: FunctionComponent = () => {
 
   const [addUser, { data }] = useMutation(REGISTER);
 
-  console.log(data);
-
   const handleLoginClick = () => {
     console.log("login");
   };
@@ -51,6 +52,7 @@ const Login: FunctionComponent = () => {
 
   return (
     <div css={styles.container}>
+      {data && <p css={styles.feedback}>{data.addUser.message}</p>}
       {/* login form */}
       <div>
         <b>Login</b>

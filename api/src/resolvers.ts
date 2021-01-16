@@ -52,16 +52,33 @@ export const resolvers = {
     ): Promise<IMutationResponse> => {
       const hash = await bcrypt.hash(password, SALT_ROUNDS);
 
-      const newUser = await prisma.user.create({
-        data: { name, password: hash },
-      });
+      try {
+        const newUser = await prisma.user.create({
+          data: { name, password: hash },
+        });
 
-      return {
-        code: "200",
-        success: true,
-        message: "user created succesfully.",
-        user: newUser,
-      };
+        return {
+          code: "200",
+          success: true,
+          message: "User created succesfully.",
+          user: newUser,
+        };
+      } catch (err) {
+        if (err.code === "P2002") {
+          // unique field taken error
+          return {
+            code: "400",
+            success: false,
+            message: "That username is taken. Please choose another.",
+          };
+        } else {
+          return {
+            code: "500",
+            success: false,
+            message: "Unknown error in the server.",
+          };
+        }
+      }
     },
   },
 };
