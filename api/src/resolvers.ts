@@ -1,9 +1,9 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import { Response, Request } from "express";
 import { User, Post } from "@prisma/client/index";
+import { createAccessToken, createRefreshToken } from "./auth";
 
 const bcrypt = require("bcrypt"); //eslint-disable-line
-const jwt = require("jsonwebtoken"); //eslint-disable-line
 
 const prisma = new PrismaClient();
 const SALT_ROUNDS = 10;
@@ -65,15 +65,12 @@ export const resolvers = {
           throw Error("Wrong password.");
         }
 
-        const refreshToken = jwt.sign({ name }, process.env.REFRESH_TOKEN, {
-          expiresIn: "7d",
-        });
-        res.cookie("REFRESH_TOKEN", refreshToken, { httpOnly: true });
-
-        const accessToken = jwt.sign({ name }, process.env.ACCESS_TOKEN, {
-          expiresIn: "15m",
+        const refreshToken = createRefreshToken(name);
+        res.cookie("REFRESH_TOKEN", refreshToken, {
+          httpOnly: true,
         });
 
+        const accessToken = createAccessToken(name);
         return {
           code: "200",
           success: true,
