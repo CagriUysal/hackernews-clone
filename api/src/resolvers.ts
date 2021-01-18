@@ -63,7 +63,9 @@ export const resolvers = {
           throw Error("Wrong password.");
         }
 
-        const accessToken = jwt.sign({ name }, process.env.ACCESS_TOKEN);
+        const accessToken = jwt.sign({ name }, process.env.ACCESS_TOKEN, {
+          expiresIn: "15m",
+        });
 
         return {
           code: "200",
