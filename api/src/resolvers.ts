@@ -65,6 +65,11 @@ export const resolvers = {
           throw Error("Wrong password.");
         }
 
+        const refreshToken = jwt.sign({ name }, process.env.REFRESH_TOKEN, {
+          expiresIn: "7d",
+        });
+        res.cookie("REFRESH_TOKEN", refreshToken, { httpOnly: true });
+
         const accessToken = jwt.sign({ name }, process.env.ACCESS_TOKEN, {
           expiresIn: "15m",
         });
