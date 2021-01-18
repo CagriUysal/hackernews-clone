@@ -2,6 +2,7 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import { User, Post } from "@prisma/client/index";
 
 const bcrypt = require("bcrypt"); //eslint-disable-line
+const jwt = require("jsonwebtoken"); //eslint-disable-line
 
 const prisma = new PrismaClient();
 const SALT_ROUNDS = 10;
@@ -62,11 +63,13 @@ export const resolvers = {
           throw Error("Wrong password.");
         }
 
+        const accessToken = jwt.sign({ name }, process.env.ACCESS_TOKEN);
+
         return {
           code: "200",
           success: true,
           message: "Login successful.",
-          accessToken: "RANDOM STUFF HERE",
+          accessToken,
         };
       } catch (err) {
         return {
@@ -95,6 +98,7 @@ export const resolvers = {
           user: newUser,
         };
       } catch (err) {
+        console.log(err);
         if (err.code === "P2002") {
           // unique field taken error
           return {
