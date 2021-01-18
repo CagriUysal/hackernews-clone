@@ -1,4 +1,5 @@
 import { Prisma, PrismaClient } from "@prisma/client";
+import { Response, Request } from "express";
 import { User, Post } from "@prisma/client/index";
 
 const bcrypt = require("bcrypt"); //eslint-disable-line
@@ -49,7 +50,8 @@ export const resolvers = {
 
     login: async (
       _,
-      { user: { name, password } }: { user: ILogin }
+      { user: { name, password } }: { user: ILogin },
+      { res }: IContext
     ): Promise<ILoginResponse> => {
       // validate input
       try {
@@ -143,4 +145,9 @@ interface ILoginResponse {
 interface ILogin {
   name: string;
   password: string;
+}
+
+interface IContext {
+  res: Response;
+  req: Request;
 }
