@@ -3,6 +3,7 @@ import { verify } from "jsonwebtoken";
 import { resolvers } from "./resolvers";
 import { typeDefs } from "./schema";
 
+// Graphql server (CRUD)
 const server = new ApolloServer({
   typeDefs,
   resolvers,
@@ -28,4 +29,4 @@ const server = new ApolloServer({
   }),
 });
 
-server.listen().then(({ url }) => console.log(`Server running at ${url}`));
+server.listen().then(({ url }) => console.log(`Graphql running at ${url}`));

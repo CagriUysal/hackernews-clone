@@ -47,6 +47,7 @@
     "migrate": "prisma migrate dev --preview-feature",
     "generate": "prisma generate",
     "server": "nodemon --watch 'api/src/**/*.ts'  --exec 'ts-node' api/src/server.ts",
+    "refreshServer": "nodemon --watch 'api/src/**/*.ts'  --exec 'ts-node' api/src/refreshServer.ts",
     "fillDB": "ts-node api/src/db/mock/fill.ts",
     "wipeDB": "ts-node api/src/db/mock/wipe.ts",
     "lint-client": "eslint client/src/**/*.tsx",
