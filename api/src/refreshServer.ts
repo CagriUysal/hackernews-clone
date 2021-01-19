@@ -35,22 +35,17 @@ const PORT = 3000;
         res.send({ ok: false, accessToken: "" });
       }
 
-      const newTokenVersion = tokenVersion + 1;
-      await prisma.user.update({
-        where: { name: userName },
-        data: { tokenVersion: newTokenVersion },
-      });
-
-      const accessToken = createAccessToken(userName);
       // update refresh token, so
       // user can logged in if they are using the site continuously
       res.cookie(
         process.env.COOKIE_NAME,
-        createRefreshToken(userName, newTokenVersion),
+        await createRefreshToken(userName, tokenVersion + 1, prisma),
         {
           httpOnly: true,
         }
       );
+
+      const accessToken = createAccessToken(userName);
 
       res.send({ ok: true, accessToken });
     } catch (error) {
