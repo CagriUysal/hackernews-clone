@@ -3,7 +3,7 @@ import { verify } from "jsonwebtoken";
 const express = require("express"); // eslint-disable-line
 const cookieParser = require("cookie-parser"); //eslint-disable-line
 
-import { createAccessToken } from "./auth";
+import { createAccessToken, createRefreshToken } from "./auth";
 
 require("dotenv").config(); // eslint-disable-line
 
@@ -24,6 +24,12 @@ const PORT = 3000;
 
       const { userName } = payload as any;
       const accessToken = createAccessToken(userName);
+
+      // update refresh token, so
+      // user can logged in if they are using the site continuously
+      res.cookie(process.env.COOKIE_NAME, createRefreshToken(userName), {
+        httpOnly: true,
+      });
 
       res.send({ ok: true, accessToken });
     } catch (error) {
