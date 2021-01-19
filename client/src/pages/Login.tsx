@@ -2,6 +2,7 @@ import React, { FunctionComponent, useState } from "react";
 
 import { css } from "@emotion/react";
 import { gql, useMutation } from "@apollo/client";
+import { Redirect } from "@reach/router";
 
 const styles = {
   container: css`
@@ -61,6 +62,10 @@ const Login: FunctionComponent = () => {
   const handleRegisterClick = (user: IRegister) => {
     register({ variables: { user } });
   };
+
+  if (loginData && loginData.login.success === true) {
+    return <Redirect to="/" />;
+  }
 
   return (
     <div css={styles.container}>
