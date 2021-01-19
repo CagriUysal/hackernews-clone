@@ -29,6 +29,10 @@ const server = new ApolloServer({
       }
     },
   }),
+  cors: {
+    origin: "http://localhost:1234",
+    credentials: true,
+  },
 });
 
 server.listen().then(({ url }) => console.log(`Graphql running at ${url}`));
