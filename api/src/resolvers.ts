@@ -66,7 +66,7 @@ export const resolvers = {
         }
 
         const refreshToken = createRefreshToken(name);
-        res.cookie("REFRESH_TOKEN", refreshToken, {
+        res.cookie(process.env.COOKIE_NAME, refreshToken, {
           httpOnly: true,
         });
 

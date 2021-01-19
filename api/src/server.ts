@@ -3,6 +3,8 @@ import { verify } from "jsonwebtoken";
 import { resolvers } from "./resolvers";
 import { typeDefs } from "./schema";
 
+require("dotenv").config(); // eslint-disable-line
+
 // Graphql server (CRUD)
 const server = new ApolloServer({
   typeDefs,
