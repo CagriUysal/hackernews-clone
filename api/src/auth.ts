@@ -8,15 +8,15 @@ export const createAccessToken = (userName: string): string => {
 
 export const createRefreshToken = async (
   userName: string,
-  tokenVersion: number,
+  newTokenVersion: number,
   prismaClient: PrismaClient
 ): Promise<string> => {
   await prismaClient.user.update({
     where: { name: userName },
-    data: { tokenVersion },
+    data: { tokenVersion: newTokenVersion },
   });
 
-  return jwt.sign({ userName, tokenVersion }, process.env.REFRESH_TOKEN, {
+  return jwt.sign({ userName, newTokenVersion }, process.env.REFRESH_TOKEN, {
     expiresIn: "7d",
   });
 };
