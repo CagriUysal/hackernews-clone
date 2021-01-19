@@ -4,6 +4,11 @@ export const createAccessToken = (userName: string): string => {
   return jwt.sign({ userName }, process.env.ACCESS_TOKEN, { expiresIn: "15m" });
 };
 
-export const createRefreshToken = (userName: string): string => {
-  return jwt.sign({ userName }, process.env.REFRESH_TOKEN, { expiresIn: "7d" });
+export const createRefreshToken = (
+  userName: string,
+  tokenVersion: number
+): string => {
+  return jwt.sign({ userName, tokenVersion }, process.env.REFRESH_TOKEN, {
+    expiresIn: "7d",
+  });
 };

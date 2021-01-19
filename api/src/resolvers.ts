@@ -65,7 +65,13 @@ export const resolvers = {
           throw Error("Wrong password.");
         }
 
-        const refreshToken = createRefreshToken(name);
+        const newTokenVersion = user.tokenVersion + 1;
+        await prisma.user.update({
+          where: { name },
+          data: { tokenVersion: newTokenVersion },
+        });
+        const refreshToken = createRefreshToken(name, newTokenVersion);
+
         res.cookie(process.env.COOKIE_NAME, refreshToken, {
           httpOnly: true,
         });

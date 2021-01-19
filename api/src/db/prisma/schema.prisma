@@ -36,6 +36,7 @@ model User {
   password String 
   createdAt DateTime @default(now())
   karma Int @default(0) 
+  tokenVersion Int @default(0)
 
   posts Post[] @relation("Posts") 
 
