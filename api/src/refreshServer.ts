@@ -20,7 +20,6 @@ const PORT = 3000;
 
     try {
       const payload = verify(token, process.env.REFRESH_TOKEN);
-      console.log(payload);
 
       const { userName } = payload as any;
       const accessToken = createAccessToken(userName);
