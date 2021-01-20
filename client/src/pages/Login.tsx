@@ -73,7 +73,7 @@ const Login: FunctionComponent = () => {
       payload: { token: loginData.login.accessToken },
     });
 
-    return <Redirect to="/" />;
+    return <Redirect to="/" noThrow />;
   }
 
   return (
