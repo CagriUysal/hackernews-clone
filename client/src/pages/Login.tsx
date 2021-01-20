@@ -57,7 +57,7 @@ const Login: FunctionComponent = () => {
   const [register, { data: registerData }] = useMutation(REGISTER);
   const [login, { data: loginData }] = useMutation(LOGIN);
 
-  const { token, dispatch } = useContext(TokenContext);
+  const { dispatch } = useContext(TokenContext);
 
   const handleLoginClick = (user: ILogin) => {
     login({ variables: { user } });
@@ -68,9 +68,10 @@ const Login: FunctionComponent = () => {
   };
 
   if (loginData && loginData.login.success === true) {
+    console.log(loginData.login.accessToken);
     dispatch({
       type: CHANGE_TOKEN,
-      payload: { token: loginData.login.accessToken },
+      payload: { accessToken: loginData.login.accessToken },
     });
 
     return <Redirect to="/" noThrow />;

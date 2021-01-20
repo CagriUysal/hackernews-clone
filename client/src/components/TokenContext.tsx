@@ -2,14 +2,17 @@ import React, { createContext, FunctionComponent, useReducer } from "react";
 
 const initState = "";
 
-export const TokenContext = createContext({});
+export const TokenContext = createContext<ITokenContext>({
+  accessToken: "",
+  dispatch: () => "",
+});
 
 export const CHANGE_TOKEN = "CHANGE_TOKEN";
 export const DELETE_TOKEN = "DELETE_TOKEN";
 
-const reducer = (state, action) => {
+const reducer = (state: string, action: IAction): string => {
   if (action.type === CHANGE_TOKEN) {
-    const { token: newToken } = action.payload;
+    const { accessToken: newToken } = action.payload;
 
     return newToken;
   }
@@ -22,11 +25,23 @@ const reducer = (state, action) => {
 };
 
 export const TokenProvider: FunctionComponent = ({ children }) => {
-  const [token, dispatch] = useReducer(reducer, initState);
+  const [accessToken, dispatch] = useReducer(reducer, initState);
 
   return (
-    <TokenContext.Provider value={{ token, dispatch }}>
+    <TokenContext.Provider value={{ accessToken, dispatch }}>
       {children}
     </TokenContext.Provider>
   );
 };
+
+interface IAction {
+  payload: { accessToken: string };
+  type: actionTypes;
+}
+
+interface ITokenContext {
+  accessToken: string;
+  dispatch: React.Dispatch<IAction>;
+}
+
+type actionTypes = "CHANGE_TOKEN" | "DELETE_TOKEN";

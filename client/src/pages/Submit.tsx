@@ -16,19 +16,19 @@ const BYE = gql`
 `;
 
 const Submit = (): React.ReactElement => {
-  const { token } = useContext(TokenContext);
+  const { accessToken } = useContext(TokenContext);
 
-  const { data, error, loading, refetch } = useQuery(BYE, {
+  const { data, refetch } = useQuery(BYE, {
     context: {
       headers: {
-        authorization: `beaber ${token}`,
+        authorization: `beaber ${accessToken}`,
       },
     },
   });
 
   useEffect(() => {
     refetch();
-  }, [token]);
+  }, [accessToken]);
 
   if (data) {
     return <h1>{data.bye.message}</h1>;

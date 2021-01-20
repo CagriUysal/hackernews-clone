@@ -32,7 +32,7 @@ const App: FunctionComponent = () => {
       .then((response) => response.json())
       .then((data) => {
         const { accessToken } = data;
-        dispatch({ type: CHANGE_TOKEN, payload: { token: accessToken } });
+        dispatch({ type: CHANGE_TOKEN, payload: { accessToken } });
       });
   }, []);
 
