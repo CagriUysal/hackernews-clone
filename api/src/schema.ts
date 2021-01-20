@@ -4,7 +4,7 @@ export const typeDefs = gql`
   """
   Interfaces
   """
-  interface MutationResponse {
+  interface Response {
     code: String!
     success: Boolean!
     message: String!
@@ -28,7 +28,7 @@ export const typeDefs = gql`
     userName: String!
   }
 
-  type AddPostResponse implements MutationResponse {
+  type AddPostResponse implements Response {
     code: String!
     success: Boolean!
     message: String!
@@ -48,7 +48,7 @@ export const typeDefs = gql`
     password: String!
   }
 
-  type RegisterResponse implements MutationResponse {
+  type RegisterResponse implements Response {
     code: String!
     success: Boolean!
     message: String!
@@ -60,7 +60,7 @@ export const typeDefs = gql`
     password: String!
   }
 
-  type LoginResponse implements MutationResponse {
+  type LoginResponse implements Response {
     code: String!
     success: Boolean!
     message: String!
@@ -70,8 +70,15 @@ export const typeDefs = gql`
   """
   Queries
   """
+  type ByeResponse implements Response {
+    code: String!
+    success: Boolean!
+    message: String!
+  }
+
   type Query {
     posts: [Post]!
+    bye: ByeResponse!
   }
 
   """

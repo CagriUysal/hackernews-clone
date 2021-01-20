@@ -9,7 +9,7 @@ const prisma = new PrismaClient();
 const SALT_ROUNDS = 10;
 
 export const resolvers = {
-  MutationResponse: {
+  Response: {
     __resolveType: (response): string => {
       if (response.post) return "Post";
       if (response.user) return "User";
@@ -19,6 +19,22 @@ export const resolvers = {
   Query: {
     posts: async (): Promise<Post[]> => {
       return await prisma.post.findMany({ include: { author: true } });
+    },
+    bye: (_, __, { isAuth }): IByeResponse => {
+      try {
+        isAuth();
+        return {
+          code: "200",
+          message: "Succesful",
+          success: false,
+        };
+      } catch (err) {
+        return {
+          code: "401",
+          message: err.message,
+          success: false,
+        };
+      }
     },
   },
 
@@ -140,11 +156,18 @@ interface IAddPostResponse {
   message: string;
   post?: Post;
 }
+
 interface ILoginResponse {
   code: string;
   success: boolean;
   message: string;
   accessToken?: string;
+}
+
+interface IByeResponse {
+  code: string;
+  success: boolean;
+  message: string;
 }
 
 interface ILogin {
