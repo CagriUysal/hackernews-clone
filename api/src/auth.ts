@@ -16,7 +16,11 @@ export const createRefreshToken = async (
     data: { tokenVersion: newTokenVersion },
   });
 
-  return jwt.sign({ userName, newTokenVersion }, process.env.REFRESH_TOKEN, {
-    expiresIn: "7d",
-  });
+  return jwt.sign(
+    { userName, tokenVersion: newTokenVersion },
+    process.env.REFRESH_TOKEN,
+    {
+      expiresIn: "7d",
+    }
+  );
 };

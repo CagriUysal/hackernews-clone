@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client";
 
 const express = require("express"); // eslint-disable-line
 const cookieParser = require("cookie-parser"); //eslint-disable-line
+const cors = require("cors"); //eslint-disable-line
 
 import { createAccessToken, createRefreshToken } from "./auth";
 
@@ -14,7 +15,14 @@ const app = express();
 const PORT = 3000;
 
 (function refreshServer() {
+  app.use(
+    cors({
+      origin: "http://localhost:1234",
+      credentials: true,
+    })
+  );
   app.use(cookieParser());
+
   app.post("/refresh", async (req, res) => {
     const token = req.cookies[process.env.COOKIE_NAME];
     if (!token) {
