@@ -1,8 +1,10 @@
-import React, { FunctionComponent, FunctionComponentFactory } from "react";
+import React, { FunctionComponent } from "react";
 
 import { Router } from "@reach/router";
 import { Global, css } from "@emotion/react";
 import { ApolloProvider } from "@apollo/client";
+
+import { TokenProvider } from "./components/TokenContext";
 import client from "./client";
 
 import Home from "./pages/Home";
@@ -39,17 +41,19 @@ const App: FunctionComponent = () => {
         `}
       />
       <ApolloProvider client={client}>
-        <Router>
-          <Home path="/" />
-          <New path="/newest" />
-          <Past path="/front" />
-          <Comments path="/newcomments" />
-          <Ask path="/ask" />
-          <Show path="/show" />
-          <Jobs path="/jobs" />
-          <Submit path="/submit" />
-          <Login path="/login" />
-        </Router>
+        <TokenProvider>
+          <Router>
+            <Home path="/" />
+            <New path="/newest" />
+            <Past path="/front" />
+            <Comments path="/newcomments" />
+            <Ask path="/ask" />
+            <Show path="/show" />
+            <Jobs path="/jobs" />
+            <Submit path="/submit" />
+            <Login path="/login" />
+          </Router>
+        </TokenProvider>
       </ApolloProvider>
     </>
   );

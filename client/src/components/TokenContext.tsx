@@ -2,7 +2,7 @@ import React, { createContext, FunctionComponent, useReducer } from "react";
 
 const initState = "";
 
-const TokenContext = createContext({});
+export const TokenContext = createContext({});
 
 export const CHANGE_TOKEN = "CHANGE_TOKEN";
 export const DELETE_TOKEN = "DELETE_TOKEN";
