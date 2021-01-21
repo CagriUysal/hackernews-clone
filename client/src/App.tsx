@@ -1,10 +1,10 @@
-import React, { FunctionComponent, useEffect, useContext } from "react";
+import React, { FunctionComponent, useEffect } from "react";
 
 import { Router } from "@reach/router";
 import { Global, css } from "@emotion/react";
 
-import { TokenContext, CHANGE_TOKEN } from "./components/TokenContext";
 import refreshAccessToken from "./utils/refreshAccessToken";
+import { setAccessToken } from "./accessToken";
 
 import Home from "./pages/Home";
 import New from "./pages/New";
@@ -17,12 +17,10 @@ import Submit from "./pages/Submit";
 import Login from "./pages/Login";
 
 const App: FunctionComponent = () => {
-  const { dispatch } = useContext(TokenContext);
-
   useEffect(() => {
     // prevent login in every refresh
     refreshAccessToken().then((accessToken) => {
-      dispatch({ type: CHANGE_TOKEN, payload: { accessToken } });
+      setAccessToken(accessToken);
     });
   }, []);
 

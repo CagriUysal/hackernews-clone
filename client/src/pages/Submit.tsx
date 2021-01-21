@@ -1,9 +1,8 @@
-import React, { useContext, useEffect } from "react";
+import React from "react";
 
 import { gql, useQuery } from "@apollo/client";
 
 import Header from "../components/Header";
-import { TokenContext } from "../components/TokenContext";
 
 const BYE = gql`
   query BYE {
@@ -15,23 +14,20 @@ const BYE = gql`
   }
 `;
 
-const Submit = (): React.ReactElement => {
-  const { accessToken } = useContext(TokenContext);
+const Submit: React.FunctionComponent = () => {
+  const { data, loading } = useQuery(BYE, { fetchPolicy: "network-only" });
 
-  const { data, refetch } = useQuery(BYE, {
-    context: {
-      headers: {
-        authorization: `beaber ${accessToken}`,
-      },
-    },
-  });
-
-  useEffect(() => {
-    refetch();
-  }, [accessToken]);
+  if (loading) {
+    return <h1>loading...</h1>;
+  }
 
   if (data) {
-    return <h1>{data.bye.message}</h1>;
+    return (
+      <>
+        <Header />
+        <h1>{data.bye.message}</h1>
+      </>
+    );
   }
 
   return <Header />;

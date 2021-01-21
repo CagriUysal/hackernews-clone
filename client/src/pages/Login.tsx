@@ -1,10 +1,10 @@
-import React, { FunctionComponent, useState, useContext } from "react";
+import React, { FunctionComponent, useState } from "react";
 
 import { css } from "@emotion/react";
 import { gql, useMutation } from "@apollo/client";
 import { Redirect } from "@reach/router";
 
-import { TokenContext, CHANGE_TOKEN } from "../components/TokenContext";
+import { setAccessToken } from "../accessToken";
 
 const styles = {
   container: css`
@@ -57,8 +57,6 @@ const Login: FunctionComponent = () => {
   const [register, { data: registerData }] = useMutation(REGISTER);
   const [login, { data: loginData }] = useMutation(LOGIN);
 
-  const { dispatch } = useContext(TokenContext);
-
   const handleLoginClick = (user: ILogin) => {
     login({ variables: { user } });
   };
@@ -68,11 +66,7 @@ const Login: FunctionComponent = () => {
   };
 
   if (loginData && loginData.login.success === true) {
-    console.log(loginData.login.accessToken);
-    dispatch({
-      type: CHANGE_TOKEN,
-      payload: { accessToken: loginData.login.accessToken },
-    });
+    setAccessToken(loginData.login.accessToken);
 
     return <Redirect to="/" noThrow />;
   }
