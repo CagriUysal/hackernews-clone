@@ -1,14 +1,10 @@
-import React, {
-  FunctionComponent,
-  useEffect,
-  useContext,
-  useState,
-} from "react";
+import React, { FunctionComponent, useEffect, useContext } from "react";
 
 import { Router } from "@reach/router";
 import { Global, css } from "@emotion/react";
 
 import { TokenContext, CHANGE_TOKEN } from "./components/TokenContext";
+import refreshAccessToken from "./utils/refreshAccessToken";
 
 import Home from "./pages/Home";
 import New from "./pages/New";
@@ -25,15 +21,9 @@ const App: FunctionComponent = () => {
 
   useEffect(() => {
     // prevent login in every refresh
-    fetch("http://localhost:3000/refresh", {
-      method: "POST",
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        const { accessToken } = data;
-        dispatch({ type: CHANGE_TOKEN, payload: { accessToken } });
-      });
+    refreshAccessToken().then((accessToken) => {
+      dispatch({ type: CHANGE_TOKEN, payload: { accessToken } });
+    });
   }, []);
 
   return (
