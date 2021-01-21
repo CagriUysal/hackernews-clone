@@ -26,7 +26,7 @@ export const resolvers = {
         return {
           code: "200",
           message: "Succesful",
-          success: false,
+          success: true,
         };
       } catch (err) {
         return {
