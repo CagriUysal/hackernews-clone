@@ -19,9 +19,14 @@ import Login from "./pages/Login";
 const App: FunctionComponent = () => {
   useEffect(() => {
     // prevent login in every refresh
-    refreshAccessToken().then((accessToken) => {
+    const fetchToken = async () => {
+      const response = await refreshAccessToken();
+      const { accessToken } = await response.json();
+
       setAccessToken(accessToken);
-    });
+    };
+
+    fetchToken();
   }, []);
 
   return (
