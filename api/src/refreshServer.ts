@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser"); //eslint-disable-line
 const cors = require("cors"); //eslint-disable-line
 
 import { createAccessToken, createRefreshToken } from "./auth";
+import sendRefreshToken from "./sendRefreshToken";
 
 require("dotenv").config(); // eslint-disable-line
 
@@ -45,12 +46,9 @@ const PORT = 3000;
 
       // update refresh token, so
       // user can logged in if they are using the site continuously
-      res.cookie(
-        process.env.COOKIE_NAME,
-        await createRefreshToken(userName, tokenVersion + 1, prisma),
-        {
-          httpOnly: true,
-        }
+      sendRefreshToken(
+        res,
+        await createRefreshToken(userName, tokenVersion + 1, prisma)
       );
 
       const accessToken = createAccessToken(userName);

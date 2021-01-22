@@ -1,9 +1,11 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import { Response, Request } from "express";
 import { User, Post } from "@prisma/client/index";
-import { createAccessToken, createRefreshToken } from "./auth";
 
 const bcrypt = require("bcrypt"); //eslint-disable-line
+
+import { createAccessToken, createRefreshToken } from "./auth";
+import sendRefreshToken from "./sendRefreshToken";
 
 const prisma = new PrismaClient();
 const SALT_ROUNDS = 10;
@@ -76,12 +78,9 @@ export const resolvers = {
           throw Error("Wrong password.");
         }
 
-        res.cookie(
-          process.env.COOKIE_NAME,
-          await createRefreshToken(name, user.tokenVersion + 1, prisma),
-          {
-            httpOnly: true,
-          }
+        sendRefreshToken(
+          res,
+          await createRefreshToken(name, user.tokenVersion + 1, prisma)
         );
 
         const accessToken = createAccessToken(name);
@@ -139,7 +138,7 @@ export const resolvers = {
         isAuth();
 
         // clear refresh token cookie
-        res.cookie(process.env.COOKIE_NAME, "");
+        sendRefreshToken(res, "");
       } catch {
         return false;
       }
