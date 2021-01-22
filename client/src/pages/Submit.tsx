@@ -4,33 +4,33 @@ import { gql, useQuery } from "@apollo/client";
 
 import Header from "../components/Header";
 
-const BYE = gql`
-  query BYE {
-    bye {
-      message
-      success
-      code
+const ME = gql`
+  query Me {
+    me {
+      name
     }
   }
 `;
 
 const Submit: React.FunctionComponent = () => {
-  const { data, loading } = useQuery(BYE, { fetchPolicy: "network-only" });
+  const { data, loading } = useQuery(ME, { fetchPolicy: "network-only" });
+
+  let body = null;
 
   if (loading) {
-    return <h1>loading...</h1>;
+    body = null;
+  } else if (data && data.me) {
+    body = <div>{`you logged in as ${data.me.name}`}</div>;
+  } else {
+    body = <div>you are not logged in.</div>;
   }
 
-  if (data) {
-    return (
-      <>
-        <Header />
-        <h1>{data.bye.message}</h1>
-      </>
-    );
-  }
-
-  return <Header />;
+  return (
+    <>
+      <Header />
+      <h1>{body}</h1>
+    </>
+  );
 };
 
 export default Submit;

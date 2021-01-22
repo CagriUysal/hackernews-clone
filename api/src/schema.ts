@@ -70,15 +70,9 @@ export const typeDefs = gql`
   """
   Queries
   """
-  type ByeResponse implements Response {
-    code: String!
-    success: Boolean!
-    message: String!
-  }
-
   type Query {
     posts: [Post]!
-    bye: ByeResponse!
+    me: User
   }
 
   """

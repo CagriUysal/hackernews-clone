@@ -20,20 +20,15 @@ export const resolvers = {
     posts: async (): Promise<Post[]> => {
       return await prisma.post.findMany({ include: { author: true } });
     },
-    bye: (_, __, { isAuth }): IByeResponse => {
+    me: async (_, __, { isAuth }): Promise<{ name: string } | null> => {
       try {
-        isAuth();
+        const payload = isAuth();
+
         return {
-          code: "200",
-          message: "Succesful",
-          success: true,
+          name: payload.userName,
         };
       } catch (err) {
-        return {
-          code: "401",
-          message: err.message,
-          success: false,
-        };
+        return null;
       }
     },
   },
@@ -162,12 +157,6 @@ interface ILoginResponse {
   success: boolean;
   message: string;
   accessToken?: string;
-}
-
-interface IByeResponse {
-  code: string;
-  success: boolean;
-  message: string;
 }
 
 interface ILogin {
