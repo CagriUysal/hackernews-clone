@@ -1,5 +1,6 @@
 import React, { FunctionComponent } from "react";
 
+import { gql, useQuery } from "@apollo/client";
 import { css } from "@emotion/react";
 import { Link } from "@reach/router";
 
@@ -57,8 +58,18 @@ const navigationMaps = [
   },
 ];
 
+const ME = gql`
+  query Me {
+    me {
+      name
+    }
+  }
+`;
+
 const Header: FunctionComponent = () => {
   const currentPath = window.location.pathname;
+
+  const { data, loading } = useQuery(ME, { fetchPolicy: "network-only" });
 
   return (
     <header>
@@ -106,15 +117,19 @@ const Header: FunctionComponent = () => {
           ))}
         </nav>
 
-        <Link
-          to="/login"
+        <div
           css={css`
-            ${styles.link}
             ${styles.login}
           `}
         >
-          login
-        </Link>
+          {data && data.me && (
+            <>
+              <Link to="/user">{data.me.name}</Link>
+              {" | "}
+            </>
+          )}
+          <Link to="/login">login</Link>
+        </div>
       </div>
     </header>
   );
