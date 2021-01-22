@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 
 import { Router } from "@reach/router";
 import { Global, css } from "@emotion/react";
@@ -17,17 +17,29 @@ import Submit from "./pages/Submit";
 import Login from "./pages/Login";
 
 const App: FunctionComponent = () => {
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     // prevent login in every refresh
     const fetchToken = async () => {
-      const response = await refreshAccessToken();
-      const { accessToken } = await response.json();
+      try {
+        const response = await refreshAccessToken();
+        const { accessToken } = await response.json();
 
-      setAccessToken(accessToken);
+        setAccessToken(accessToken);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchToken();
   }, []);
+
+  if (loading) {
+    return null;
+  }
 
   return (
     <>
