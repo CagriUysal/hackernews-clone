@@ -82,5 +82,6 @@ export const typeDefs = gql`
     addPost(post: AddPostInput!): AddPostResponse
     register(user: RegisterInput!): RegisterResponse
     login(user: LoginInput!): LoginResponse
+    logout: Boolean
   }
 `;

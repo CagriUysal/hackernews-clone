@@ -99,7 +99,6 @@ export const resolvers = {
         };
       }
     },
-
     register: async (
       _,
       { user: { name, password } }: { user: Prisma.UserCreateInput }
@@ -133,6 +132,16 @@ export const resolvers = {
             message: "Unknown error in the server.",
           };
         }
+      }
+    },
+    logout: (_, __, { isAuth, res }): boolean => {
+      try {
+        isAuth();
+
+        // clear refresh token cookie
+        res.cookie(process.env.COOKIE_NAME, "");
+      } catch {
+        return false;
       }
     },
   },

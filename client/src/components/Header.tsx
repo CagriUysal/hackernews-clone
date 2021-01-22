@@ -1,11 +1,12 @@
 import React, { FunctionComponent } from "react";
 
-import { gql, useQuery } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { css } from "@emotion/react";
 import { Link } from "@reach/router";
 
 // @ts-ignore
 import logo from "../assets/y18.gif";
+import { setAccessToken } from "../accessToken";
 
 const styles = {
   container: css`
@@ -24,6 +25,14 @@ const styles = {
   login: css`
     position: absolute;
     right: 0.5em;
+  `,
+  logout: css`
+    border: none;
+    background-color: inherit;
+    font-size: inherit;
+    font-family: inherit;
+    cursor: pointer;
+    padding: 0;
   `,
 };
 
@@ -66,10 +75,23 @@ const ME = gql`
   }
 `;
 
+const LOG_OUT = gql`
+  mutation Logout {
+    logout
+  }
+`;
+
 const Header: FunctionComponent = () => {
   const currentPath = window.location.pathname;
 
-  const { data, loading } = useQuery(ME, { fetchPolicy: "network-only" });
+  const { data } = useQuery(ME, { fetchPolicy: "network-only" });
+  const [logOut, { client }] = useMutation(LOG_OUT);
+
+  const handleButtonClick = async () => {
+    await logOut();
+    setAccessToken("");
+    await client.resetStore();
+  };
 
   return (
     <header>
@@ -122,13 +144,17 @@ const Header: FunctionComponent = () => {
             ${styles.login}
           `}
         >
-          {data && data.me && (
+          {data && data.me ? (
             <>
               <Link to="/user">{data.me.name}</Link>
               {" | "}
+              <button css={styles.logout} onClick={handleButtonClick}>
+                logout
+              </button>
             </>
+          ) : (
+            <Link to="/login">login</Link>
           )}
-          <Link to="/login">login</Link>
         </div>
       </div>
     </header>
