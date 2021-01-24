@@ -61,6 +61,10 @@ const App: FunctionComponent = () => {
             text-decoration: none;
             color: inherit;
           }
+          button {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-size: 1rem;
+          }
         `}
       />
       <Router>
