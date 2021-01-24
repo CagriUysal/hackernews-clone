@@ -38,27 +38,36 @@ export const resolvers = {
   Mutation: {
     addPost: async (
       _,
-      {
-        post: { link, title, userName },
-      }: { post: { link: string; title: string; userName: string } }
+      { post: { link, title } }: IAddPostInput,
+      { isAuth }
     ): Promise<IAddPostResponse> => {
-      const newPost = await prisma.post.create({
-        data: {
-          link,
-          title,
-          author: {
-            connect: { name: userName },
-          },
-        },
-        include: { author: true },
-      });
+      try {
+        const payload = isAuth();
 
-      return {
-        code: "200",
-        success: true,
-        message: "post created succesfully.",
-        post: newPost,
-      };
+        const newPost = await prisma.post.create({
+          data: {
+            link,
+            title,
+            author: {
+              connect: { name: payload.userName },
+            },
+          },
+          include: { author: true },
+        });
+
+        return {
+          code: "200",
+          success: true,
+          message: "post created succesfully.",
+          post: newPost,
+        };
+      } catch {
+        return {
+          code: "401",
+          success: false,
+          message: "not authorized.",
+        };
+      }
     },
 
     login: async (
@@ -153,6 +162,13 @@ interface IRegisterResponse {
   success: boolean;
   message: string;
   user?: User;
+}
+
+interface IAddPostInput {
+  post: {
+    link: string;
+    title: string;
+  };
 }
 
 interface IAddPostResponse {

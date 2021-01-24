@@ -25,14 +25,13 @@ export const typeDefs = gql`
   input AddPostInput {
     link: String!
     title: String!
-    userName: String!
   }
 
   type AddPostResponse implements Response {
     code: String!
     success: Boolean!
     message: String!
-    post: Post!
+    post: Post
   }
 
   """

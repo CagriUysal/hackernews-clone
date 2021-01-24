@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 
-import { gql, useQuery } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { Redirect } from "@reach/router";
 import { css } from "@emotion/react";
 
@@ -51,8 +51,39 @@ const ME = gql`
   }
 `;
 
+const ADD_POST = gql`
+  mutation AddPost($post: AddPostInput!) {
+    addPost(post: $post) {
+      code
+      success
+      message
+    }
+  }
+`;
+
 const Submit: React.FunctionComponent = () => {
+  const [title, setTitle] = useState("");
+  const [link, setLink] = useState("");
+
   const { data, loading } = useQuery(ME, { fetchPolicy: "network-only" });
+  const [addPost, { data: postData }] = useMutation(ADD_POST);
+
+  const handleSubmit = (post: IAddPostInput) => {
+    addPost({ variables: { post } });
+
+    setTitle("");
+    setLink("");
+  };
+
+  if (postData && postData.addPost) {
+    const { success, message } = postData.addPost;
+
+    if (success) {
+      return <Redirect to="/" />;
+    } else {
+      console.log(message);
+    }
+  }
 
   if (loading) {
     return null;
@@ -70,14 +101,28 @@ const Submit: React.FunctionComponent = () => {
             <label htmlFor="title" css={styles.label}>
               title
             </label>
-            <input type="text" name="title" id="title" css={styles.input} />
+            <input
+              type="text"
+              name="title"
+              id="title"
+              css={styles.input}
+              value={title}
+              onChange={(event) => setTitle(event.target.value)}
+            />
           </div>
 
           <div css={styles.formInput}>
             <label htmlFor="url" css={styles.label}>
               url
             </label>
-            <input type="text" name="url" id="url" css={styles.input} />
+            <input
+              type="text"
+              name="url"
+              id="url"
+              css={styles.input}
+              value={link}
+              onChange={(event) => setLink(event.target.value)}
+            />
           </div>
 
           <span
@@ -96,7 +141,12 @@ const Submit: React.FunctionComponent = () => {
             <textarea name="text" id="text" css={styles.input} rows={4} />
           </div>
 
-          <button css={styles.button}>submit</button>
+          <button
+            css={styles.button}
+            onClick={() => handleSubmit({ link, title })}
+          >
+            submit
+          </button>
 
           <p css={styles.caution}>
             Leave url blank to submit a question for discussion. If there is no
@@ -111,3 +161,8 @@ const Submit: React.FunctionComponent = () => {
 };
 
 export default Submit;
+
+interface IAddPostInput {
+  link: string;
+  title: string;
+}
