@@ -54,64 +54,60 @@ const ME = gql`
 const Submit: React.FunctionComponent = () => {
   const { data, loading } = useQuery(ME, { fetchPolicy: "network-only" });
 
-  let body = null;
-
   if (loading) {
-    body = null;
+    return null;
   } else if (data && data.me) {
-    body = <div>{`you logged in as ${data.me.name}`}</div>;
+    return (
+      <>
+        <Header />
+        <div css={styles.container}>
+          <div
+            css={css`
+              ${styles.formInput};
+              padding-top: 1em;
+            `}
+          >
+            <label htmlFor="title" css={styles.label}>
+              title
+            </label>
+            <input type="text" name="title" id="title" css={styles.input} />
+          </div>
+
+          <div css={styles.formInput}>
+            <label htmlFor="url" css={styles.label}>
+              url
+            </label>
+            <input type="text" name="url" id="url" css={styles.input} />
+          </div>
+
+          <span
+            css={css`
+              font-weight: bold;
+              margin-left: 3.5em;
+            `}
+          >
+            or
+          </span>
+
+          <div css={styles.textContainer}>
+            <label htmlFor="text" css={styles.label}>
+              text
+            </label>
+            <textarea name="text" id="text" css={styles.input} rows={4} />
+          </div>
+
+          <button css={styles.button}>submit</button>
+
+          <p css={styles.caution}>
+            Leave url blank to submit a question for discussion. If there is no
+            url, the text (if any) will appear at the top of the thread.
+          </p>
+        </div>
+      </>
+    );
   } else {
     return <Redirect to="/login" noThrow />;
   }
-
-  return (
-    <>
-      <Header />
-      <div css={styles.container}>
-        <div
-          css={css`
-            ${styles.formInput};
-            padding-top: 1em;
-          `}
-        >
-          <label htmlFor="title" css={styles.label}>
-            title
-          </label>
-          <input type="text" name="title" id="title" css={styles.input} />
-        </div>
-
-        <div css={styles.formInput}>
-          <label htmlFor="url" css={styles.label}>
-            url
-          </label>
-          <input type="text" name="url" id="url" css={styles.input} />
-        </div>
-
-        <span
-          css={css`
-            font-weight: bold;
-            margin-left: 3.5em;
-          `}
-        >
-          or
-        </span>
-
-        <div css={styles.textContainer}>
-          <label htmlFor="text" css={styles.label}>
-            text
-          </label>
-          <textarea name="text" id="text" css={styles.input} rows={4} />
-        </div>
-
-        <button css={styles.button}>submit</button>
-
-        <p css={styles.caution}>
-          Leave url blank to submit a question for discussion. If there is no
-          url, the text (if any) will appear at the top of the thread.
-        </p>
-      </div>
-    </>
-  );
 };
 
 export default Submit;
