@@ -139,6 +139,8 @@ export const resolvers = {
 
         // clear refresh token cookie
         sendRefreshToken(res, "");
+
+        return true;
       } catch {
         return false;
       }
