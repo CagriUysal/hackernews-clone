@@ -1,6 +1,7 @@
 import React from "react";
 
 import { gql, useQuery } from "@apollo/client";
+import { Redirect } from "@reach/router";
 
 import Header from "../components/Header";
 
@@ -22,7 +23,7 @@ const Submit: React.FunctionComponent = () => {
   } else if (data && data.me) {
     body = <div>{`you logged in as ${data.me.name}`}</div>;
   } else {
-    body = <div>you are not logged in.</div>;
+    return <Redirect to="/login" noThrow />;
   }
 
   return (
