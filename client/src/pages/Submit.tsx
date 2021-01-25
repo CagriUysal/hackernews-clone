@@ -2,16 +2,14 @@ import React, { useState } from "react";
 
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { Redirect } from "@reach/router";
-import { css } from "@emotion/react";
+import { css, useTheme } from "@emotion/react";
 
 import Header from "../components/Header";
 
 const styles = {
-  container: css`
-    width: 85%;
-    margin: 0 auto;
-    background-color: #f6f6ef;
-    color: #828282;
+  container: (theme) => css`
+    color: ${theme.colors.primary};
+    background-color: ${theme.colors.bg};
   `,
   formInput: css`
     margin-bottom: 0.5em;
@@ -62,6 +60,8 @@ const ADD_POST = gql`
 `;
 
 const Submit: React.FunctionComponent = () => {
+  const theme = useTheme();
+
   const [title, setTitle] = useState("");
   const [link, setLink] = useState("");
 
@@ -77,7 +77,6 @@ const Submit: React.FunctionComponent = () => {
 
   if (postData && postData.addPost) {
     const { success, message } = postData.addPost;
-
     if (success) {
       return <Redirect to="/" />;
     } else {
@@ -89,7 +88,7 @@ const Submit: React.FunctionComponent = () => {
     return null;
   } else if (data && data.me) {
     return (
-      <>
+      <div css={theme.layout}>
         <Header />
         <div css={styles.container}>
           <div
@@ -153,7 +152,7 @@ const Submit: React.FunctionComponent = () => {
             url, the text (if any) will appear at the top of the thread.
           </p>
         </div>
-      </>
+      </div>
     );
   } else {
     return <Redirect to="/login" noThrow />;

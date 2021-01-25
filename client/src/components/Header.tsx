@@ -10,11 +10,9 @@ import { setAccessToken } from "../accessToken";
 
 const styles = {
   container: css`
-    margin: 0.5em auto;
-    margin-bottom: 0; // clear margin-bottom
+    margin-top: 0.5em;
     padding: 2px;
     background-color: #ff6600;
-    width: 85%;
     display: flex;
     align-items: center;
     position: relative;

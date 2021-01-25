@@ -5,10 +5,8 @@ import { css } from "@emotion/react";
 import Post, { IPost } from "./Post";
 
 const styles = {
-  container: css`
-    width: 85%;
-    margin: 0 auto;
-    background-color: #f6f6ef;
+  container: (theme) => css`
+    background-color: ${theme.colors.bg};
   `,
 };
 

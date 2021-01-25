@@ -2,7 +2,7 @@ import React, { FunctionComponent } from "react";
 
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
-import { css } from "@emotion/react";
+import { css, useTheme } from "@emotion/react";
 
 // @ts-ignore
 import upArrow from "../assets/grayarrow2x.gif";
@@ -26,13 +26,13 @@ const styles = {
       cursor: pointer;
     }
   `,
-  domain: css`
-    color: #828282;
+  domain: (theme) => css`
+    color: ${theme.colors.primary};
     font-size: 0.7em;
     margin-left: 0.5em;
   `,
-  bottom: css`
-    color: #828282;
+  bottom: (theme) => css`
+    color: ${theme.colors.primary};
     font-size: 0.7em;
     margin-left: 4em;
   `,
@@ -44,6 +44,8 @@ type ComponentProps = {
 };
 
 const Post: FunctionComponent<ComponentProps> = ({ post, rank }) => {
+  const theme = useTheme();
+
   const {
     title,
     link,
@@ -59,8 +61,8 @@ const Post: FunctionComponent<ComponentProps> = ({ post, rank }) => {
       {/* upper row */}
       <div>
         <span
-          css={css`
-            color: #828282;
+          css={(theme) => css`
+            color: ${theme.colors.primary};
           `}
         >
           {rank}.
