@@ -5,12 +5,17 @@ import { Redirect } from "@reach/router";
 import { css, useTheme } from "@emotion/react";
 
 import Header from "../components/Header";
+import validateSubmit from "../utils/validateSubmit";
 
 const styles = {
   container: (theme) => css`
     color: ${theme.colors.primary};
     background-color: ${theme.colors.bg};
   `,
+  error: css`
+    margin-left: 0.5em;
+  `,
+
   formInput: css`
     margin-bottom: 0.5em;
   `,
@@ -69,11 +74,19 @@ const Submit: React.FunctionComponent = () => {
 
   const [title, setTitle] = useState("");
   const [link, setLink] = useState("");
+  const [errorMessage, setErrorMessage] = useState<null | string>(null);
 
   const { data, loading } = useQuery(ME, { fetchPolicy: "network-only" });
   const [addPost, { data: postData }] = useMutation(ADD_POST);
 
   const handleSubmit = (post: IAddPostInput) => {
+    try {
+      validateSubmit({ title, link });
+    } catch (error) {
+      setErrorMessage(error.message);
+      return;
+    }
+
     addPost({ variables: { post } });
 
     setTitle("");
@@ -96,6 +109,7 @@ const Submit: React.FunctionComponent = () => {
       <div css={theme.layout}>
         <Header />
         <div css={styles.container}>
+          {errorMessage && <span css={styles.error}>{errorMessage}</span>}
           <div
             css={css`
               ${styles.formInput};
