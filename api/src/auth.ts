@@ -1,4 +1,7 @@
 import { PrismaClient } from "@prisma/client";
+import { verify } from "jsonwebtoken";
+import { Request } from "express";
+import { JwtPayload } from "jwt-decode";
 
 const jwt = require("jsonwebtoken"); //eslint-disable-line
 
@@ -23,4 +26,21 @@ export const createRefreshToken = async (
       expiresIn: "7d",
     }
   );
+};
+
+export const isAuth = (req: Request) => {
+  const authHeader = req.headers["authorization"];
+
+  if (!authHeader) {
+    throw new Error("Not Auth.");
+  }
+
+  try {
+    const token = authHeader.split(" ")[1];
+    const payload = verify(token, process.env.ACCESS_TOKEN); // throws an error if not valid
+
+    return payload;
+  } catch (error) {
+    throw new Error("Not Auth.");
+  }
 };
