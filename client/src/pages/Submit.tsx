@@ -59,6 +59,11 @@ const ADD_POST = gql`
   }
 `;
 
+interface IAddPostInput {
+  link: string;
+  title: string;
+}
+
 const Submit: React.FunctionComponent = () => {
   const theme = useTheme();
 
@@ -160,8 +165,3 @@ const Submit: React.FunctionComponent = () => {
 };
 
 export default Submit;
-
-interface IAddPostInput {
-  link: string;
-  title: string;
-}

@@ -38,6 +38,16 @@ const styles = {
   `,
 };
 
+export interface IPost {
+  title: string;
+  link: string;
+  upvote: number;
+  createdAt: number;
+  author: {
+    name: string;
+  };
+}
+
 type ComponentProps = {
   post: IPost;
   rank: number;
@@ -61,7 +71,7 @@ const Post: FunctionComponent<ComponentProps> = ({ post, rank }) => {
       {/* upper row */}
       <div>
         <span
-          css={(theme) => css`
+          css={css`
             color: ${theme.colors.primary};
           `}
         >
@@ -87,13 +97,3 @@ const Post: FunctionComponent<ComponentProps> = ({ post, rank }) => {
 };
 
 export default Post;
-
-export interface IPost {
-  title: string;
-  link: string;
-  upvote: number;
-  createdAt: number;
-  author: {
-    name: string;
-  };
-}
