@@ -1,10 +1,11 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 
 import { css } from "@emotion/react";
 import { gql, useMutation } from "@apollo/client";
 import { Redirect } from "@reach/router";
 
 import { setAccessToken } from "../accessToken";
+import validateRegister from "../utils/validateRegister";
 
 const styles = {
   container: css`
@@ -48,22 +49,49 @@ const LOGIN = gql`
   }
 `;
 
+interface IUser {
+  name: string;
+  password: string;
+}
+
 const Login: FunctionComponent = () => {
   const [loginName, setLoginName] = useState("");
   const [loginPass, setLoginPass] = useState("");
   const [registerName, setRegisterName] = useState("");
   const [registerPass, setRegisterPass] = useState("");
+  const [feedbackMessage, setFeedbackMessage] = useState<null | string>(null);
 
   const [register, { data: registerData }] = useMutation(REGISTER);
   const [login, { data: loginData }] = useMutation(LOGIN);
 
-  const handleLoginClick = (user: ILogin) => {
+  const handleLoginClick = (user: IUser) => {
     login({ variables: { user } });
   };
 
-  const handleRegisterClick = (user: IRegister) => {
+  const handleRegisterClick = (user: IUser) => {
+    try {
+      validateRegister(user);
+    } catch (err) {
+      setFeedbackMessage(err.message);
+      return;
+    }
+
     register({ variables: { user } });
   };
+
+  useEffect(() => {
+    if (registerData) {
+      const { message } = registerData.register;
+      setFeedbackMessage(message);
+    }
+  }, [registerData]);
+
+  useEffect(() => {
+    if (loginData) {
+      const { message } = loginData.login;
+      setFeedbackMessage(message);
+    }
+  }, [loginData]);
 
   if (loginData && loginData.login.success === true) {
     setAccessToken(loginData.login.accessToken);
@@ -74,10 +102,7 @@ const Login: FunctionComponent = () => {
   return (
     <div css={styles.container}>
       {/* feedback */}
-      {registerData && (
-        <p css={styles.feedback}>{registerData.register.message}</p>
-      )}
-      {loginData && <p css={styles.feedback}>{loginData.login.message}</p>}
+      {feedbackMessage && <p css={styles.feedback}>{feedbackMessage}</p>}
 
       {/* login form */}
       <div>
@@ -165,13 +190,3 @@ const Login: FunctionComponent = () => {
 };
 
 export default Login;
-
-interface IRegister {
-  name: string;
-  password: string;
-}
-
-interface ILogin {
-  name: string;
-  password: string;
-}
