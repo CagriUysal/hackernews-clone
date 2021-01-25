@@ -1,7 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { verify } from "jsonwebtoken";
 import { Request } from "express";
-import { JwtPayload } from "jwt-decode";
 
 const jwt = require("jsonwebtoken"); //eslint-disable-line
 

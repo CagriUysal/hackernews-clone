@@ -55,7 +55,6 @@ const PORT = 3000;
 
       res.send({ ok: true, accessToken });
     } catch (error) {
-      console.log(error);
       res.send({ ok: false, accessToken: "" });
     }
   });
