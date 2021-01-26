@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { verify } from "jsonwebtoken";
 import { Request } from "express";
 
-const jwt = require("jsonwebtoken"); //eslint-disable-line
+import jwt from "jsonwebtoken";
 
 export const createAccessToken = (userName: string): string => {
   return jwt.sign({ userName }, process.env.ACCESS_TOKEN, { expiresIn: "15m" });

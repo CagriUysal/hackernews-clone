@@ -1,9 +1,11 @@
+import dotenv from "dotenv";
 import { ApolloServer } from "apollo-server";
+
 import { resolvers } from "./resolvers";
 import { typeDefs } from "./schema";
 import { isAuth } from "./auth";
 
-require("dotenv").config(); // eslint-disable-line
+dotenv.config();
 
 // Graphql server (CRUD)
 const server = new ApolloServer({

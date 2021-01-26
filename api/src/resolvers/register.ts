@@ -1,6 +1,6 @@
+import bcrypt from "bcrypt";
 import { Prisma } from "@prisma/client";
 import { User } from "@prisma/client/index";
-const bcrypt = require("bcrypt"); //eslint-disable-line
 
 import { prisma } from "./prismaClient";
 
@@ -31,6 +31,7 @@ export default async function (
       user: newUser,
     };
   } catch (err) {
+    console.log(err.message);
     if (err.code === "P2002") {
       // unique field taken error
       return {

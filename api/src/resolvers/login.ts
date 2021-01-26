@@ -1,4 +1,4 @@
-const bcrypt = require("bcrypt"); //eslint-disable-line
+import bcrypt from "bcrypt";
 
 import { prisma } from "./prismaClient";
 import sendRefreshToken from "../sendRefreshToken";

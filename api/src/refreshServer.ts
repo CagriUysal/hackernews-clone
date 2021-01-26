@@ -1,14 +1,14 @@
+import express from "express";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import dotenv from "dotenv";
 import { verify } from "jsonwebtoken";
 import { PrismaClient } from "@prisma/client";
-
-const express = require("express"); // eslint-disable-line
-const cookieParser = require("cookie-parser"); //eslint-disable-line
-const cors = require("cors"); //eslint-disable-line
 
 import { createAccessToken, createRefreshToken } from "./auth";
 import sendRefreshToken from "./sendRefreshToken";
 
-require("dotenv").config(); // eslint-disable-line
+dotenv.config();
 
 const prisma = new PrismaClient();
 
