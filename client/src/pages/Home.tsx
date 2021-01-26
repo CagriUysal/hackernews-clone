@@ -4,7 +4,7 @@ import { useQuery, gql } from "@apollo/client";
 import { useTheme } from "@emotion/react";
 
 import Header from "../components/Header";
-import Posts from "../components/Posts";
+import PostList from "../components/PostList";
 
 const ALL_POSTS = gql`
   query AllPosts {
@@ -28,7 +28,7 @@ const Home: FunctionComponent = () => {
   return (
     <div css={theme.layout}>
       <Header />
-      {data && <Posts posts={data.posts} />}
+      {data && <PostList posts={data.posts} />}
     </div>
   );
 };
