@@ -71,6 +71,7 @@ export const typeDefs = gql`
   """
   type Query {
     posts: [Post]!
+    post(id: Int!): Post
     me: User
   }
 

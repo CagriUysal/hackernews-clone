@@ -52,7 +52,7 @@
   "scripts": {
     "migrate": "prisma migrate dev --preview-feature",
     "generate": "prisma generate",
-    "server": "nodemon --watch api/src/**/*.ts --ignore api/src/refreshServer.ts  --exec 'ts-node --project api/tsconfig.json api/src/server.ts'",
+    "server": "nodemon --watch api/src/**/*.ts  --exec 'ts-node --project api/tsconfig.json api/src/server.ts'",
     "refresh-server": "nodemon --watch api/src/refreshServer.ts  --exec 'ts-node --project api/tsconfig.json api/src/refreshServer.ts'",
     "fillDB": "ts-node api/src/db/mock/fill.ts",
     "wipeDB": "ts-node api/src/db/mock/wipe.ts",

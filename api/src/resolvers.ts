@@ -1,4 +1,5 @@
 import posts from "./resolvers/posts";
+import post from "./resolvers/post";
 import me from "./resolvers/me";
 import addPost from "./resolvers/addPost";
 import login from "./resolvers/login";
@@ -15,6 +16,7 @@ export const resolvers = {
 
   Query: {
     posts,
+    post,
     me,
   },
 
