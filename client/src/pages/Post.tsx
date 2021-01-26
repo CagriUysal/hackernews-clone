@@ -35,17 +35,20 @@ const Post: FunctionComponent<ComponentProps> = ({ postId }) => {
     variables: { id: Number(postId) },
   });
 
-  let body = null;
   if (data && data.post) {
-    body = <PostListItem post={data.post} rank={null} />;
+    return (
+      <div css={theme.layout}>
+        <Header />
+        <div css={styles.container}>
+          <PostListItem post={data.post} rank={null} />
+        </div>
+      </div>
+    );
+  } else if (data && data.post === null) {
+    return <p>No such item.</p>;
   }
 
-  return (
-    <div css={theme.layout}>
-      <Header />
-      <div css={styles.container}>{body}</div>
-    </div>
-  );
+  return null;
 };
 
 export default Post;
