@@ -9,6 +9,7 @@ import PostList from "../components/PostList";
 const ALL_POSTS = gql`
   query AllPosts {
     posts {
+      id
       title
       link
       upvote

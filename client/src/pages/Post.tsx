@@ -14,6 +14,7 @@ const styles = {
 const POST = gql`
   query Post($id: Int!) {
     post(id: $id) {
+      id
       title
       link
       upvote

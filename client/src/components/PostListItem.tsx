@@ -6,6 +6,7 @@ import { css, useTheme } from "@emotion/react";
 
 // @ts-ignore
 import upArrow from "../assets/grayarrow2x.gif";
+import { Link } from "@reach/router";
 
 // @ts-ignore
 TimeAgo.addDefaultLocale(en);
@@ -31,9 +32,15 @@ const styles = {
     font-size: 0.7em;
     margin-left: 0.5em;
   `,
+  link: css`
+    &:hover {
+      text-decoration: underline;
+    }
+  `,
 };
 
 export interface IPost {
+  id: number;
   title: string;
   link: string;
   upvote: number;
@@ -52,6 +59,7 @@ const Post: FunctionComponent<ComponentProps> = ({ post, rank }) => {
   const theme = useTheme();
 
   const {
+    id,
     title,
     link,
     upvote,
@@ -92,7 +100,10 @@ const Post: FunctionComponent<ComponentProps> = ({ post, rank }) => {
             margin-left: ${rank ? "4em" : "2.5em"};
           `}
         >
-          {upvote} points by {name} {timeAgo.format(createdAt)}
+          {upvote} points by {name}{" "}
+          <Link to={`/post/${id}`} css={styles.link}>
+            {timeAgo.format(createdAt)}
+          </Link>
         </span>
       </div>
     </div>
