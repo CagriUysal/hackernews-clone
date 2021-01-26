@@ -3,6 +3,7 @@ import { css, useTheme } from "@emotion/react";
 import { useQuery, gql } from "@apollo/client";
 
 import Header from "../components/Header";
+import PostListItem from "../components/PostListItem";
 
 const styles = {
   container: (theme) => css`
@@ -13,8 +14,10 @@ const styles = {
 const POST = gql`
   query Post($id: Int!) {
     post(id: $id) {
-      link
       title
+      link
+      upvote
+      createdAt
       author {
         name
       }
@@ -34,9 +37,7 @@ const Post: FunctionComponent<ComponentProps> = ({ postId }) => {
 
   let body = null;
   if (data && data.post) {
-    const { title } = data.post;
-
-    body = <p>{title}</p>;
+    body = <PostListItem post={data.post} rank={null} />;
   }
 
   return (

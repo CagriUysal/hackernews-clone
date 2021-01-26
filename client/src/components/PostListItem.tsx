@@ -31,11 +31,6 @@ const styles = {
     font-size: 0.7em;
     margin-left: 0.5em;
   `,
-  bottom: (theme) => css`
-    color: ${theme.colors.primary};
-    font-size: 0.7em;
-    margin-left: 4em;
-  `,
 };
 
 export interface IPost {
@@ -50,7 +45,7 @@ export interface IPost {
 
 type ComponentProps = {
   post: IPost;
-  rank: number;
+  rank: number | null;
 };
 
 const Post: FunctionComponent<ComponentProps> = ({ post, rank }) => {
@@ -70,13 +65,15 @@ const Post: FunctionComponent<ComponentProps> = ({ post, rank }) => {
     <div css={styles.container}>
       {/* upper row */}
       <div>
-        <span
-          css={css`
-            color: ${theme.colors.primary};
-          `}
-        >
-          {rank}.
-        </span>
+        {rank && (
+          <span
+            css={css`
+              color: ${theme.colors.primary};
+            `}
+          >
+            {rank}.
+          </span>
+        )}
         <button css={styles.button}>
           <img src={upArrow} alt="up arrow" height="12px" width="12px" />
         </button>
@@ -88,7 +85,13 @@ const Post: FunctionComponent<ComponentProps> = ({ post, rank }) => {
 
       {/* bottom row */}
       <div>
-        <span css={styles.bottom}>
+        <span
+          css={(theme) => css`
+            color: ${theme.colors.primary};
+            font-size: 0.7em;
+            margin-left: ${rank ? "4em" : "2.5em"};
+          `}
+        >
           {upvote} points by {name} {timeAgo.format(createdAt)}
         </span>
       </div>
