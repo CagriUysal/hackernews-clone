@@ -35,6 +35,33 @@ export const typeDefs = gql`
   }
 
   """
+  Comment
+  """
+  type Comment {
+    id: ID!
+    message: String!
+    upvotes: Int!
+    createdAt: Float!
+    post: Post!
+    author: User!
+    parent: Comment
+    children: [Comment]
+  }
+
+  input AddCommentInput {
+    message: String!
+    postId: Int!
+    parentId: Int
+  }
+
+  type AddCommentResponse implements Response {
+    code: String!
+    success: Boolean!
+    message: String!
+    comment: Comment
+  }
+
+  """
   User
   """
   type User {
@@ -80,6 +107,7 @@ export const typeDefs = gql`
   """
   type Mutation {
     addPost(post: AddPostInput!): AddPostResponse
+    addComment(comment: AddCommentInput!): AddCommentResponse
     register(user: RegisterInput!): RegisterResponse
     login(user: LoginInput!): LoginResponse
     logout: Boolean
