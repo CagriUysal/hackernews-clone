@@ -14,7 +14,7 @@ type ComponentProps = {
   posts: IPost[];
 };
 
-const Posts: FunctionComponent<ComponentProps> = ({ posts }) => {
+const PostList: FunctionComponent<ComponentProps> = ({ posts }) => {
   return (
     <main css={styles.container}>
       {posts.map((post, index) => (
@@ -28,4 +28,4 @@ const Posts: FunctionComponent<ComponentProps> = ({ posts }) => {
   );
 };
 
-export default Posts;
+export default PostList;

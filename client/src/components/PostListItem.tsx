@@ -55,7 +55,7 @@ type ComponentProps = {
   rank: number | null;
 };
 
-const Post: FunctionComponent<ComponentProps> = ({ post, rank }) => {
+const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
   const theme = useTheme();
 
   const {
@@ -110,4 +110,4 @@ const Post: FunctionComponent<ComponentProps> = ({ post, rank }) => {
   );
 };
 
-export default Post;
+export default PostListItem;
