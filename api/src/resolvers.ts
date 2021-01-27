@@ -5,6 +5,7 @@ import addPost from "./resolvers/addPost";
 import login from "./resolvers/login";
 import register from "./resolvers/register";
 import logout from "./resolvers/logout";
+import addComment from "./resolvers/addComment";
 
 export const resolvers = {
   Response: {
@@ -22,6 +23,7 @@ export const resolvers = {
 
   Mutation: {
     addPost,
+    addComment,
     login,
     register,
     logout,
