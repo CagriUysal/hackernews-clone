@@ -99,6 +99,7 @@ export const typeDefs = gql`
   type Query {
     posts: [Post]!
     post(id: Int!): Post
+    topLevelComments(postId: Int!): [Comment]
     me: User
   }
 
