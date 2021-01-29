@@ -9,8 +9,6 @@ import { css, useTheme } from "@emotion/react";
 import upArrow from "../assets/grayarrow2x.gif";
 import { Link } from "@reach/router";
 
-// @ts-ignore
-TimeAgo.addDefaultLocale(en);
 
 const styles = {
   container: css`
