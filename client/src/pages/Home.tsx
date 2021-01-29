@@ -17,6 +17,9 @@ const ALL_POSTS = gql`
       author {
         name
       }
+      comments {
+        id
+      }
     }
   }
 `;

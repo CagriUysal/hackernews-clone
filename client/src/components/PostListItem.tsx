@@ -1,4 +1,5 @@
 import React, { FunctionComponent } from "react";
+import {Comment} from '@prisma/client/index'
 
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
@@ -48,6 +49,8 @@ export interface IPost {
   author: {
     name: string;
   };
+  comments: Comment[]
+  };
 }
 
 type ComponentProps = {
@@ -65,6 +68,7 @@ const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
     upvote,
     createdAt,
     author: { name },
+    comments,
   } = post;
 
   const timeAgo = new TimeAgo("en-US");
@@ -100,9 +104,16 @@ const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
             margin-left: ${rank ? "4em" : "2.5em"};
           `}
         >
-          {upvote} points by {name}{" "}
+          {upvote} points by{" "}
+          <Link to={`/user/${name}`} css={styles.link}>
+            {name}
+          </Link>{" "}
           <Link to={`/post/${id}`} css={styles.link}>
             {timeAgo.format(createdAt)}
+          </Link>
+          {" | "}
+          <Link to={`post/${id}`} css={styles.link}>
+            {`${comments.length} comments`}
           </Link>
         </span>
       </div>

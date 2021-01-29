@@ -20,6 +20,7 @@ export const typeDefs = gql`
     upvote: Int!
     createdAt: Float!
     author: User!
+    comments: [Comment]
   }
 
   input AddPostInput {

@@ -5,6 +5,6 @@ import { prisma } from "./prismaClient";
 export default async function post(_, { id }: { id: number }): Promise<Post> {
   return await prisma.post.findUnique({
     where: { id },
-    include: { author: true },
+    include: { author: true, comments: true },
   });
 }

@@ -34,6 +34,9 @@ const POST = gql`
       author {
         name
       }
+      comments {
+        id
+      }
     }
   }
 `;
