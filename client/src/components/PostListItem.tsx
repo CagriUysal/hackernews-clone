@@ -110,7 +110,7 @@ const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
             {timeAgo.format(createdAt)}
           </Link>
           {" | "}
-          <Link to={`post/${id}`} css={styles.link}>
+          <Link to={`/post/${id}`} css={styles.link}>
             {`${comments.length} comments`}
           </Link>
         </span>
