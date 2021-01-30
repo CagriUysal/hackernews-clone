@@ -97,7 +97,16 @@ const Login: FunctionComponent<RouteComponentProps> = ({ location }) => {
   if (loginData && loginData.login.success === true) {
     setAccessToken(loginData.login.accessToken);
 
-    return <Redirect to="/" noThrow />;
+    return (
+      <Redirect
+        to={
+          location?.state.redirectedFrom
+            ? `${location.state.redirectedFrom}`
+            : "/"
+        }
+        noThrow
+      />
+    );
   }
 
   return (

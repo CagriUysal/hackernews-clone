@@ -178,7 +178,10 @@ const Submit: FunctionComponent<RouteComponentProps> = () => {
       <Redirect
         to="/login"
         noThrow
-        state={{ message: "You have to be logged in to submit." }}
+        state={{
+          message: "You have to be logged in to submit.",
+          redirectedFrom: "/submit",
+        }}
       />
     );
   }
