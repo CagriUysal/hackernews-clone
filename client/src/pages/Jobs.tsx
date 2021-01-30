@@ -1,8 +1,9 @@
-import React from "react";
+import React, { FunctionComponent } from "react";
+import { RouteComponentProps } from "@reach/router";
 
 import Header from "../components/Header";
 
-const Jobs = (): React.ReactElement => {
+const Jobs: FunctionComponent<RouteComponentProps> = () => {
   return <Header />;
 };
 

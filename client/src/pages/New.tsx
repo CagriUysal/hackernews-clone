@@ -1,8 +1,9 @@
-import React from "react";
+import React, { FunctionComponent } from "react";
+import { RouteComponentProps } from "@reach/router";
 
 import Header from "../components/Header";
 
-const New = (): React.ReactElement => {
+const New: FunctionComponent<RouteComponentProps> = () => {
   return <Header />;
 };
 

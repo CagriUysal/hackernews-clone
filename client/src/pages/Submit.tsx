@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, FunctionComponent } from "react";
 
 import { gql, useMutation, useQuery } from "@apollo/client";
-import { Redirect } from "@reach/router";
+import { Redirect, RouteComponentProps } from "@reach/router";
 import { css, useTheme } from "@emotion/react";
 
 import Header from "../components/Header";
@@ -69,7 +69,7 @@ interface IAddPostInput {
   title: string;
 }
 
-const Submit: React.FunctionComponent = () => {
+const Submit: FunctionComponent<RouteComponentProps> = () => {
   const theme = useTheme();
 
   const [title, setTitle] = useState("");

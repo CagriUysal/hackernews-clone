@@ -1,8 +1,7 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
-
+import { FunctionComponent, useEffect, useState } from "react";
 import { css } from "@emotion/react";
 import { gql, useMutation } from "@apollo/client";
-import { Redirect } from "@reach/router";
+import { Redirect, RouteComponentProps } from "@reach/router";
 
 import { setAccessToken } from "../accessToken";
 import validateRegister from "../utils/validateRegister";
@@ -54,7 +53,7 @@ interface IUser {
   password: string;
 }
 
-const Login: FunctionComponent = () => {
+const Login: FunctionComponent<RouteComponentProps> = () => {
   const [loginName, setLoginName] = useState("");
   const [loginPass, setLoginPass] = useState("");
   const [registerName, setRegisterName] = useState("");

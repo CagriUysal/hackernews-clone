@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useState } from "react";
 import { css, useTheme } from "@emotion/react";
 import { useQuery, gql, useMutation } from "@apollo/client";
+import { RouteComponentProps } from "@reach/router";
 
 import Header from "../components/Header";
 import PostListItem from "../components/PostListItem";
@@ -72,9 +73,9 @@ interface IAddCommentInput {
   parentId: number | null;
 }
 
-type ComponentProps = {
-  postId: string;
-};
+interface ComponentProps extends RouteComponentProps {
+  postId?: string;
+}
 
 const Post: FunctionComponent<ComponentProps> = ({ postId }) => {
   const theme = useTheme();

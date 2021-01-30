@@ -1,8 +1,9 @@
-import React from "react";
+import React, { FunctionComponent } from "react";
+import { RouteComponentProps } from "@reach/router";
 
 import Header from "../components/Header";
 
-const Comments = (): React.ReactElement => {
+const Comments: FunctionComponent<RouteComponentProps> = () => {
   return <Header />;
 };
 

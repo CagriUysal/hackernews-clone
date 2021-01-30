@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
-
 import { useQuery, gql } from "@apollo/client";
 import { useTheme } from "@emotion/react";
+import { RouteComponentProps } from "@reach/router";
 
 import Header from "../components/Header";
 import PostList from "../components/PostList";
@@ -24,7 +24,7 @@ const ALL_POSTS = gql`
   }
 `;
 
-const Home: FunctionComponent = () => {
+const Home: FunctionComponent<RouteComponentProps> = () => {
   const theme = useTheme();
 
   const { data } = useQuery(ALL_POSTS);
