@@ -40,14 +40,30 @@ export interface IComment {
   author: {
     name: string;
   };
+  post?: {
+    id: number;
+    title: string;
+  };
+  parent?: {
+    id: number;
+  } | null;
 }
 
-interface IComponentProps {
+type ComponentProps = {
   comment: IComment;
-}
+};
 
-const CommentListItem: FunctionComponent<IComponentProps> = ({ comment }) => {
+const CommentListItem: FunctionComponent<ComponentProps> = ({ comment }) => {
   const timeAgo = new TimeAgo("en-US");
+
+  const {
+    id,
+    message,
+    createdAt,
+    author: { name },
+    post: { id: postId, title } = {},
+    // parent: { id: parentId }, // parent can be null, so can't destruct its id!
+  } = comment;
 
   return (
     <div css={styles.container}>
@@ -57,18 +73,42 @@ const CommentListItem: FunctionComponent<IComponentProps> = ({ comment }) => {
           <img src={upArrow} alt="up arrow" height="12px" width="12px" />
         </button>
         <span css={styles.info}>
-          <Link to={`/user/${comment.author.name}`} css={styles.link}>
-            {comment.author.name}
+          <Link to={`/user/${name}`} css={styles.link}>
+            {name}
           </Link>{" "}
-          <Link to={`/comment/${comment.id}`} css={styles.link}>
-            {timeAgo.format(comment.createdAt)}
+          <Link to={`/comment/${id}`} css={styles.link}>
+            {timeAgo.format(createdAt)}
           </Link>
+          {comment.parent !== undefined &&
+            (comment.parent !== null ? (
+              <>
+                {" | "}
+                <Link to={`/comment/${comment.parent.id}`} css={styles.link}>
+                  parent
+                </Link>
+              </>
+            ) : (
+              <>
+                {" | "}
+                <Link to={`/post/${postId}`} css={styles.link}>
+                  parent
+                </Link>
+              </>
+            ))}
+          {comment.post !== undefined && (
+            <>
+              {" | on "}
+              <Link to={`/post/${postId}`} css={styles.link}>
+                {title}
+              </Link>
+            </>
+          )}
         </span>
       </div>
 
       {/* buttom row  */}
       <div css={styles.bottomRow}>
-        <p>{comment.message}</p>
+        <p>{message}</p>
       </div>
     </div>
   );

@@ -4,7 +4,9 @@ import { css } from "@emotion/react";
 import CommentListItem, { IComment } from "./CommentListItem";
 
 const styles = {
-  container: css``,
+  container: (theme) => css`
+    background-color: ${theme.colors.bg};
+  `,
 };
 
 type ComponentProps = {
@@ -12,6 +14,8 @@ type ComponentProps = {
 };
 
 const PostList: FunctionComponent<ComponentProps> = ({ comments }) => {
+  console.log(comments);
+
   return (
     <main css={styles.container}>
       {comments.map((comment) => (

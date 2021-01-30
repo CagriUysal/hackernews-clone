@@ -7,6 +7,7 @@ import register from "./resolvers/register";
 import logout from "./resolvers/logout";
 import addComment from "./resolvers/addComment";
 import topLevelComments from "./resolvers/topLevelComments";
+import comments from "./resolvers/comments";
 
 export const resolvers = {
   Response: {
@@ -19,6 +20,7 @@ export const resolvers = {
   Query: {
     posts,
     post,
+    comments,
     topLevelComments,
     me,
   },
