@@ -107,7 +107,7 @@ const Submit: FunctionComponent<RouteComponentProps> = () => {
   } else if (data && data.me) {
     return (
       <div css={theme.layout}>
-        <Header />
+        <Header onlyTitle="Submit" />
         <div css={styles.container}>
           {errorMessage && <span css={styles.error}>{errorMessage}</span>}
           <div

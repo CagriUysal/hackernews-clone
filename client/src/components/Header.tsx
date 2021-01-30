@@ -32,6 +32,11 @@ const styles = {
     cursor: pointer;
     padding: 0;
   `,
+  title: css`
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    font-weight: bold;
+  `,
 };
 
 const navigationMaps = [
@@ -79,13 +84,18 @@ const LOG_OUT = gql`
   }
 `;
 
-const Header: FunctionComponent = () => {
+type ComponentProps = {
+  // if given, only the title shown and navigation is hidden
+  onlyTitle?: string;
+};
+
+const Header: FunctionComponent<ComponentProps> = ({ onlyTitle }) => {
   const currentPath = window.location.pathname;
 
   const { data } = useQuery(ME, { fetchPolicy: "network-only" });
   const [logOut, { client }] = useMutation(LOG_OUT);
 
-  const handleButtonClick = async () => {
+  const handleLogout = async () => {
     await logOut();
     setAccessToken("");
     await client.resetStore();
@@ -110,50 +120,51 @@ const Header: FunctionComponent = () => {
           />
         </Link>
 
-        <Link
-          to="/"
-          css={css`
-            margin-left: 0.5em;
-            margin-right: 0.5em;
-            font-weight: bold;
-          `}
-        >
-          Hacker News
-        </Link>
+        {onlyTitle ? (
+          <p css={styles.title}>{onlyTitle}</p>
+        ) : (
+          <Link to="/" css={styles.title}>
+            Hacker News
+          </Link>
+        )}
 
-        <nav>
-          {navigationMaps.map(({ name, path }, i) => (
-            <React.Fragment key={path}>
-              <Link
-                to={path}
-                css={css`
-                  color: ${currentPath === path ? "#FFF" : undefined};
-                `}
-              >
-                {name}
-              </Link>
-              <span>{i !== navigationMaps.length - 1 ? " | " : ""}</span>
-            </React.Fragment>
-          ))}
-        </nav>
+        {!onlyTitle && (
+          <>
+            <nav>
+              {navigationMaps.map(({ name, path }, i) => (
+                <React.Fragment key={path}>
+                  <Link
+                    to={path}
+                    css={css`
+                      color: ${currentPath === path ? "#FFF" : undefined};
+                    `}
+                  >
+                    {name}
+                  </Link>
+                  <span>{i !== navigationMaps.length - 1 ? " | " : ""}</span>
+                </React.Fragment>
+              ))}
+            </nav>
 
-        <div
-          css={css`
-            ${styles.login}
-          `}
-        >
-          {data && data.me ? (
-            <>
-              <Link to="/user">{data.me.name}</Link>
-              {" | "}
-              <button css={styles.logout} onClick={handleButtonClick}>
-                logout
-              </button>
-            </>
-          ) : (
-            <Link to="/login">login</Link>
-          )}
-        </div>
+            <div
+              css={css`
+                ${styles.login}
+              `}
+            >
+              {data && data.me ? (
+                <>
+                  <Link to="/user">{data.me.name}</Link>
+                  {" | "}
+                  <button css={styles.logout} onClick={handleLogout}>
+                    logout
+                  </button>
+                </>
+              ) : (
+                <Link to="/login">login</Link>
+              )}
+            </div>
+          </>
+        )}
       </div>
     </header>
   );
