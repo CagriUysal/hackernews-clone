@@ -96,7 +96,7 @@ const Submit: FunctionComponent<RouteComponentProps> = () => {
   if (postData && postData.addPost) {
     const { success, message } = postData.addPost;
     if (success) {
-      return <Redirect to="/" />;
+      return <Redirect to="/" noThrow />;
     } else {
       console.log(message);
     }
@@ -174,7 +174,13 @@ const Submit: FunctionComponent<RouteComponentProps> = () => {
       </div>
     );
   } else {
-    return <Redirect to="/login" noThrow />;
+    return (
+      <Redirect
+        to="/login"
+        noThrow
+        state={{ message: "You have to be logged in to submit." }}
+      />
+    );
   }
 };
 

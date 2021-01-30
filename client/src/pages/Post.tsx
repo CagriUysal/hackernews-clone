@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState } from "react";
 import { css, useTheme } from "@emotion/react";
 import { useQuery, gql, useMutation } from "@apollo/client";
-import { RouteComponentProps } from "@reach/router";
+import { Redirect, RouteComponentProps } from "@reach/router";
 
 import Header from "../components/Header";
 import PostListItem from "../components/PostListItem";
@@ -46,6 +46,7 @@ const ADD_COMMENT = gql`
   mutation AddComment($comment: AddCommentInput!) {
     addComment(comment: $comment) {
       code
+      success
       message
       comment {
         message
@@ -86,13 +87,26 @@ const Post: FunctionComponent<ComponentProps> = ({ postId }) => {
   const { data: topLevelCommentsData } = useQuery(TOP_LEVEL_COMMENTS, {
     variables: { postId: Number(postId) },
   });
-  const [addComment] = useMutation(ADD_COMMENT);
+  const [addComment, { data: addCommentData }] = useMutation(ADD_COMMENT);
 
   const [comment, setComment] = useState("");
 
   const handleAddComment = (comment: IAddCommentInput) => {
     addComment({ variables: { comment } });
   };
+
+  if (addCommentData) {
+    const { success, code } = addCommentData.addComment;
+    if (success === false && code === "401") {
+      return (
+        <Redirect
+          to="/login"
+          noThrow
+          state={{ message: "You have to be logged in to comment." }}
+        />
+      );
+    }
+  }
 
   if (data && data.post) {
     return (

@@ -12,8 +12,6 @@ type ComponentProps = {
 };
 
 const PostList: FunctionComponent<ComponentProps> = ({ comments }) => {
-  console.log(comments);
-
   return (
     <main css={styles.container}>
       {comments.map((comment) => (
