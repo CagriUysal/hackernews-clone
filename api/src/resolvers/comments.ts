@@ -4,6 +4,6 @@ import { prisma } from "./prismaClient";
 
 export default async function comments(): Promise<Comment[]> {
   return await prisma.comment.findMany({
-    include: { author: true, post: true },
+    include: { author: true, post: true, parent: true },
   });
 }
