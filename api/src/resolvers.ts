@@ -8,6 +8,7 @@ import logout from "./resolvers/logout";
 import addComment from "./resolvers/addComment";
 import topLevelComments from "./resolvers/topLevelComments";
 import comments from "./resolvers/comments";
+import comment from "./resolvers/comment";
 
 export const resolvers = {
   Response: {
@@ -21,6 +22,7 @@ export const resolvers = {
     posts,
     post,
     comments,
+    comment,
     topLevelComments,
     me,
   },

@@ -101,6 +101,7 @@ export const typeDefs = gql`
     posts: [Post!]!
     post(id: Int!): Post
     comments: [Comment!]!
+    comment(id: Int!): Comment
     topLevelComments(postId: Int!): [Comment!]!
     me: User
   }
