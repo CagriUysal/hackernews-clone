@@ -6,7 +6,7 @@ import login from "./resolvers/login";
 import register from "./resolvers/register";
 import logout from "./resolvers/logout";
 import addComment from "./resolvers/addComment";
-import topLevelComments from "./resolvers/topLevelComments";
+import postComments from "./resolvers/postComments";
 import comments from "./resolvers/comments";
 import comment from "./resolvers/comment";
 
@@ -21,9 +21,9 @@ export const resolvers = {
   Query: {
     posts,
     post,
+    postComments,
     comments,
     comment,
-    topLevelComments,
     me,
   },
 
