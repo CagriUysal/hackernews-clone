@@ -40,13 +40,13 @@ export interface IComment {
   author: {
     name: string;
   };
+  parent: {
+    id: number;
+  } | null;
   post?: {
     id: number;
     title: string;
   };
-  parent?: {
-    id: number;
-  } | null;
 }
 
 type ComponentProps = {
@@ -65,6 +65,13 @@ const CommentListItem: FunctionComponent<ComponentProps> = ({ comment }) => {
     // parent: { id: parentId }, // parent can be null, so can't destruct its id!
   } = comment;
 
+  // if post information provided, comment list item will
+  // show more information in its top row
+  let extendedDisplay = false;
+  if (postId !== undefined) {
+    extendedDisplay = true;
+  }
+
   return (
     <div css={styles.container}>
       {/* upper row */}
@@ -79,7 +86,7 @@ const CommentListItem: FunctionComponent<ComponentProps> = ({ comment }) => {
           <Link to={`/comment/${id}`} css={styles.link}>
             {timeAgo.format(createdAt)}
           </Link>
-          {comment.parent !== undefined &&
+          {extendedDisplay &&
             (comment.parent !== null ? (
               <>
                 {" | "}
@@ -95,7 +102,7 @@ const CommentListItem: FunctionComponent<ComponentProps> = ({ comment }) => {
                 </Link>
               </>
             ))}
-          {comment.post !== undefined && (
+          {extendedDisplay && (
             <>
               {" | on "}
               <Link to={`/post/${postId}`} css={styles.link}>

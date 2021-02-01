@@ -55,12 +55,15 @@ const ADD_COMMENT = gql`
   }
 `;
 
-const TOP_LEVEL_COMMENTS = gql`
-  query TopLevelComments($postId: Int!) {
-    topLevelComments(postId: $postId) {
+const POST_COMMENTS = gql`
+  query PostComments($postId: Int!) {
+    postComments(postId: $postId) {
       id
       message
       createdAt
+      parent {
+        id
+      }
       author {
         name
       }
@@ -84,7 +87,7 @@ const Post: FunctionComponent<ComponentProps> = ({ postId }) => {
   const { data } = useQuery(POST, {
     variables: { id: Number(postId) },
   });
-  const { data: topLevelCommentsData } = useQuery(TOP_LEVEL_COMMENTS, {
+  const { data: postCommentsData } = useQuery(POST_COMMENTS, {
     variables: { postId: Number(postId) },
   });
   const [addComment, { data: addCommentData }] = useMutation(ADD_COMMENT);
@@ -137,8 +140,8 @@ const Post: FunctionComponent<ComponentProps> = ({ postId }) => {
             add comment
           </button>
 
-          {topLevelCommentsData && (
-            <CommentList comments={topLevelCommentsData.topLevelComments} />
+          {postCommentsData && (
+            <CommentList comments={postCommentsData.postComments} />
           )}
         </div>
       </div>
