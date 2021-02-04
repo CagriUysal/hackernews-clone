@@ -94,7 +94,10 @@ const CommentListItem: FunctionComponent<ComponentProps> = ({
             (comment.parent !== null ? (
               <>
                 {" | "}
-                <Link to={`/comment/${comment.parent.id}`} css={styles.link}>
+                <Link
+                  to={`/post/${postId}/comment/${comment.parent.id}`}
+                  css={styles.link}
+                >
                   parent
                 </Link>
               </>
