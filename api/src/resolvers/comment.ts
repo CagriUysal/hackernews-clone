@@ -8,6 +8,6 @@ export default async function comment(
 ): Promise<Comment> {
   return await prisma.comment.findUnique({
     where: { id },
-    include: { author: true, parent: true, post: true, children: true },
+    include: { author: true, parent: true, post: true },
   });
 }

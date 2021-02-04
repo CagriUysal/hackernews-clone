@@ -61,6 +61,5 @@ model Comment {
   authorId Int
 
   parentId Int?
-  parent Comment? @relation("ParentChildren", fields:[parentId], references: [id])
-  children Comment[] @relation("ParentChildren")
+  parent Comment? @relation(fields:[parentId], references: [id])
 }

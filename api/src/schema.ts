@@ -46,7 +46,6 @@ export const typeDefs = gql`
     post: Post!
     author: User!
     parent: Comment
-    children: [Comment]
   }
 
   input AddCommentInput {
