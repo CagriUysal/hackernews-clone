@@ -51,9 +51,13 @@ export interface IComment {
 
 type ComponentProps = {
   comment: IComment;
+  level: number;
 };
 
-const CommentListItem: FunctionComponent<ComponentProps> = ({ comment }) => {
+const CommentListItem: FunctionComponent<ComponentProps> = ({
+  comment,
+  level,
+}) => {
   const timeAgo = new TimeAgo("en-US");
 
   const {
@@ -73,7 +77,12 @@ const CommentListItem: FunctionComponent<ComponentProps> = ({ comment }) => {
   }
 
   return (
-    <div css={styles.container}>
+    <div
+      css={css`
+        ${styles.container}
+        margin-left: ${level * 3}em;
+      `}
+    >
       {/* upper row */}
       <div>
         <button css={styles.button}>
