@@ -16,6 +16,7 @@ import Jobs from "./pages/Jobs";
 import Submit from "./pages/Submit";
 import Login from "./pages/Login";
 import Post from "./pages/Post";
+import Comment from "./pages/Comment";
 
 const App: FunctionComponent = () => {
   const [loading, setLoading] = useState(true);
@@ -79,6 +80,7 @@ const App: FunctionComponent = () => {
         <Submit path="/submit" />
         <Login path="/login" />
         <Post path="/post/:postId" />
+        <Comment path="/post/:postId/comment/:commentId" />
       </Router>
     </>
   );

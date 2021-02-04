@@ -1,10 +1,11 @@
 import React, { FunctionComponent, useState } from "react";
 import { css, useTheme } from "@emotion/react";
+import { RouteComponentProps } from "@reach/router";
 import { useQuery, gql, useMutation } from "@apollo/client";
-import { Redirect, RouteComponentProps } from "@reach/router";
+import { Redirect } from "@reach/router";
 
 import Header from "../components/Header";
-import PostListItem from "../components/PostListItem";
+import CommentListItem from "../components/CommentListItem";
 import CommentList from "../components/CommentList";
 
 const styles = {
@@ -24,19 +25,20 @@ const styles = {
   `,
 };
 
-const POST = gql`
-  query Post($id: Int!) {
-    post(id: $id) {
-      id
-      title
-      link
-      upvote
+const COMMENT = gql`
+  query Comment($id: Int!) {
+    comment(id: $id) {
+      message
       createdAt
+      parent {
+        id
+      }
       author {
         name
       }
-      comments {
+      post {
         id
+        title
       }
     }
   }
@@ -82,19 +84,18 @@ interface IAddCommentInput {
 }
 
 interface ComponentProps extends RouteComponentProps {
+  commentId?: string;
   postId?: string;
 }
 
-const Post: FunctionComponent<ComponentProps> = ({ postId }) => {
+const Comment: FunctionComponent<ComponentProps> = ({ commentId, postId }) => {
   const theme = useTheme();
 
-  const { data } = useQuery(POST, {
-    variables: { id: Number(postId) },
-  });
+  const { data } = useQuery(COMMENT, { variables: { id: Number(commentId) } });
+  const [addComment, { data: addCommentData }] = useMutation(ADD_COMMENT);
   const { data: postCommentsData } = useQuery(POST_COMMENTS, {
     variables: { postId: Number(postId) },
   });
-  const [addComment, { data: addCommentData }] = useMutation(ADD_COMMENT);
 
   const [comment, setComment] = useState("");
 
@@ -115,46 +116,57 @@ const Post: FunctionComponent<ComponentProps> = ({ postId }) => {
     }
   }
 
-  if (data && data.post) {
+  if (data && data.comment) {
     return (
       <div css={theme.layout}>
         <Header />
-        <div css={styles.container}>
-          <PostListItem post={data.post} rank={null} />
-
-          <textarea
-            name="text"
-            id="text"
-            css={styles.commentInput}
-            rows={6}
-            value={comment}
-            onChange={(event) => setComment(event.target.value)}
-          />
-
-          <button
-            css={styles.button}
-            onClick={() =>
-              handleAddComment({
-                message: comment,
-                postId: Number(postId),
-                parentId: null,
-              })
-            }
+        <main css={styles.container}>
+          <div
+            css={css`
+              padding-bottom: 1em;
+            `}
           >
-            add comment
-          </button>
+            <CommentListItem comment={data.comment} extendedDisplay />
 
-          {postCommentsData && (
-            <CommentList comments={postCommentsData.postComments} />
-          )}
-        </div>
+            <textarea
+              name="text"
+              id="text"
+              css={styles.commentInput}
+              rows={6}
+              value={comment}
+              onChange={(event) => setComment(event.target.value)}
+            />
+
+            <button
+              css={styles.button}
+              onClick={() =>
+                handleAddComment({
+                  message: comment,
+                  postId: Number(postId),
+                  parentId: Number(commentId),
+                })
+              }
+            >
+              reply
+            </button>
+          </div>
+
+          <div>
+            {postCommentsData && (
+              <CommentList
+                comments={postCommentsData.postComments}
+                parentId={Number(commentId)}
+              />
+            )}
+          </div>
+        </main>
       </div>
     );
-  } else if (data && data.post === null) {
+  } else if (data && data.comment === null) {
     return <p>No such item.</p>;
   }
 
   return null;
 };
 
-export default Post;
+export default Comment;

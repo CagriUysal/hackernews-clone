@@ -8,6 +8,6 @@ export default async function postComments(
 ): Promise<Comment[]> {
   return await prisma.comment.findMany({
     where: { post: { id: postId } },
-    include: { author: true, parent: true },
+    include: { author: true, parent: true, post: true },
   });
 }

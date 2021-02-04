@@ -43,7 +43,7 @@ export interface IComment {
   parent: {
     id: number;
   } | null;
-  post?: {
+  post: {
     id: number;
     title: string;
   };
@@ -51,12 +51,14 @@ export interface IComment {
 
 type ComponentProps = {
   comment: IComment;
-  level: number;
+  level?: number;
+  extendedDisplay?: boolean;
 };
 
 const CommentListItem: FunctionComponent<ComponentProps> = ({
   comment,
-  level,
+  level = 0,
+  extendedDisplay = false,
 }) => {
   const timeAgo = new TimeAgo("en-US");
 
@@ -65,16 +67,9 @@ const CommentListItem: FunctionComponent<ComponentProps> = ({
     message,
     createdAt,
     author: { name },
-    post: { id: postId, title } = {},
+    post: { id: postId, title },
     // parent: { id: parentId }, // parent can be null, so can't destruct its id!
   } = comment;
-
-  // if post information provided, comment list item will
-  // show more information in its top row
-  let extendedDisplay = false;
-  if (postId !== undefined) {
-    extendedDisplay = true;
-  }
 
   return (
     <div
@@ -92,7 +87,7 @@ const CommentListItem: FunctionComponent<ComponentProps> = ({
           <Link to={`/user/${name}`} css={styles.link}>
             {name}
           </Link>{" "}
-          <Link to={`/comment/${id}`} css={styles.link}>
+          <Link to={`/post/${postId}/comment/${id}`} css={styles.link}>
             {timeAgo.format(createdAt)}
           </Link>
           {extendedDisplay &&

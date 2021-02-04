@@ -14,7 +14,7 @@ export const typeDefs = gql`
   Post
   """
   type Post {
-    id: ID!
+    id: Int!
     link: String!
     title: String!
     upvote: Int!
@@ -39,7 +39,7 @@ export const typeDefs = gql`
   Comment
   """
   type Comment {
-    id: ID!
+    id: Int!
     message: String!
     upvotes: Int!
     createdAt: Float!
@@ -65,7 +65,7 @@ export const typeDefs = gql`
   User
   """
   type User {
-    id: ID!
+    id: Int!
     name: String!
   }
 

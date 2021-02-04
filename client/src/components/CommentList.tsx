@@ -40,15 +40,18 @@ const nestComments = (
 
     if (isParent) {
       tree.push(hash[comment.id]);
-    } else {
-      hash[comment.parent!.id].children.push(hash[comment.id]);
+    } else if (comment.parent !== null) {
+      hash[comment.parent.id].children.push(hash[comment.id]);
     }
   });
 
   return tree;
 };
 
-const getOrderedComments = (comments: IComment[]): [lookupValue, number][] => {
+const getOrderedComments = (
+  comments: IComment[],
+  parentId: number | null = null
+): [lookupValue, number][] => {
   const list: [lookupValue, number][] = [];
 
   const preOrderTraverse = (root: lookupValue, level = 0) => {
@@ -60,7 +63,7 @@ const getOrderedComments = (comments: IComment[]): [lookupValue, number][] => {
     root.children.forEach((child) => preOrderTraverse(child, level + 1));
   };
 
-  const nestedComments = nestComments(comments);
+  const nestedComments = nestComments(comments, parentId);
   nestedComments.map((rootComment) => {
     preOrderTraverse(rootComment);
   });
@@ -70,10 +73,15 @@ const getOrderedComments = (comments: IComment[]): [lookupValue, number][] => {
 
 type ComponentProps = {
   comments: IComment[];
+  parentId?: number | null;
 };
 
-const PostList: FunctionComponent<ComponentProps> = ({ comments }) => {
-  const orderedComments = getOrderedComments(comments);
+const PostList: FunctionComponent<ComponentProps> = ({
+  comments,
+  parentId = null,
+}) => {
+  console.log(parentId);
+  const orderedComments = getOrderedComments(comments, parentId);
 
   return (
     <main css={styles.container}>
