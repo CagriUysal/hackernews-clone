@@ -35,7 +35,7 @@ const Comments: FunctionComponent<RouteComponentProps> = () => {
   return (
     <div css={theme.layout}>
       <Header />
-      {data && <CommentList comments={data.comments} />}
+      {data && <CommentList comments={data.comments} extendAll />}
     </div>
   );
 };

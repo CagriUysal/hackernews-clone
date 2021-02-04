@@ -74,28 +74,48 @@ const getOrderedComments = (
 type ComponentProps = {
   comments: IComment[];
   parentId?: number | null;
+  nest?: boolean;
+  extendAll?: boolean;
 };
 
 const PostList: FunctionComponent<ComponentProps> = ({
   comments,
   parentId = null,
+  nest = false,
+  extendAll = false,
 }) => {
-  console.log(parentId);
-  const orderedComments = getOrderedComments(comments, parentId);
+  if (nest) {
+    const orderedComments = getOrderedComments(comments, parentId);
 
-  return (
-    <main css={styles.container}>
-      {orderedComments.map(([comment, level]) => {
-        return (
-          <CommentListItem
-            comment={comment}
-            key={`${comment.createdAt}-${comment.author.name}`}
-            level={level}
-          />
-        );
-      })}
-    </main>
-  );
+    return (
+      <main css={styles.container}>
+        {orderedComments.map(([comment, level]) => {
+          return (
+            <CommentListItem
+              comment={comment}
+              key={`${comment.createdAt}-${comment.author.name}`}
+              level={level}
+              extendedDisplay={extendAll}
+            />
+          );
+        })}
+      </main>
+    );
+  } else {
+    return (
+      <main css={styles.container}>
+        {comments.map((comment) => {
+          return (
+            <CommentListItem
+              comment={comment}
+              key={`${comment.createdAt}-${comment.author.name}`}
+              extendedDisplay={extendAll}
+            />
+          );
+        })}
+      </main>
+    );
+  }
 };
 
 export default PostList;

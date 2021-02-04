@@ -151,11 +151,16 @@ const Comment: FunctionComponent<ComponentProps> = ({ commentId, postId }) => {
             </button>
           </div>
 
-          <div>
+          <div
+            css={css`
+              padding-bottom: 3em;
+            `}
+          >
             {postCommentsData && (
               <CommentList
                 comments={postCommentsData.postComments}
                 parentId={Number(commentId)}
+                nest
               />
             )}
           </div>
