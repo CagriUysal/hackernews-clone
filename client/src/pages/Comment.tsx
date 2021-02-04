@@ -7,6 +7,7 @@ import { Redirect } from "@reach/router";
 import Header from "../components/Header";
 import CommentListItem from "../components/CommentListItem";
 import CommentList from "../components/CommentList";
+import validateComment from "../utils/validateComment";
 
 const styles = {
   container: (theme) => css`
@@ -22,6 +23,10 @@ const styles = {
     margin-left: 2.5em;
     margin-top: 1em;
     margin-bottom: 3em;
+  `,
+  errorMessage: (theme) => css`
+    color: ${theme.colors.primary};
+    padding: 1em;
   `,
 };
 
@@ -97,9 +102,17 @@ const Comment: FunctionComponent<ComponentProps> = ({ commentId, postId }) => {
     variables: { postId: Number(postId) },
   });
 
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [comment, setComment] = useState("");
 
   const handleAddComment = (comment: IAddCommentInput) => {
+    try {
+      validateComment(comment.message);
+    } catch {
+      setErrorMessage("Please try again.");
+      return;
+    }
+
     addComment({ variables: { comment } });
   };
 
@@ -113,6 +126,8 @@ const Comment: FunctionComponent<ComponentProps> = ({ commentId, postId }) => {
           state={{ message: "You have to be logged in to comment." }}
         />
       );
+    } else if (success === true) {
+      if (errorMessage !== null) setErrorMessage(null);
     }
   }
 
@@ -126,6 +141,7 @@ const Comment: FunctionComponent<ComponentProps> = ({ commentId, postId }) => {
               padding-bottom: 1em;
             `}
           >
+            {errorMessage && <p css={styles.errorMessage}>{errorMessage}</p>}
             <CommentListItem comment={data.comment} extendedDisplay />
 
             <textarea

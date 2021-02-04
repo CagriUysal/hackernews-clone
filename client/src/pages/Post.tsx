@@ -6,6 +6,7 @@ import { Redirect, RouteComponentProps } from "@reach/router";
 import Header from "../components/Header";
 import PostListItem from "../components/PostListItem";
 import CommentList from "../components/CommentList";
+import validateComment from "../utils/validateComment";
 
 const styles = {
   container: (theme) => css`
@@ -21,6 +22,10 @@ const styles = {
     margin-left: 2.5em;
     margin-top: 1em;
     margin-bottom: 3em;
+  `,
+  errorMessage: (theme) => css`
+    color: ${theme.colors.primary};
+    padding: 1em;
   `,
 };
 
@@ -97,8 +102,16 @@ const Post: FunctionComponent<ComponentProps> = ({ postId }) => {
   const [addComment, { data: addCommentData }] = useMutation(ADD_COMMENT);
 
   const [comment, setComment] = useState("");
+  const [errorMessage, setErrorMessage] = useState<null | string>(null);
 
   const handleAddComment = (comment: IAddCommentInput) => {
+    try {
+      validateComment(comment.message);
+    } catch {
+      setErrorMessage("Please try again.");
+      return;
+    }
+
     addComment({ variables: { comment } });
   };
 
@@ -112,6 +125,8 @@ const Post: FunctionComponent<ComponentProps> = ({ postId }) => {
           state={{ message: "You have to be logged in to comment." }}
         />
       );
+    } else if (success === true) {
+      if (errorMessage !== null) setErrorMessage(null);
     }
   }
 
@@ -120,6 +135,8 @@ const Post: FunctionComponent<ComponentProps> = ({ postId }) => {
       <div css={theme.layout}>
         <Header />
         <div css={styles.container}>
+          {errorMessage && <p css={styles.errorMessage}>{errorMessage}</p>}
+
           <PostListItem post={data.post} rank={null} />
 
           <textarea
