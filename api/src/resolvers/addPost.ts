@@ -1,5 +1,6 @@
-import { Post } from "@prisma/client/index";
+import { URL } from "url";
 
+import { Post } from "@prisma/client/index";
 import { prisma } from "./prismaClient";
 
 interface IAddPostInput {
@@ -22,12 +23,25 @@ export default async function (
   { isAuth }
 ): Promise<IAddPostResponse> {
   try {
-    const payload = isAuth();
+    var payload = isAuth();
+  } catch {
+    return {
+      code: "400",
+      success: false,
+      message: "Not authorized",
+    };
+  }
+
+  try {
+    // extract domain from link
+    const url = new URL(link);
+    const domain = url.hostname;
 
     const newPost = await prisma.post.create({
       data: {
         link,
         title,
+        domain,
         author: {
           connect: { name: payload.userName },
         },
@@ -41,11 +55,12 @@ export default async function (
       message: "post created succesfully.",
       post: newPost,
     };
-  } catch {
+  } catch (err) {
+    console.error(err);
     return {
-      code: "401",
+      code: "500",
       success: false,
-      message: "not authorized.",
+      message: "An error occured in server",
     };
   }
 }
