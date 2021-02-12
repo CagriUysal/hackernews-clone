@@ -40,6 +40,7 @@ export interface IPost {
   id: number;
   title: string;
   link: string;
+  domain: string;
   upvote: number;
   createdAt: number;
   author: {
@@ -60,6 +61,7 @@ const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
     id,
     title,
     link,
+    domain,
     upvote,
     createdAt,
     author: { name },
@@ -87,7 +89,13 @@ const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
         <a css={styles.title} href={link}>
           {title}
         </a>
-        <span css={styles.domain}>({new URL(link).hostname})</span>
+        <span css={styles.domain}>
+          (
+          <Link to={`/from/${domain}`} css={styles.link}>
+            {domain}
+          </Link>
+          )
+        </span>
       </div>
 
       {/* bottom row */}

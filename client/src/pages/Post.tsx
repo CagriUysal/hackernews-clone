@@ -35,6 +35,7 @@ const POST = gql`
       id
       title
       link
+      domain
       upvote
       createdAt
       author {

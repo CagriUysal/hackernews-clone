@@ -16,6 +16,7 @@ export const typeDefs = gql`
   type Post {
     id: Int!
     link: String!
+    domain: String!
     title: String!
     upvote: Int!
     createdAt: Float!

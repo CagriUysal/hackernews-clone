@@ -12,6 +12,7 @@ const ALL_POSTS = gql`
       id
       title
       link
+      domain
       upvote
       createdAt
       author {
