@@ -177,6 +177,7 @@ const Comment: FunctionComponent<ComponentProps> = ({ commentId, postId }) => {
                 comments={postCommentsData.postComments}
                 parentId={Number(commentId)}
                 nest
+                showReply
               />
             )}
           </div>

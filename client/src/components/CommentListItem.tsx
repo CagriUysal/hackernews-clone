@@ -1,6 +1,5 @@
 import React, { FunctionComponent } from "react";
 import TimeAgo from "javascript-time-ago";
-// import en from "javascript-time-ago/locale/en";
 import { css } from "@emotion/react";
 
 // @ts-ignore
@@ -31,6 +30,12 @@ const styles = {
     margin-top: 0.5em;
     margin-left: 2em;
   `,
+  reply: css`
+    display: inline-block;
+    margin-top: 1em;
+    text-decoration: underline;
+    font-size: 0.8em;
+  `,
 };
 
 export interface IComment {
@@ -53,12 +58,14 @@ type ComponentProps = {
   comment: IComment;
   level?: number;
   extendedDisplay?: boolean;
+  showReply?: boolean;
 };
 
 const CommentListItem: FunctionComponent<ComponentProps> = ({
   comment,
   level = 0,
   extendedDisplay = false,
+  showReply = false,
 }) => {
   const timeAgo = new TimeAgo("en-US");
 
@@ -123,6 +130,11 @@ const CommentListItem: FunctionComponent<ComponentProps> = ({
       {/* buttom row  */}
       <div css={styles.bottomRow}>
         <p>{message}</p>
+        {showReply && (
+          <Link to={`/post/${postId}/comment/${id}`} css={styles.reply}>
+            reply
+          </Link>
+        )}
       </div>
     </div>
   );

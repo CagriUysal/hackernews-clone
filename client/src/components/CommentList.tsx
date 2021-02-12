@@ -76,6 +76,7 @@ type ComponentProps = {
   parentId?: number | null;
   nest?: boolean;
   extendAll?: boolean;
+  showReply?: boolean;
 };
 
 const CommentList: FunctionComponent<ComponentProps> = ({
@@ -83,6 +84,7 @@ const CommentList: FunctionComponent<ComponentProps> = ({
   parentId = null,
   nest = false,
   extendAll = false,
+  showReply = false,
 }) => {
   if (nest) {
     const orderedComments = getOrderedComments(comments, parentId);
@@ -96,6 +98,7 @@ const CommentList: FunctionComponent<ComponentProps> = ({
               key={`${comment.createdAt}-${comment.author.name}`}
               level={level}
               extendedDisplay={extendAll}
+              showReply={showReply}
             />
           );
         })}
@@ -110,6 +113,7 @@ const CommentList: FunctionComponent<ComponentProps> = ({
               comment={comment}
               key={`${comment.createdAt}-${comment.author.name}`}
               extendedDisplay={extendAll}
+              showReply={showReply}
             />
           );
         })}

@@ -162,7 +162,11 @@ const Post: FunctionComponent<ComponentProps> = ({ postId }) => {
           </button>
 
           {postCommentsData && (
-            <CommentList comments={postCommentsData.postComments} nest />
+            <CommentList
+              comments={postCommentsData.postComments}
+              nest
+              showReply
+            />
           )}
         </div>
       </div>
