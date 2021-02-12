@@ -78,7 +78,7 @@ type ComponentProps = {
   extendAll?: boolean;
 };
 
-const PostList: FunctionComponent<ComponentProps> = ({
+const CommentList: FunctionComponent<ComponentProps> = ({
   comments,
   parentId = null,
   nest = false,
@@ -118,4 +118,4 @@ const PostList: FunctionComponent<ComponentProps> = ({
   }
 };
 
-export default PostList;
+export default CommentList;
