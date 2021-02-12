@@ -1,14 +1,12 @@
 import React, { FunctionComponent } from "react";
-import {Comment} from '@prisma/client/index'
+import { Comment } from "@prisma/client/index";
 
 import TimeAgo from "javascript-time-ago";
-import en from "javascript-time-ago/locale/en";
 import { css, useTheme } from "@emotion/react";
 
 // @ts-ignore
 import upArrow from "../assets/grayarrow2x.gif";
 import { Link } from "@reach/router";
-
 
 const styles = {
   container: css`
@@ -47,8 +45,7 @@ export interface IPost {
   author: {
     name: string;
   };
-  comments: Comment[]
-  };
+  comments: Comment[];
 }
 
 type ComponentProps = {
