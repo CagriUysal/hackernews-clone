@@ -100,6 +100,7 @@ export const typeDefs = gql`
   type Query {
     posts: [Post!]!
     post(id: Int!): Post
+    domainPosts(domain: String!): [Post!]!
     postComments(postId: Int!): [Comment!]!
     comments: [Comment!]!
     comment(id: Int!): Comment

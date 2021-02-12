@@ -9,6 +9,7 @@ import addComment from "./resolvers/addComment";
 import postComments from "./resolvers/postComments";
 import comments from "./resolvers/comments";
 import comment from "./resolvers/comment";
+import domainPosts from "./resolvers/domainPosts";
 
 export const resolvers = {
   Response: {
@@ -21,6 +22,7 @@ export const resolvers = {
   Query: {
     posts,
     post,
+    domainPosts,
     postComments,
     comments,
     comment,
