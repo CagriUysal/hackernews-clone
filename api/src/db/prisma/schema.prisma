@@ -14,6 +14,7 @@ model Post {
   @@map("posts") 
   id Int @id @default(autoincrement()) 
   link String 
+  domain String
   title String
   upvote Int @default(0)
   createdAt DateTime @default(now())
