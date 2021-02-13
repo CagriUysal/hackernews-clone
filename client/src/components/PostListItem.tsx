@@ -1,8 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { Comment } from "@prisma/client/index";
-
-import TimeAgo from "javascript-time-ago";
 import { css, useTheme } from "@emotion/react";
+import { formatDistanceToNowStrict } from "date-fns";
 
 // @ts-ignore
 import upArrow from "../assets/grayarrow2x.gif";
@@ -68,8 +67,6 @@ const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
     comments,
   } = post;
 
-  const timeAgo = new TimeAgo("en-US");
-
   return (
     <div css={styles.container}>
       {/* upper row */}
@@ -112,7 +109,9 @@ const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
             {name}
           </Link>{" "}
           <Link to={`/post/${id}`} css={styles.link}>
-            {timeAgo.format(createdAt)}
+            {formatDistanceToNowStrict(createdAt, {
+              addSuffix: true,
+            })}
           </Link>
           {" | "}
           <Link to={`/post/${id}`} css={styles.link}>

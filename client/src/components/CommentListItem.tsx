@@ -1,10 +1,10 @@
 import React, { FunctionComponent } from "react";
-import TimeAgo from "javascript-time-ago";
 import { css } from "@emotion/react";
+import { Link } from "@reach/router";
+import { formatDistanceToNowStrict } from "date-fns";
 
 // @ts-ignore
 import upArrow from "../assets/grayarrow2x.gif";
-import { Link } from "@reach/router";
 
 const styles = {
   container: css`
@@ -67,8 +67,6 @@ const CommentListItem: FunctionComponent<ComponentProps> = ({
   extendedDisplay = false,
   showReply = false,
 }) => {
-  const timeAgo = new TimeAgo("en-US");
-
   const {
     id,
     message,
@@ -95,7 +93,9 @@ const CommentListItem: FunctionComponent<ComponentProps> = ({
             {name}
           </Link>{" "}
           <Link to={`/post/${postId}/comment/${id}`} css={styles.link}>
-            {timeAgo.format(createdAt)}
+            {formatDistanceToNowStrict(createdAt, {
+              addSuffix: true,
+            })}
           </Link>
           {extendedDisplay &&
             (comment.parent !== null ? (
