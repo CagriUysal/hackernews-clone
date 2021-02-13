@@ -10,6 +10,7 @@ import postComments from "./resolvers/postComments";
 import comments from "./resolvers/comments";
 import comment from "./resolvers/comment";
 import domainPosts from "./resolvers/domainPosts";
+import latestPosts from "./resolvers/latestPosts";
 
 export const resolvers = {
   Response: {
@@ -23,6 +24,7 @@ export const resolvers = {
     posts,
     post,
     domainPosts,
+    latestPosts,
     postComments,
     comments,
     comment,

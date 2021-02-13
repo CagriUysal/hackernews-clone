@@ -101,6 +101,7 @@ export const typeDefs = gql`
     posts: [Post!]!
     post(id: Int!): Post
     domainPosts(domain: String!): [Post!]!
+    latestPosts: [Post!]!
     postComments(postId: Int!): [Comment!]!
     comments: [Comment!]!
     comment(id: Int!): Comment
