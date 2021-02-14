@@ -11,6 +11,7 @@ import comments from "./resolvers/comments";
 import comment from "./resolvers/comment";
 import domainPosts from "./resolvers/domainPosts";
 import latestPosts from "./resolvers/latestPosts";
+import pastPosts from "./resolvers/pastPosts";
 
 export const resolvers = {
   Response: {
@@ -25,6 +26,7 @@ export const resolvers = {
     post,
     domainPosts,
     latestPosts,
+    pastPosts,
     postComments,
     comments,
     comment,

@@ -36,6 +36,11 @@ export const typeDefs = gql`
     post: Post
   }
 
+  input pastPostsInput {
+    start: String!
+    end: String!
+  }
+
   """
   Comment
   """
@@ -102,6 +107,7 @@ export const typeDefs = gql`
     post(id: Int!): Post
     domainPosts(domain: String!): [Post!]!
     latestPosts: [Post!]!
+    pastPosts(input: pastPostsInput!): [Post!]!
     postComments(postId: Int!): [Comment!]!
     comments: [Comment!]!
     comment(id: Int!): Comment
