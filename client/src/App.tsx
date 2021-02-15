@@ -84,7 +84,7 @@ const App: FunctionComponent = () => {
         <Post path="/post/:postId" />
         <Comment path="/post/:postId/comment/:commentId" />
         <From path="/from/:domain" />
-        <User path="/user/:userName" />
+        <User path="/user/:name" />
       </Router>
     </>
   );
