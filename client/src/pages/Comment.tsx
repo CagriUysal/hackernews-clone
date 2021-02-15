@@ -123,7 +123,10 @@ const Comment: FunctionComponent<ComponentProps> = ({ commentId, postId }) => {
         <Redirect
           to="/login"
           noThrow
-          state={{ message: "You have to be logged in to comment." }}
+          state={{
+            message: "You have to be logged in to comment.",
+            redirectedFrom: `/post/${postId}/comment/${commentId}`,
+          }}
         />
       );
     } else if (success === true) {
