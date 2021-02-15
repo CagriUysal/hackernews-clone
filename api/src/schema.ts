@@ -20,7 +20,7 @@ export const typeDefs = gql`
     title: String!
     upvote: Int!
     createdAt: Float!
-    author: User!
+    author: PublicUser!
     comments: [Comment]
   }
 
@@ -50,7 +50,7 @@ export const typeDefs = gql`
     upvotes: Int!
     createdAt: Float!
     post: Post!
-    author: User!
+    author: PublicUser!
     parent: Comment
   }
 
@@ -70,9 +70,18 @@ export const typeDefs = gql`
   """
   User
   """
-  type User {
+  type PrivateUser {
     id: Int!
     name: String!
+  }
+
+  type PublicUser {
+    name: String!
+    createdAt: Float!
+    karma: Int!
+    posts: [Post!]!
+    comments: [Comment!]!
+    favorites: [Post!]!
   }
 
   input RegisterInput {
@@ -84,7 +93,7 @@ export const typeDefs = gql`
     code: String!
     success: Boolean!
     message: String!
-    user: User
+    user: PublicUser
   }
 
   input LoginInput {
@@ -111,7 +120,8 @@ export const typeDefs = gql`
     postComments(postId: Int!): [Comment!]!
     comments: [Comment!]!
     comment(id: Int!): Comment
-    me: User
+    user(name: String!): PublicUser
+    me: PrivateUser
   }
 
   """
