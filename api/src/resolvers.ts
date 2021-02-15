@@ -13,6 +13,7 @@ import domainPosts from "./resolvers/domainPosts";
 import latestPosts from "./resolvers/latestPosts";
 import pastPosts from "./resolvers/pastPosts";
 import user from "./resolvers/user";
+import userPosts from "./resolvers/userPosts";
 
 export const resolvers = {
   Response: {
@@ -28,6 +29,7 @@ export const resolvers = {
     domainPosts,
     latestPosts,
     pastPosts,
+    userPosts,
     postComments,
     comments,
     comment,

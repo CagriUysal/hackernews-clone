@@ -19,6 +19,7 @@ import Post from "./pages/Post";
 import Comment from "./pages/Comment";
 import From from "./pages/From";
 import User from "./pages/User";
+import Submissions from "./pages/Submissions";
 
 const App: FunctionComponent = () => {
   const [loading, setLoading] = useState(true);
@@ -85,6 +86,7 @@ const App: FunctionComponent = () => {
         <Comment path="/post/:postId/comment/:commentId" />
         <From path="/from/:domain" />
         <User path="/user/:name" />
+        <Submissions path="/user/:name/submissions" />
       </Router>
     </>
   );
