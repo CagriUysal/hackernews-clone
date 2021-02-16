@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react";
-import { useTheme } from "@emotion/react";
+import { useTheme, css } from "@emotion/react";
 import { RouteComponentProps } from "@reach/router";
 import { gql, useQuery } from "@apollo/client";
 
@@ -30,14 +30,29 @@ interface ComponentProps extends RouteComponentProps {
 }
 const Submission: FunctionComponent<ComponentProps> = ({ name }) => {
   const theme = useTheme();
-  const { data } = useQuery(USER_POSTS, { variables: { name } });
+  const { data, loading } = useQuery(USER_POSTS, { variables: { name } });
 
-  return (
-    <div css={theme.layout}>
-      <Header />
-      {data && <PostList posts={data.userPosts} />}
-    </div>
-  );
+  if (data && data.userPosts === null) {
+    return (
+      <p
+        css={css`
+          padding: 1em;
+          font-family: "Times New Roman", Times, serif;
+        `}
+      >
+        No such user.
+      </p>
+    );
+  } else if (data && data.userPosts) {
+    return (
+      <div css={theme.layout}>
+        <Header />
+        {<PostList posts={data.userPosts} />}
+      </div>
+    );
+  } else if (loading) {
+    return null;
+  }
 };
 
 export default Submission;
