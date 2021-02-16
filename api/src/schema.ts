@@ -121,6 +121,7 @@ export const typeDefs = gql`
     postComments(postId: Int!): [Comment!]!
     comments: [Comment!]!
     comment(id: Int!): Comment
+    userComments(name: String!): [Comment!]
     user(name: String!): PublicUser
     me: PrivateUser
   }

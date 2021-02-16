@@ -14,6 +14,7 @@ import latestPosts from "./resolvers/latestPosts";
 import pastPosts from "./resolvers/pastPosts";
 import user from "./resolvers/user";
 import userPosts from "./resolvers/userPosts";
+import userComments from "./resolvers/userComments";
 
 export const resolvers = {
   Response: {
@@ -33,6 +34,7 @@ export const resolvers = {
     postComments,
     comments,
     comment,
+    userComments,
     me,
     user,
   },
