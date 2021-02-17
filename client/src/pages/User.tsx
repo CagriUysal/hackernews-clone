@@ -3,6 +3,7 @@ import { css, useTheme } from "@emotion/react";
 import { RouteComponentProps } from "@reach/router";
 import { gql, useQuery } from "@apollo/client";
 import { Link } from "@reach/router";
+import { formatDistanceToNowStrict } from "date-fns";
 
 import Header from "../components/Header";
 
@@ -75,7 +76,9 @@ const User: FunctionComponent<ComponentProps> = ({ name }) => {
           </p>
           <p>
             <span css={styles.infoKey}>created: </span>
-            {createdAt}
+            {formatDistanceToNowStrict(createdAt, {
+              addSuffix: true,
+            })}
           </p>
           <p>
             <span css={styles.infoKey}>karma: </span>
