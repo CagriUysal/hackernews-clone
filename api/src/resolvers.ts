@@ -15,6 +15,7 @@ import pastPosts from "./resolvers/pastPosts";
 import user from "./resolvers/user";
 import userPosts from "./resolvers/userPosts";
 import userComments from "./resolvers/userComments";
+import addFavorite from "./resolvers/addFavorite";
 
 export const resolvers = {
   Response: {
@@ -42,6 +43,7 @@ export const resolvers = {
   Mutation: {
     addPost,
     addComment,
+    addFavorite,
     login,
     register,
     logout,

@@ -36,6 +36,12 @@ export const typeDefs = gql`
     post: Post
   }
 
+  type AddFavoriteResponse implements Response {
+    code: String!
+    success: Boolean!
+    message: String!
+  }
+
   input pastPostsInput {
     start: String!
     end: String!
@@ -132,6 +138,7 @@ export const typeDefs = gql`
   type Mutation {
     addPost(post: AddPostInput!): AddPostResponse
     addComment(comment: AddCommentInput!): AddCommentResponse
+    addFavorite(postId: Int!): AddFavoriteResponse
     register(user: RegisterInput!): RegisterResponse
     login(user: LoginInput!): LoginResponse
     logout: Boolean
