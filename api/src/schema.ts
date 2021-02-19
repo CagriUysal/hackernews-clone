@@ -21,7 +21,8 @@ export const typeDefs = gql`
     upvote: Int!
     createdAt: Float!
     author: PublicUser!
-    comments: [Comment]
+    comments: [Comment!]
+    currentUserFavorited: Boolean
   }
 
   input AddPostInput {

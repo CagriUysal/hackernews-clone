@@ -1,7 +1,9 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useState, useEffect } from "react";
 import { Comment } from "@prisma/client/index";
 import { css, useTheme } from "@emotion/react";
 import { formatDistanceToNowStrict } from "date-fns";
+import { gql, useMutation } from "@apollo/client";
+import { navigate } from "@reach/router";
 
 // @ts-ignore
 import upArrow from "../assets/grayarrow2x.gif";
@@ -35,6 +37,26 @@ const styles = {
   `,
 };
 
+const ADD_FAVORITE = gql`
+  mutation AddFavorite($postId: Int!) {
+    addFavorite(postId: $postId) {
+      code
+      success
+      message
+    }
+  }
+`;
+
+const REMOVE_FAVORITE = gql`
+  mutation RemoveFavorite($postId: Int!) {
+    removeFavorite(postId: $postId) {
+      code
+      success
+      message
+    }
+  }
+`;
+
 export interface IPost {
   id: number;
   title: string;
@@ -46,16 +68,20 @@ export interface IPost {
     name: string;
   };
   comments: Comment[];
+  currentUserFavorited?: boolean;
 }
 
 type ComponentProps = {
   post: IPost;
   rank: number | null;
+  showFavorite?: boolean;
 };
 
-const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
-  const theme = useTheme();
-
+const PostListItem: FunctionComponent<ComponentProps> = ({
+  post,
+  rank,
+  showFavorite = false,
+}) => {
   const {
     id,
     title,
@@ -65,7 +91,53 @@ const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
     createdAt,
     author: { name },
     comments,
+    currentUserFavorited,
   } = post;
+
+  const theme = useTheme();
+  const [isFavorited, setIsFavorited] = useState(currentUserFavorited);
+  const [addFavorite, { data: addFavoriteData }] = useMutation(ADD_FAVORITE, {
+    variables: { postId: id },
+  });
+  const [removeFavorite, { data: removeFavoriteData }] = useMutation(
+    REMOVE_FAVORITE,
+    {
+      variables: { postId: id },
+    }
+  );
+
+  const handleFavClick = () => {
+    if (isFavorited) {
+      removeFavorite();
+    } else {
+      addFavorite();
+    }
+  };
+
+  useEffect(() => {
+    if (addFavoriteData) {
+      const { success, code } = addFavoriteData.addFavorite;
+      if (success === false && code === "401") {
+        navigate("/login", {
+          state: {
+            message: "Please log in.",
+            redirectedFrom: `/post/${id}`,
+          },
+        });
+      } else if (success === true) {
+        setIsFavorited(true);
+      }
+    }
+  }, [addFavoriteData]);
+
+  useEffect(() => {
+    if (removeFavoriteData) {
+      const { success } = removeFavoriteData.removeFavorite;
+      if (success === true) {
+        setIsFavorited(false);
+      }
+    }
+  }, [removeFavoriteData]);
 
   return (
     <div css={styles.container}>
@@ -100,7 +172,7 @@ const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
         <span
           css={(theme) => css`
             color: ${theme.colors.primary};
-            font-size: 0.7em;
+            font-size: 0.6rem;
             margin-left: ${rank ? "4em" : "2.5em"};
           `}
         >
@@ -114,6 +186,25 @@ const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
             })}
           </Link>
           {" | "}
+          {showFavorite && (
+            <>
+              <button
+                css={(theme) => css`
+                  ${styles.button}
+                  padding: 0;
+                  font-size: 0.6rem;
+                  color: ${theme.colors.primary};
+                  &:hover {
+                    text-decoration: underline;
+                  }
+                `}
+                onClick={handleFavClick}
+              >
+                {isFavorited ? "un-favorite" : "favorite"}
+              </button>
+              {" | "}
+            </>
+          )}
           <Link to={`/post/${id}`} css={styles.link}>
             {`${comments.length} comments`}
           </Link>

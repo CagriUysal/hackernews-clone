@@ -44,6 +44,7 @@ const POST = gql`
       comments {
         id
       }
+      currentUserFavorited
     }
   }
 `;
@@ -96,6 +97,7 @@ const Post: FunctionComponent<ComponentProps> = ({ postId }) => {
 
   const { data } = useQuery(POST, {
     variables: { id: Number(postId) },
+    fetchPolicy: "network-only",
   });
   const { data: postCommentsData } = useQuery(POST_COMMENTS, {
     variables: { postId: Number(postId) },
@@ -141,7 +143,7 @@ const Post: FunctionComponent<ComponentProps> = ({ postId }) => {
         <div css={styles.container}>
           {errorMessage && <p css={styles.errorMessage}>{errorMessage}</p>}
 
-          <PostListItem post={data.post} rank={null} />
+          <PostListItem post={data.post} rank={null} showFavorite />
 
           <textarea
             name="text"
