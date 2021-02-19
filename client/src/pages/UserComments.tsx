@@ -31,7 +31,7 @@ interface ComponentProps extends RouteComponentProps {
 }
 const UserComments: FunctionComponent<ComponentProps> = ({ name }) => {
   const theme = useTheme();
-  const { data, loading } = useQuery(USER_COMMENTS, { variables: { name } });
+  const { data } = useQuery(USER_COMMENTS, { variables: { name } });
 
   if (data && data.userComments === null) {
     return (
@@ -51,11 +51,9 @@ const UserComments: FunctionComponent<ComponentProps> = ({ name }) => {
         {<CommentList comments={data.userComments} extendAll showReply />}
       </div>
     );
-  } else if (loading) {
+  } else {
     return null;
   }
-
-  return <h1>bla</h1>;
 };
 
 export default UserComments;
