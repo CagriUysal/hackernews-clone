@@ -16,6 +16,7 @@ import user from "./resolvers/user";
 import userPosts from "./resolvers/userPosts";
 import userComments from "./resolvers/userComments";
 import addFavorite from "./resolvers/addFavorite";
+import removeFavorite from "./resolvers/removeFavorite";
 
 export const resolvers = {
   Response: {
@@ -44,6 +45,7 @@ export const resolvers = {
     addPost,
     addComment,
     addFavorite,
+    removeFavorite,
     login,
     register,
     logout,
