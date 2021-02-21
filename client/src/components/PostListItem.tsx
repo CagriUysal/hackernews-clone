@@ -203,7 +203,7 @@ const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
             </>
           )}
           <Link to={`/post/${id}`} css={styles.link}>
-            {`${comments.length} comments`}
+            {comments.length === 0 ? "discuss" : `${comments.length} comments`}
           </Link>
         </span>
       </div>
