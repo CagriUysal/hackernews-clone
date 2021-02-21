@@ -21,6 +21,7 @@ const ALL_POSTS = gql`
       comments {
         id
       }
+      currentUserFavorited
     }
   }
 `;

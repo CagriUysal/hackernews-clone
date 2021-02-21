@@ -21,6 +21,7 @@ const USER_POSTS = gql`
       comments {
         id
       }
+      currentUserFavorited
     }
   }
 `;
@@ -30,7 +31,7 @@ interface ComponentProps extends RouteComponentProps {
 }
 const Submission: FunctionComponent<ComponentProps> = ({ name }) => {
   const theme = useTheme();
-  const { data, loading } = useQuery(USER_POSTS, { variables: { name } });
+  const { data } = useQuery(USER_POSTS, { variables: { name } });
 
   if (data && data.userPosts === null) {
     return (
@@ -50,7 +51,7 @@ const Submission: FunctionComponent<ComponentProps> = ({ name }) => {
         {<PostList posts={data.userPosts} />}
       </div>
     );
-  } else if (loading) {
+  } else {
     return null;
   }
 };

@@ -21,6 +21,7 @@ const LATEST_POSTS = gql`
       comments {
         id
       }
+      currentUserFavorited
     }
   }
 `;
