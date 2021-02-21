@@ -131,6 +131,7 @@ export const typeDefs = gql`
     latestPosts: [Post!]!
     pastPosts(input: pastPostsInput!): [Post!]!
     userPosts(name: String!): [Post!]
+    favoritePosts(name: String!): [Post!]
     postComments(postId: Int!): [Comment!]!
     comments: [Comment!]!
     comment(id: Int!): Comment

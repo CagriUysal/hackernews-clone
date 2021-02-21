@@ -17,6 +17,7 @@ import userPosts from "./resolvers/userPosts";
 import userComments from "./resolvers/userComments";
 import addFavorite from "./resolvers/addFavorite";
 import removeFavorite from "./resolvers/removeFavorite";
+import favoritePosts from "./resolvers/favoritePosts";
 
 export const resolvers = {
   Response: {
@@ -33,6 +34,7 @@ export const resolvers = {
     latestPosts,
     pastPosts,
     userPosts,
+    favoritePosts,
     postComments,
     comments,
     comment,

@@ -68,20 +68,15 @@ export interface IPost {
     name: string;
   };
   comments: Comment[];
-  currentUserFavorited?: boolean;
+  currentUserFavorited: boolean | null;
 }
 
 type ComponentProps = {
   post: IPost;
-  rank: number | null;
-  showFavorite?: boolean;
+  rank?: number | null;
 };
 
-const PostListItem: FunctionComponent<ComponentProps> = ({
-  post,
-  rank,
-  showFavorite = false,
-}) => {
+const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
   const {
     id,
     title,
@@ -95,7 +90,9 @@ const PostListItem: FunctionComponent<ComponentProps> = ({
   } = post;
 
   const theme = useTheme();
-  const [isFavorited, setIsFavorited] = useState(currentUserFavorited);
+  const [isFavorited, setIsFavorited] = useState<null | boolean>(
+    currentUserFavorited
+  );
   const [addFavorite, { data: addFavoriteData }] = useMutation(ADD_FAVORITE, {
     variables: { postId: id },
   });
@@ -107,9 +104,9 @@ const PostListItem: FunctionComponent<ComponentProps> = ({
   );
 
   const handleFavClick = () => {
-    if (isFavorited) {
+    if (isFavorited === true) {
       removeFavorite();
-    } else {
+    } else if (isFavorited === false) {
       addFavorite();
     }
   };
@@ -186,7 +183,7 @@ const PostListItem: FunctionComponent<ComponentProps> = ({
             })}
           </Link>
           {" | "}
-          {showFavorite && (
+          {currentUserFavorited !== null && (
             <>
               <button
                 css={(theme) => css`
