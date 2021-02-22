@@ -49,19 +49,6 @@ const POST = gql`
   }
 `;
 
-const ADD_COMMENT = gql`
-  mutation AddComment($comment: AddCommentInput!) {
-    addComment(comment: $comment) {
-      code
-      success
-      message
-      comment {
-        message
-      }
-    }
-  }
-`;
-
 const POST_COMMENTS = gql`
   query PostComments($postId: Int!) {
     postComments(postId: $postId) {
@@ -77,6 +64,31 @@ const POST_COMMENTS = gql`
       post {
         id
         title
+      }
+    }
+  }
+`;
+
+const ADD_COMMENT = gql`
+  mutation AddComment($comment: AddCommentInput!) {
+    addComment(comment: $comment) {
+      code
+      success
+      message
+      comment {
+        id
+        message
+        createdAt
+        parent {
+          id
+        }
+        author {
+          name
+        }
+        post {
+          id
+          title
+        }
       }
     }
   }
@@ -99,10 +111,29 @@ const Post: FunctionComponent<ComponentProps> = ({ postId }) => {
     variables: { id: Number(postId) },
     fetchPolicy: "network-only",
   });
+
   const { data: postCommentsData } = useQuery(POST_COMMENTS, {
     variables: { postId: Number(postId) },
   });
-  const [addComment, { data: addCommentData }] = useMutation(ADD_COMMENT);
+
+  const [addComment, { data: addCommentData }] = useMutation(ADD_COMMENT, {
+    update(cache, { data: { addComment } }) {
+      const { comment } = addComment;
+
+      const { postComments } = cache.readQuery({
+        query: POST_COMMENTS,
+        variables: { postId: Number(postId) },
+      });
+
+      cache.writeQuery({
+        query: POST_COMMENTS,
+        variables: { postId: Number(postId) },
+        data: {
+          postComments: [...postComments, comment],
+        },
+      });
+    },
+  });
 
   const [comment, setComment] = useState("");
   const [errorMessage, setErrorMessage] = useState<null | string>(null);
