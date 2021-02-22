@@ -1,7 +1,7 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useState, useEffect } from "react";
 import { css, useTheme } from "@emotion/react";
 import { useQuery, gql, useMutation } from "@apollo/client";
-import { Redirect, RouteComponentProps } from "@reach/router";
+import { navigate, RouteComponentProps } from "@reach/router";
 
 import Header from "../components/Header";
 import PostListItem from "../components/PostListItem";
@@ -118,23 +118,22 @@ const Post: FunctionComponent<ComponentProps> = ({ postId }) => {
     addComment({ variables: { comment } });
   };
 
-  if (addCommentData) {
-    const { success, code } = addCommentData.addComment;
-    if (success === false && code === "401") {
-      return (
-        <Redirect
-          to="/login"
-          noThrow
-          state={{
+  useEffect(() => {
+    if (addCommentData) {
+      const { success, code } = addCommentData.addComment;
+      if (success === false && code === "401") {
+        navigate("/login", {
+          state: {
             message: "You have to be logged in to comment.",
             redirectedFrom: `/post/${postId}`,
-          }}
-        />
-      );
-    } else if (success === true) {
-      if (errorMessage !== null) setErrorMessage(null);
+          },
+        });
+      } else if (success === true) {
+        if (errorMessage !== null) setErrorMessage(null);
+        setComment("");
+      }
     }
-  }
+  }, [addCommentData]);
 
   if (data && data.post) {
     return (
@@ -143,7 +142,7 @@ const Post: FunctionComponent<ComponentProps> = ({ postId }) => {
         <div css={styles.container}>
           {errorMessage && <p css={styles.errorMessage}>{errorMessage}</p>}
 
-          <PostListItem post={data.post} rank={null} showFavorite />
+          <PostListItem post={data.post} rank={null} />
 
           <textarea
             name="text"
