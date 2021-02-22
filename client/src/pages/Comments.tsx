@@ -28,7 +28,7 @@ const COMMENTS = gql`
 
 const Comments: FunctionComponent<RouteComponentProps> = () => {
   const theme = useTheme();
-  const { data } = useQuery(COMMENTS);
+  const { data } = useQuery(COMMENTS, { fetchPolicy: "network-only" });
 
   return (
     <div css={theme.layout}>

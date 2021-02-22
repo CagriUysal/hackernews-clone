@@ -29,7 +29,7 @@ const LATEST_POSTS = gql`
 const New: FunctionComponent<RouteComponentProps> = () => {
   const theme = useTheme();
 
-  const { data } = useQuery(LATEST_POSTS);
+  const { data } = useQuery(LATEST_POSTS, { fetchPolicy: "network-only" });
 
   return (
     <div css={theme.layout}>
