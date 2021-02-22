@@ -1,8 +1,8 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useState, useEffect } from "react";
 import { css, useTheme } from "@emotion/react";
 import { RouteComponentProps } from "@reach/router";
 import { useQuery, gql, useMutation } from "@apollo/client";
-import { Redirect } from "@reach/router";
+import { navigate } from "@reach/router";
 
 import Header from "../components/Header";
 import CommentListItem from "../components/CommentListItem";
@@ -49,19 +49,6 @@ const COMMENT = gql`
   }
 `;
 
-const ADD_COMMENT = gql`
-  mutation AddComment($comment: AddCommentInput!) {
-    addComment(comment: $comment) {
-      code
-      success
-      message
-      comment {
-        message
-      }
-    }
-  }
-`;
-
 const POST_COMMENTS = gql`
   query PostComments($postId: Int!) {
     postComments(postId: $postId) {
@@ -82,6 +69,31 @@ const POST_COMMENTS = gql`
   }
 `;
 
+const ADD_COMMENT = gql`
+  mutation AddComment($comment: AddCommentInput!) {
+    addComment(comment: $comment) {
+      code
+      success
+      message
+      comment {
+        id
+        message
+        createdAt
+        parent {
+          id
+        }
+        author {
+          name
+        }
+        post {
+          id
+          title
+        }
+      }
+    }
+  }
+`;
+
 interface IAddCommentInput {
   message: string;
   postId: number;
@@ -97,9 +109,31 @@ const Comment: FunctionComponent<ComponentProps> = ({ commentId, postId }) => {
   const theme = useTheme();
 
   const { data } = useQuery(COMMENT, { variables: { id: Number(commentId) } });
-  const [addComment, { data: addCommentData }] = useMutation(ADD_COMMENT);
   const { data: postCommentsData } = useQuery(POST_COMMENTS, {
     variables: { postId: Number(postId) },
+  });
+
+  const [addComment, { data: addCommentData }] = useMutation(ADD_COMMENT, {
+    update(cache, { data: { addComment } }) {
+      const { comment } = addComment;
+
+      if (comment === null) {
+        return; // unsuccessful. don't update cache.
+      }
+
+      const { postComments } = cache.readQuery({
+        query: POST_COMMENTS,
+        variables: { postId: Number(postId) },
+      });
+
+      cache.writeQuery({
+        query: POST_COMMENTS,
+        variables: { postId: Number(postId) },
+        data: {
+          postComments: [...postComments, comment],
+        },
+      });
+    },
   });
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -116,23 +150,22 @@ const Comment: FunctionComponent<ComponentProps> = ({ commentId, postId }) => {
     addComment({ variables: { comment } });
   };
 
-  if (addCommentData) {
-    const { success, code } = addCommentData.addComment;
-    if (success === false && code === "401") {
-      return (
-        <Redirect
-          to="/login"
-          noThrow
-          state={{
+  useEffect(() => {
+    if (addCommentData) {
+      const { success, code } = addCommentData.addComment;
+      if (success === false && code === "401") {
+        navigate("/login", {
+          state: {
             message: "You have to be logged in to comment.",
             redirectedFrom: `/post/${postId}/comment/${commentId}`,
-          }}
-        />
-      );
-    } else if (success === true) {
-      if (errorMessage !== null) setErrorMessage(null);
+          },
+        });
+      } else if (success === true) {
+        if (errorMessage !== null) setErrorMessage(null);
+        setComment("");
+      }
     }
-  }
+  }, [addCommentData]);
 
   if (data && data.comment) {
     return (

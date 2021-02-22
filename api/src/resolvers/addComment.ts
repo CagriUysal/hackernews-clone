@@ -41,7 +41,7 @@ export default async function (
         post: { connect: { id: postId } },
         parent: parentId ? { connect: { id: parentId } } : undefined,
       },
-      include: { author: true, post: true },
+      include: { author: true, post: true, parent: true },
     });
 
     return {
