@@ -120,6 +120,10 @@ const Post: FunctionComponent<ComponentProps> = ({ postId }) => {
     update(cache, { data: { addComment } }) {
       const { comment } = addComment;
 
+      if (comment === null) {
+        return; // unsuccessful. don't update cache.
+      }
+
       const { postComments } = cache.readQuery({
         query: POST_COMMENTS,
         variables: { postId: Number(postId) },
