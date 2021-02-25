@@ -18,6 +18,7 @@ import userComments from "./resolvers/userComments";
 import addFavorite from "./resolvers/addFavorite";
 import removeFavorite from "./resolvers/removeFavorite";
 import favoritePosts from "./resolvers/favoritePosts";
+import upvotePost from "./resolvers/upvotePost";
 
 export const resolvers = {
   Response: {
@@ -48,6 +49,7 @@ export const resolvers = {
     addComment,
     addFavorite,
     removeFavorite,
+    upvotePost,
     login,
     register,
     logout,
