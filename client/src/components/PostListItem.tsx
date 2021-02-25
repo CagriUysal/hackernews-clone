@@ -57,6 +57,19 @@ const REMOVE_FAVORITE = gql`
   }
 `;
 
+const UPVOTE_POST = gql`
+  mutation upvotePost($postId: Int!) {
+    upvotePost(postId: $postId) {
+      code
+      success
+      message
+      post {
+        title
+      }
+    }
+  }
+`;
+
 export interface IPost {
   id: number;
   title: string;
@@ -102,6 +115,9 @@ const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
       variables: { postId: id },
     }
   );
+  const [upvotePost, { data: upvotePostData }] = useMutation(UPVOTE_POST, {
+    variables: { postId: id },
+  });
 
   const handleFavClick = () => {
     if (isFavorited === true) {
@@ -109,6 +125,10 @@ const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
     } else if (isFavorited === false) {
       addFavorite();
     }
+  };
+
+  const handleUpvoteClick = () => {
+    upvotePost();
   };
 
   useEffect(() => {
@@ -149,7 +169,7 @@ const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
             {rank}.
           </span>
         )}
-        <button css={styles.button}>
+        <button css={styles.button} onClick={handleUpvoteClick}>
           <img src={upArrow} alt="up arrow" height="12px" width="12px" />
         </button>
         <a css={styles.title} href={link}>
