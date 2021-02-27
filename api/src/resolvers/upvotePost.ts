@@ -1,9 +1,11 @@
+import { Post } from "@prisma/client";
 import { prisma } from "./prismaClient";
 
 interface IAddFavoriteResponse {
   code: string;
   success: boolean;
   message: string;
+  post?: Post;
 }
 
 export default async function (
@@ -13,6 +15,14 @@ export default async function (
 ): Promise<IAddFavoriteResponse> {
   try {
     var payload = isAuth();
+    var name = payload.userName as string;
+
+    const user = await prisma.user.findUnique({
+      where: { name },
+      include: { upvotes: { where: { id: postId } } },
+    });
+
+    if (user.upvotes.length !== 0) throw new Error("Already Upvoted.");
   } catch (error) {
     return {
       code: "401",
@@ -22,15 +32,15 @@ export default async function (
   }
 
   try {
-    const name = payload.userName as string;
-    await prisma.user.update({
-      where: { name },
+    const updatedPost = await prisma.post.update({
+      where: { id: postId },
       data: {
-        upvotes: {
+        upvotedBy: {
           connect: {
-            id: postId,
+            name,
           },
         },
+        upvote: { increment: 1 },
       },
     });
 
@@ -38,6 +48,7 @@ export default async function (
       code: "200",
       success: true,
       message: `Post '${postId}' upvoted by ${name}.`,
+      post: updatedPost,
     };
   } catch (error) {
     return {
