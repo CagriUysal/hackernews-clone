@@ -25,6 +25,14 @@ const styles = {
       cursor: pointer;
     }
   `,
+  textButton: (theme) => css`
+    padding: 0;
+    font-size: 0.6rem;
+    color: ${theme.colors.primary};
+    &:hover {
+      text-decoration: underline;
+    }
+  `,
   domain: (theme) => css`
     color: ${theme.colors.primary};
     font-size: 0.7em;
@@ -70,6 +78,19 @@ const UPVOTE_POST = gql`
   }
 `;
 
+const UNVOTE_POST = gql`
+  mutation UnvotePost($postId: Int!) {
+    unvotePost(postId: $postId) {
+      code
+      success
+      message
+      post {
+        title
+      }
+    }
+  }
+`;
+
 export interface IPost {
   id: number;
   title: string;
@@ -105,12 +126,14 @@ const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
   } = post;
 
   const theme = useTheme();
+
   const [isFavorited, setIsFavorited] = useState<null | boolean>(
     currentUserFavorited
   );
   const [isUpvoted, setIsUpvoted] = useState<null | boolean>(
     currentUserUpvoted
   );
+
   const [addFavorite, { data: addFavoriteData }] = useMutation(ADD_FAVORITE, {
     variables: { postId: id },
   });
@@ -121,6 +144,9 @@ const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
     }
   );
   const [upvotePost, { data: upvotePostData }] = useMutation(UPVOTE_POST, {
+    variables: { postId: id },
+  });
+  const [unvotePost, { data: unvotePostData }] = useMutation(UNVOTE_POST, {
     variables: { postId: id },
   });
 
@@ -134,6 +160,10 @@ const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
 
   const handleUpvoteClick = () => {
     upvotePost();
+  };
+
+  const handleUnvoteClick = () => {
+    unvotePost();
   };
 
   useEffect(() => {
@@ -151,6 +181,15 @@ const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
       }
     }
   }, [upvotePostData]);
+
+  useEffect(() => {
+    if (unvotePostData) {
+      const { success } = unvotePostData.unvotePost;
+      if (success === true) {
+        setIsUpvoted(false);
+      }
+    }
+  }, [unvotePostData]);
 
   useEffect(() => {
     if (addFavoriteData) {
@@ -232,18 +271,21 @@ const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
             })}
           </Link>
           {" | "}
+          {isUpvoted && (
+            <>
+              <button
+                onClick={handleUnvoteClick}
+                css={[styles.button, styles.textButton]}
+              >
+                unvote
+              </button>
+              {" | "}
+            </>
+          )}
           {currentUserFavorited !== null && (
             <>
               <button
-                css={(theme) => css`
-                  ${styles.button}
-                  padding: 0;
-                  font-size: 0.6rem;
-                  color: ${theme.colors.primary};
-                  &:hover {
-                    text-decoration: underline;
-                  }
-                `}
+                css={[styles.button, styles.textButton]}
                 onClick={handleFavClick}
               >
                 {isFavorited ? "un-favorite" : "favorite"}
