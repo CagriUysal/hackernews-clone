@@ -57,6 +57,13 @@ export const typeDefs = gql`
     post: Post
   }
 
+  type UnvotePostResponse implements Response {
+    code: String!
+    success: Boolean!
+    message: String!
+    post: Post
+  }
+
   input pastPostsInput {
     start: String!
     end: String!
@@ -157,6 +164,7 @@ export const typeDefs = gql`
     addFavorite(postId: Int!): AddFavoriteResponse
     removeFavorite(postId: Int!): RemoveFavoriteResponse
     upvotePost(postId: Int!): UpvotePostResponse
+    unvotePost(postId: Int!): UnvotePostResponse
     register(user: RegisterInput!): RegisterResponse
     login(user: LoginInput!): LoginResponse
     logout: Boolean

@@ -1,7 +1,7 @@
 import { Post } from "@prisma/client";
 import { prisma } from "./prismaClient";
 
-interface IUpvotePost {
+interface IUnvotePost {
   code: string;
   success: boolean;
   message: string;
@@ -12,7 +12,7 @@ export default async function (
   _,
   { postId }: { postId: number },
   { isAuth }
-): Promise<IUpvotePost> {
+): Promise<IUnvotePost> {
   try {
     var payload = isAuth();
     var name = payload.userName as string;
@@ -22,7 +22,8 @@ export default async function (
       include: { upvotes: { where: { id: postId } } },
     });
 
-    if (user.upvotes.length !== 0) throw new Error("Already Upvoted.");
+    if (user.upvotes.length === 0)
+      throw new Error("Post isn't upvoted, cannot unvote.");
   } catch (error) {
     return {
       code: "401",
@@ -36,18 +37,18 @@ export default async function (
       where: { id: postId },
       data: {
         upvotedBy: {
-          connect: {
+          disconnect: {
             name,
           },
         },
-        upvote: { increment: 1 },
+        upvote: { decrement: 1 },
       },
     });
 
     return {
       code: "200",
       success: true,
-      message: `Post '${postId}' upvoted by ${name}.`,
+      message: `Post '${postId}' unvoted by ${name}.`,
       post: updatedPost,
     };
   } catch (error) {
