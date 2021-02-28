@@ -1,24 +1,23 @@
 import { PrismaClient } from "@prisma/client";
-import { verify } from "jsonwebtoken";
+import { Post } from "@prisma/client/index";
+import { verify, sign } from "jsonwebtoken";
 import { Request } from "express";
 
-import jwt from "jsonwebtoken";
-
 export const createAccessToken = (userName: string): string => {
-  return jwt.sign({ userName }, process.env.ACCESS_TOKEN, { expiresIn: "15m" });
+  return sign({ userName }, process.env.ACCESS_TOKEN, { expiresIn: "15m" });
 };
 
 export const createRefreshToken = async (
   userName: string,
   newTokenVersion: number,
-  prismaClient: PrismaClient
+  client: PrismaClient
 ): Promise<string> => {
-  await prismaClient.user.update({
+  await client.user.update({
     where: { name: userName },
     data: { tokenVersion: newTokenVersion },
   });
 
-  return jwt.sign(
+  return sign(
     { userName, tokenVersion: newTokenVersion },
     process.env.REFRESH_TOKEN,
     {
@@ -42,4 +41,24 @@ export const isAuth = (req: Request) => {
   } catch (error) {
     throw new Error("Not Auth.");
   }
+};
+
+export const appendUpvoteInfo = async (
+  posts: Post[],
+  name: string,
+  client: PrismaClient
+) => {
+  // NOTE: appending `currentUserUpvoted` field can be solved more elegantly?
+
+  const postIds = posts.map((post) => post.id);
+  const user = await client.user.findUnique({
+    where: { name },
+    include: { upvotes: { where: { id: { in: postIds } } } },
+  });
+  const upvoteIds = user.upvotes.map((post) => post.id);
+
+  return posts.map((post) => ({
+    ...post,
+    currentUserUpvoted: upvoteIds.includes(post.id), // append graphql field
+  }));
 };

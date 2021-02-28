@@ -82,6 +82,7 @@ export interface IPost {
   };
   comments: Comment[];
   currentUserFavorited: boolean | null;
+  currentUserUpvoted: boolean | null;
 }
 
 type ComponentProps = {
@@ -100,11 +101,15 @@ const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
     author: { name },
     comments,
     currentUserFavorited,
+    currentUserUpvoted,
   } = post;
 
   const theme = useTheme();
   const [isFavorited, setIsFavorited] = useState<null | boolean>(
     currentUserFavorited
+  );
+  const [isUpvoted, setIsUpvoted] = useState<null | boolean>(
+    currentUserUpvoted
   );
   const [addFavorite, { data: addFavoriteData }] = useMutation(ADD_FAVORITE, {
     variables: { postId: id },
@@ -130,6 +135,22 @@ const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
   const handleUpvoteClick = () => {
     upvotePost();
   };
+
+  useEffect(() => {
+    if (upvotePostData) {
+      const { success, code } = upvotePostData.upvotePost;
+      if (success === false && code === "401") {
+        navigate("/login", {
+          state: {
+            message: "You have to be logged in to vote.",
+            redirectedFrom: `${window.location.pathname}`,
+          },
+        });
+      } else if (success === true) {
+        setIsUpvoted(true);
+      }
+    }
+  }, [upvotePostData]);
 
   useEffect(() => {
     if (addFavoriteData) {
@@ -169,9 +190,17 @@ const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
             {rank}.
           </span>
         )}
-        <button css={styles.button} onClick={handleUpvoteClick}>
-          <img src={upArrow} alt="up arrow" height="12px" width="12px" />
-        </button>
+        {
+          <button
+            css={css`
+              ${styles.button};
+              visibility: ${isUpvoted ? "hidden" : undefined};
+            `}
+            onClick={handleUpvoteClick}
+          >
+            <img src={upArrow} alt="up arrow" height="12px" width="12px" />
+          </button>
+        }
         <a css={styles.title} href={link}>
           {title}
         </a>

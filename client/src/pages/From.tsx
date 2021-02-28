@@ -21,6 +21,7 @@ const DOMAIN_POSTS = gql`
       comments {
         id
       }
+      currentUserUpvoted
     }
   }
 `;

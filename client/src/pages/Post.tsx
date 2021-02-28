@@ -45,6 +45,7 @@ const POST = gql`
         id
       }
       currentUserFavorited
+      currentUserUpvoted
     }
   }
 `;

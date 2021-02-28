@@ -1,5 +1,4 @@
 import { Post } from "@prisma/client/index";
-import post from "./post";
 
 import { prisma } from "./prismaClient";
 
@@ -10,12 +9,13 @@ interface IPost extends Post {
 export default async function favoritePosts(
   _,
   { name }: { name: string },
-  { isAuth }
+  { isAuth, appendUpvoteInfo }
 ): Promise<IPost[]> {
-  // check if user exists
   const user = await prisma.user.findUnique({
     where: { name },
-    select: { favorites: { include: { author: true, comments: true } } },
+    select: {
+      favorites: { include: { author: true, comments: true } },
+    },
   });
 
   if (user === null) {
@@ -25,15 +25,23 @@ export default async function favoritePosts(
   try {
     const { userName } = isAuth();
 
+    const modifiedPosts = await appendUpvoteInfo(
+      user.favorites,
+      userName,
+      prisma
+    );
+
     if (userName === name) {
-      return user.favorites.map((post) => ({
+      // if authorized user is the same with the user selected,
+      // give authorized user the ability to unfavorite posts.
+      return modifiedPosts.map((post) => ({
         ...post,
         currentUserFavorited: true,
       }));
+    } else {
+      return modifiedPosts;
     }
   } catch {
-    // pass
+    return user.favorites;
   }
-
-  return user.favorites;
 }

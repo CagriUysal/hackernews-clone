@@ -4,6 +4,7 @@ import { prisma } from "./prismaClient";
 
 interface IPost extends Post {
   currentUserFavorited: boolean;
+  currentUserUpvoted?: boolean;
 }
 
 export default async function post(
@@ -12,9 +13,25 @@ export default async function post(
   { isAuth }
 ): Promise<IPost> {
   try {
-    const payload = isAuth();
-    var name = payload.userName;
-  } catch {
+    const { userName } = isAuth();
+
+    const post = await prisma.post.findUnique({
+      where: { id },
+      include: {
+        author: true,
+        comments: true,
+        // following arrays not empty if the post favorited by or upvoted the authorized user.
+        favoritedBy: { where: { name: userName } },
+        upvotedBy: { where: { name: userName } },
+      },
+    });
+
+    return {
+      ...post,
+      currentUserFavorited: post.favoritedBy.length > 0,
+      currentUserUpvoted: post.upvotedBy.length > 0,
+    };
+  } catch (error) {
     const post = await prisma.post.findUnique({
       where: { id },
       include: {
@@ -26,16 +43,4 @@ export default async function post(
     // no-one authorized
     return { ...post, currentUserFavorited: false };
   }
-
-  const post = await prisma.post.findUnique({
-    where: { id },
-    include: {
-      author: true,
-      comments: true,
-      // not empty if the post favorited by the authorized user.
-      favoritedBy: { where: { name } },
-    },
-  });
-
-  return { ...post, currentUserFavorited: post.favoritedBy.length > 0 };
 }

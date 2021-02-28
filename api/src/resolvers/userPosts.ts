@@ -4,7 +4,8 @@ import { prisma } from "./prismaClient";
 
 export default async function userPosts(
   _,
-  { name }: { name: string }
+  { name }: { name: string },
+  { isAuth, appendUpvoteInfo }
 ): Promise<Post[]> {
   // check if user exists
   const user = await prisma.user.findUnique({ where: { name } });
@@ -12,9 +13,17 @@ export default async function userPosts(
     return null;
   }
 
-  return await prisma.post.findMany({
+  const posts = await prisma.post.findMany({
     where: { author: { name } },
     include: { author: true, comments: true },
     orderBy: { createdAt: "desc" },
   });
+
+  try {
+    const { userName } = isAuth();
+
+    return await appendUpvoteInfo(posts, userName, prisma);
+  } catch (error) {
+    return posts;
+  }
 }

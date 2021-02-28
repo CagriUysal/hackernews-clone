@@ -23,6 +23,7 @@ export const typeDefs = gql`
     author: PublicUser!
     comments: [Comment!]
     currentUserFavorited: Boolean
+    currentUserUpvoted: Boolean
   }
 
   input AddPostInput {

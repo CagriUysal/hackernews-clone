@@ -22,6 +22,7 @@ const FAVORITE_POSTS = gql`
         id
       }
       currentUserFavorited
+      currentUserUpvoted
     }
   }
 `;

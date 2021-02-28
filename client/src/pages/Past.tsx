@@ -36,6 +36,7 @@ const PAST_POSTS = gql`
         id
       }
       currentUserFavorited
+      currentUserUpvoted
     }
   }
 `;
