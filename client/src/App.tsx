@@ -61,7 +61,7 @@ const App: FunctionComponent = () => {
           body {
             margin: 0;
             font-family: Verdana, Geneva, Tahoma, sans-serif;
-            font-size: 16px;
+            font-size: 14px;
             line-height: 1.4;
           }
           a {

@@ -8,5 +8,6 @@ export const theme = {
   layout: css`
     width: 85%;
     margin: 0 auto;
+    background-color: #f6f6ef;
   `,
 };

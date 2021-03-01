@@ -1,14 +1,6 @@
 import React, { FunctionComponent } from "react";
 
-import { css } from "@emotion/react";
-
 import PostListItem, { IPost } from "./PostListItem";
-
-const styles = {
-  container: (theme) => css`
-    background-color: ${theme.colors.bg};
-  `,
-};
 
 type ComponentProps = {
   posts: IPost[];
@@ -16,7 +8,7 @@ type ComponentProps = {
 
 const PostList: FunctionComponent<ComponentProps> = ({ posts }) => {
   return (
-    <main css={styles.container}>
+    <main>
       {posts.map((post, index) => (
         <PostListItem
           post={post}

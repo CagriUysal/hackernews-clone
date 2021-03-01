@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState, useEffect } from "react";
 import { Comment } from "@prisma/client/index";
-import { css, useTheme } from "@emotion/react";
+import { css } from "@emotion/react";
 import { formatDistanceToNowStrict } from "date-fns";
 import { gql, useMutation } from "@apollo/client";
 import { navigate } from "@reach/router";
@@ -11,32 +11,44 @@ import { Link } from "@reach/router";
 
 const styles = {
   container: css`
+    display: flex;
     color: #000;
-    padding: 0.5em;
-    font-size: 0.9em;
+    font-size: 0.95rem;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
   `,
-  title: css`
-    margin-left: 0.1em;
+  rank: (theme) => css`
+    color: ${theme.colors.primary};
+    width: 2em;
+    text-align: right;
+    margin-right: 0.3em;
+  `,
+  upvote: css`
+    margin-right: 0.3em;
+  `,
+  domain: (theme) => css`
+    color: ${theme.colors.primary};
+    font-size: 0.8em;
+    margin-left: 0.5em;
+  `,
+  buttomRow: (theme) => css`
+    color: ${theme.colors.primary};
+    font-size: 0.7em;
   `,
   button: css`
     background: none;
     border: none;
+    padding: 0;
     &:hover {
       cursor: pointer;
     }
   `,
   textButton: (theme) => css`
-    padding: 0;
-    font-size: 0.6rem;
+    font-size: inherit;
     color: ${theme.colors.primary};
     &:hover {
       text-decoration: underline;
     }
-  `,
-  domain: (theme) => css`
-    color: ${theme.colors.primary};
-    font-size: 0.7em;
-    margin-left: 0.5em;
   `,
   link: css`
     &:hover {
@@ -124,8 +136,6 @@ const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
     currentUserFavorited,
     currentUserUpvoted,
   } = post;
-
-  const theme = useTheme();
 
   const [isFavorited, setIsFavorited] = useState<null | boolean>(
     currentUserFavorited
@@ -218,17 +228,8 @@ const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
 
   return (
     <div css={styles.container}>
-      {/* upper row */}
-      <div>
-        {rank && (
-          <span
-            css={css`
-              color: ${theme.colors.primary};
-            `}
-          >
-            {rank}.
-          </span>
-        )}
+      <div css={styles.rank}>{rank && <span>{rank}.</span>}</div>
+      <div css={styles.upvote}>
         {
           <button
             css={css`
@@ -240,27 +241,23 @@ const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
             <img src={upArrow} alt="up arrow" height="12px" width="12px" />
           </button>
         }
-        <a css={styles.title} href={link}>
-          {title}
-        </a>
-        <span css={styles.domain}>
-          (
-          <Link to={`/from/${domain}`} css={styles.link}>
-            {domain}
-          </Link>
-          )
-        </span>
       </div>
 
-      {/* bottom row */}
       <div>
-        <span
-          css={(theme) => css`
-            color: ${theme.colors.primary};
-            font-size: 0.6rem;
-            margin-left: ${rank ? "4em" : "2.5em"};
-          `}
-        >
+        {/* upper row */}
+        <div>
+          <a href={link}>{title}</a>
+          <span css={styles.domain}>
+            (
+            <Link to={`/from/${domain}`} css={styles.link}>
+              {domain}
+            </Link>
+            )
+          </span>
+        </div>
+
+        {/* bottom row */}
+        <div css={styles.buttomRow}>
           {upvote} points by{" "}
           <Link to={`/user/${name}`} css={styles.link}>
             {name}
@@ -296,7 +293,7 @@ const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
           <Link to={`/post/${id}`} css={styles.link}>
             {comments.length === 0 ? "discuss" : `${comments.length} comments`}
           </Link>
-        </span>
+        </div>
       </div>
     </div>
   );
