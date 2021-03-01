@@ -84,7 +84,7 @@ const UPVOTE_POST = gql`
       success
       message
       post {
-        title
+        upvote
       }
     }
   }
@@ -97,7 +97,7 @@ const UNVOTE_POST = gql`
       success
       message
       post {
-        title
+        upvote
       }
     }
   }
@@ -129,7 +129,7 @@ const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
     title,
     link,
     domain,
-    upvote,
+    upvote: initialUpvote,
     createdAt,
     author: { name },
     comments,
@@ -143,6 +143,7 @@ const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
   const [isUpvoted, setIsUpvoted] = useState<null | boolean>(
     currentUserUpvoted
   );
+  const [upvote, setUpvote] = useState(initialUpvote);
 
   const [addFavorite, { data: addFavoriteData }] = useMutation(ADD_FAVORITE, {
     variables: { postId: id },
@@ -188,6 +189,7 @@ const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
         });
       } else if (success === true) {
         setIsUpvoted(true);
+        setUpvote(upvote + 1); // show upvote effect to the user
       }
     }
   }, [upvotePostData]);
@@ -197,6 +199,7 @@ const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
       const { success } = unvotePostData.unvotePost;
       if (success === true) {
         setIsUpvoted(false);
+        setUpvote(upvote - 1);
       }
     }
   }, [unvotePostData]);
