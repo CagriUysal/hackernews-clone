@@ -34,6 +34,7 @@ model User {
   id Int @default(autoincrement()) @id
   name String @unique
   email String? @unique
+  about String @default("")
   password String 
   createdAt DateTime @default(now())
   karma Int @default(0) 

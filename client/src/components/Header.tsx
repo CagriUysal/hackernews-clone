@@ -151,9 +151,9 @@ const Header: FunctionComponent<ComponentProps> = ({ onlyTitle }) => {
                 ${styles.login}
               `}
             >
-              {data && data.me ? (
+              {data?.me ? (
                 <>
-                  <Link to="/user">{data.me.name}</Link>
+                  <Link to={`/user/${data.me.name}`}>{data.me.name}</Link>
                   {" | "}
                   <button css={styles.logout} onClick={handleLogout}>
                     logout

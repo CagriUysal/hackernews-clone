@@ -22,10 +22,10 @@ import upvotePost from "./resolvers/upvotePost";
 import unvotePost from "./resolvers/unvotePost";
 
 export const resolvers = {
-  Response: {
-    __resolveType: (response): string => {
-      if (response.post) return "Post";
-      if (response.user) return "User";
+  User: {
+    __resolveType: (user): string => {
+      if (user.hidden) return "PrivateUser";
+      else return "PublicUser";
     },
   },
 

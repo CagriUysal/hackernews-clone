@@ -10,6 +10,17 @@ export const typeDefs = gql`
     message: String!
   }
 
+  interface User {
+    id: Int!
+    name: String!
+    about: String!
+    createdAt: Float!
+    karma: Int!
+    posts: [Post!]!
+    comments: [Comment!]!
+    favorites: [Post!]!
+  }
+
   """
   Post
   """
@@ -98,13 +109,25 @@ export const typeDefs = gql`
   """
   User
   """
-  type PrivateUser {
+  type PrivateUser implements User {
     id: Int!
     name: String!
+    about: String!
+    createdAt: Float!
+    karma: Int!
+    posts: [Post!]!
+    comments: [Comment!]!
+    favorites: [Post!]!
+
+    email: String
+    hidden: [Post!]!
+    upvotedPosts: [Post!]!
   }
 
-  type PublicUser {
+  type PublicUser implements User {
+    id: Int!
     name: String!
+    about: String!
     createdAt: Float!
     karma: Int!
     posts: [Post!]!
@@ -151,7 +174,7 @@ export const typeDefs = gql`
     comments: [Comment!]!
     comment(id: Int!): Comment
     userComments(name: String!): [Comment!]
-    user(name: String!): PublicUser
+    user(name: String!): User
     me: PrivateUser
   }
 

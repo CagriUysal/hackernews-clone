@@ -22,6 +22,8 @@ const styles = {
   `,
   links: css`
     margin-left: 4.5em; // align with info
+    margin-top: 1em;
+    margin-bottom: 1em;
   `,
   link: css`
     display: block;
@@ -32,9 +34,15 @@ const styles = {
 const USER = gql`
   query User($name: String!) {
     user(name: $name) {
+      __typename
+      id
       name
       createdAt
       karma
+      about
+      ... on PrivateUser {
+        email
+      }
     }
   }
 `;
@@ -46,13 +54,12 @@ interface ComponentProps extends RouteComponentProps {
 const User: FunctionComponent<ComponentProps> = ({ name }) => {
   const theme = useTheme();
 
-  const { data, loading } = useQuery(USER, { variables: { name } });
+  const { data } = useQuery(USER, {
+    variables: { name },
+    fetchPolicy: "network-only",
+  });
 
-  if (loading) {
-    return null;
-  }
-
-  if (data && data.user === null) {
+  if (data?.user === null) {
     return (
       <p
         css={css`
@@ -63,44 +70,87 @@ const User: FunctionComponent<ComponentProps> = ({ name }) => {
         No such user.
       </p>
     );
-  } else if (data && data.user) {
-    const { name, createdAt, karma } = data.user;
+  } else if (data?.user) {
+    const { name, createdAt, karma, about, __typename } = data.user;
+    const isPrivateUser = __typename === "PrivateUser";
 
     return (
       <div css={theme.layout}>
         <Header />
         <div css={styles.container}>
-          <p>
+          <div>
             <span css={styles.infoKey}>user: </span>
             {name}
-          </p>
-          <p>
+          </div>
+          <div>
             <span css={styles.infoKey}>created: </span>
             {formatDistanceToNowStrict(createdAt, {
               addSuffix: true,
             })}
-          </p>
-          <p>
+          </div>
+          <div>
             <span css={styles.infoKey}>karma: </span>
             {karma}
-          </p>
-          <p>
-            <span css={styles.infoKey}>about: </span>
-          </p>
+          </div>
+          <div>
+            <span
+              css={css`
+                ${styles.infoKey}
+                vertical-align:top;
+              `}
+            >
+              about:{" "}
+            </span>
+            {isPrivateUser ? (
+              <textarea cols={60} rows={5} defaultValue={about} />
+            ) : (
+              <span>{about}</span>
+            )}
+          </div>
+          {isPrivateUser && (
+            <div>
+              <span css={styles.infoKey}>email: </span>
+              <input
+                type="text"
+                css={css`
+                  width: 35em;
+                `}
+                defaultValue={data.user.email}
+              />
+            </div>
+          )}
           <div css={styles.links}>
+            {isPrivateUser && (
+              <Link to={`/changepw`} css={styles.link}>
+                change password
+              </Link>
+            )}
             <Link to={`/user/${name}/submissions`} css={styles.link}>
               submissions
             </Link>
             <Link to={`/user/${name}/comments`} css={styles.link}>
               comments
             </Link>
+            {isPrivateUser && (
+              <Link to={`/user/${name}/hidden`} css={styles.link}>
+                hidden
+              </Link>
+            )}
+            {isPrivateUser && (
+              <Link to={`/user/${name}/upvoted`} css={styles.link}>
+                upvoted submissions
+              </Link>
+            )}
             <Link to={`/user/${name}/favorites`} css={styles.link}>
               favorites
             </Link>
           </div>
+          {isPrivateUser && <button>update</button>}
         </div>
       </div>
     );
+  } else {
+    return null;
   }
 };
 
