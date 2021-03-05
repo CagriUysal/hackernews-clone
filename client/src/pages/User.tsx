@@ -1,7 +1,7 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useState, useEffect } from "react";
 import { css, useTheme } from "@emotion/react";
 import { RouteComponentProps } from "@reach/router";
-import { gql, useQuery } from "@apollo/client";
+import { gql, useQuery, useMutation } from "@apollo/client";
 import { Link } from "@reach/router";
 import { formatDistanceToNowStrict } from "date-fns";
 
@@ -14,7 +14,6 @@ const styles = {
       color: ${theme.colors.primary};
       padding-top: 1em;
       padding-bottom: 2em;
-      font-size: 0.9em;
     `,
   infoKey: css`
     min-width: 4.5em;
@@ -26,7 +25,6 @@ const styles = {
     margin-bottom: 1em;
   `,
   link: css`
-    display: block;
     text-decoration: underline;
   `,
 };
@@ -47,6 +45,20 @@ const USER = gql`
   }
 `;
 
+const UPDATE_USER = gql`
+  mutation UpdateUser($input: UpdateUserInput!) {
+    updateUser(input: $input) {
+      code
+      success
+      message
+      user {
+        about
+        email
+      }
+    }
+  }
+`;
+
 interface ComponentProps extends RouteComponentProps {
   name?: string;
 }
@@ -54,10 +66,62 @@ interface ComponentProps extends RouteComponentProps {
 const User: FunctionComponent<ComponentProps> = ({ name }) => {
   const theme = useTheme();
 
+  const [about, setAbout] = useState("");
+  const [email, setEmail] = useState("");
+
   const { data } = useQuery(USER, {
     variables: { name },
     fetchPolicy: "network-only",
   });
+
+  const [updateUser] = useMutation(UPDATE_USER, {
+    update: (cache, { data: { updateUser } }) => {
+      const {
+        success,
+        user: { email },
+      } = updateUser;
+
+      if (success === false) {
+        return; // unsuccessful. don't update cache.
+      }
+
+      // clear email input field after update.
+      if (email === null) {
+        setEmail("");
+      } else {
+        setEmail(email);
+      }
+
+      // cache update is necessary for helper message to be shown or removed
+      const { user } = cache.readQuery({
+        query: USER,
+        variables: { name },
+      });
+
+      cache.writeQuery({
+        query: USER,
+        variables: { name },
+        data: {
+          user: { ...user, email }, // update email
+        },
+      });
+    },
+  });
+
+  const updateClickHandler = () => {
+    updateUser({ variables: { input: { email, about } } });
+  };
+
+  useEffect(() => {
+    if (data?.user) {
+      const { about, email } = data.user;
+
+      setAbout(about);
+
+      if (email !== null) setEmail(email);
+      else setEmail("");
+    }
+  }, [data]);
 
   if (data?.user === null) {
     return (
@@ -71,13 +135,26 @@ const User: FunctionComponent<ComponentProps> = ({ name }) => {
       </p>
     );
   } else if (data?.user) {
-    const { name, createdAt, karma, about, __typename } = data.user;
+    const { name, createdAt, karma, __typename } = data.user;
     const isPrivateUser = __typename === "PrivateUser";
 
     return (
       <div css={theme.layout}>
         <Header />
         <div css={styles.container}>
+          {isPrivateUser && data.user.email === null && (
+            <p
+              css={css`
+                background-color: #ffffaa;
+                padding: 0.4em;
+                margin-bottom: 0.5em;
+              `}
+            >
+              Please put a valid address in the email field, or we won't be able
+              to send you a new password if you forget yours. Your address is
+              only visible to you and us. Crawlers and other users can't see it.
+            </p>
+          )}
           <div>
             <span css={styles.infoKey}>user: </span>
             {name}
@@ -102,7 +179,12 @@ const User: FunctionComponent<ComponentProps> = ({ name }) => {
               about:{" "}
             </span>
             {isPrivateUser ? (
-              <textarea cols={60} rows={5} defaultValue={about} />
+              <textarea
+                cols={60}
+                rows={5}
+                value={about}
+                onChange={(event) => setAbout(event.target.value)}
+              />
             ) : (
               <span>{about}</span>
             )}
@@ -115,37 +197,57 @@ const User: FunctionComponent<ComponentProps> = ({ name }) => {
                 css={css`
                   width: 35em;
                 `}
-                defaultValue={data.user.email}
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
               />
             </div>
           )}
           <div css={styles.links}>
             {isPrivateUser && (
-              <Link to={`/changepw`} css={styles.link}>
-                change password
-              </Link>
+              <div>
+                <Link to={`/changepw`} css={styles.link}>
+                  change password
+                </Link>
+              </div>
             )}
-            <Link to={`/user/${name}/submissions`} css={styles.link}>
-              submissions
-            </Link>
-            <Link to={`/user/${name}/comments`} css={styles.link}>
-              comments
-            </Link>
-            {isPrivateUser && (
-              <Link to={`/user/${name}/hidden`} css={styles.link}>
-                hidden
+
+            <div>
+              <Link to={`/user/${name}/submissions`} css={styles.link}>
+                submissions
               </Link>
-            )}
-            {isPrivateUser && (
-              <Link to={`/user/${name}/upvoted`} css={styles.link}>
-                upvoted submissions
+            </div>
+
+            <div>
+              <Link to={`/user/${name}/comments`} css={styles.link}>
+                comments
               </Link>
-            )}
-            <Link to={`/user/${name}/favorites`} css={styles.link}>
-              favorites
-            </Link>
+            </div>
+
+            <div>
+              {isPrivateUser && (
+                <Link to={`/user/${name}/hidden`} css={styles.link}>
+                  hidden
+                </Link>
+              )}
+            </div>
+
+            <div>
+              {isPrivateUser && (
+                <Link to={`/user/${name}/upvoted`} css={styles.link}>
+                  upvoted submissions
+                </Link>
+              )}
+            </div>
+
+            <div>
+              <Link to={`/user/${name}/favorites`} css={styles.link}>
+                favorites
+              </Link>
+            </div>
           </div>
-          {isPrivateUser && <button>update</button>}
+          {isPrivateUser && (
+            <button onClick={updateClickHandler}>update</button>
+          )}
         </div>
       </div>
     );

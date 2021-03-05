@@ -20,6 +20,7 @@ import removeFavorite from "./resolvers/removeFavorite";
 import favoritePosts from "./resolvers/favoritePosts";
 import upvotePost from "./resolvers/upvotePost";
 import unvotePost from "./resolvers/unvotePost";
+import updateUser from "./resolvers/updateUser";
 
 export const resolvers = {
   User: {
@@ -52,6 +53,7 @@ export const resolvers = {
     removeFavorite,
     upvotePost,
     unvotePost,
+    updateUser,
     login,
     register,
     logout,

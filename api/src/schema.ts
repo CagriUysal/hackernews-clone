@@ -140,6 +140,18 @@ export const typeDefs = gql`
     password: String!
   }
 
+  input UpdateUserInput {
+    about: String!
+    email: String!
+  }
+
+  type UpdateUserResponse implements Response {
+    code: String!
+    success: Boolean!
+    message: String!
+    user: PrivateUser
+  }
+
   type RegisterResponse implements Response {
     code: String!
     success: Boolean!
@@ -189,6 +201,7 @@ export const typeDefs = gql`
     upvotePost(postId: Int!): UpvotePostResponse
     unvotePost(postId: Int!): UnvotePostResponse
     register(user: RegisterInput!): RegisterResponse
+    updateUser(input: UpdateUserInput!): UpdateUserResponse
     login(user: LoginInput!): LoginResponse
     logout: Boolean
   }
