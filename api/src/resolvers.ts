@@ -21,6 +21,7 @@ import favoritePosts from "./resolvers/favoritePosts";
 import upvotePost from "./resolvers/upvotePost";
 import unvotePost from "./resolvers/unvotePost";
 import updateUser from "./resolvers/updateUser";
+import changePw from "./resolvers/changePw";
 
 export const resolvers = {
   User: {
@@ -54,6 +55,7 @@ export const resolvers = {
     upvotePost,
     unvotePost,
     updateUser,
+    changePw,
     login,
     register,
     logout,

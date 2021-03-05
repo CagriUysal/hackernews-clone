@@ -152,6 +152,17 @@ export const typeDefs = gql`
     user: PrivateUser
   }
 
+  input ChangePwInput {
+    currentPw: String!
+    newPw: String!
+  }
+
+  type ChangePwResponse implements Response {
+    code: String!
+    success: Boolean!
+    message: String!
+  }
+
   type RegisterResponse implements Response {
     code: String!
     success: Boolean!
@@ -202,6 +213,7 @@ export const typeDefs = gql`
     unvotePost(postId: Int!): UnvotePostResponse
     register(user: RegisterInput!): RegisterResponse
     updateUser(input: UpdateUserInput!): UpdateUserResponse
+    changePw(input: ChangePwInput!): ChangePwResponse
     login(user: LoginInput!): LoginResponse
     logout: Boolean
   }

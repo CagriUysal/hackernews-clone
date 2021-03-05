@@ -22,6 +22,7 @@ import User from "./pages/User";
 import Submissions from "./pages/Submissions";
 import UserComments from "./pages/UserComments";
 import Favorites from "./pages/Favorites";
+import ChangePw from "./pages/ChangePw";
 
 const App: FunctionComponent = () => {
   const [loading, setLoading] = useState(true);
@@ -91,6 +92,7 @@ const App: FunctionComponent = () => {
         <Submissions path="/user/:name/submissions" />
         <UserComments path="/user/:name/comments" />
         <Favorites path="/user/:name/favorites" />
+        <ChangePw path="/changepw" />
       </Router>
     </>
   );
