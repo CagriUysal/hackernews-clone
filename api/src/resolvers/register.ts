@@ -1,26 +1,23 @@
 import bcrypt from "bcrypt";
-import { Prisma } from "@prisma/client";
-import { User } from "@prisma/client/index";
 
 import { prisma } from "./utils/prismaClient";
+import { IResponse } from "./utils/types";
 
 const SALT_ROUNDS = 10;
 
-interface IRegisterResponse {
-  code: string;
-  success: boolean;
-  message: string;
-  user?: User;
+interface IUser {
+  name: string;
+  password: string;
 }
 
 export default async function (
   _,
-  { user: { name, password } }: { user: Prisma.UserCreateInput }
-): Promise<IRegisterResponse> {
+  { user: { name, password } }: { user: IUser }
+): Promise<IResponse> {
   const hash = await bcrypt.hash(password, SALT_ROUNDS);
 
   try {
-    const newUser = await prisma.user.create({
+    await prisma.user.create({
       data: { name, password: hash },
     });
 
@@ -28,7 +25,6 @@ export default async function (
       code: "200",
       success: true,
       message: "User created succesfully.",
-      user: newUser,
     };
   } catch (err) {
     console.log(err.message);

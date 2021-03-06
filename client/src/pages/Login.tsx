@@ -29,10 +29,6 @@ const REGISTER = gql`
       code
       success
       message
-      user {
-        id
-        name
-      }
     }
   }
 `;

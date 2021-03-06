@@ -1,18 +1,11 @@
-import { Post } from "@prisma/client";
 import { prisma } from "./utils/prismaClient";
-
-interface IUpvotePost {
-  code: string;
-  success: boolean;
-  message: string;
-  post?: Post;
-}
+import { IResponse } from "./utils/types";
 
 export default async function (
   _,
   { postId }: { postId: number },
   { isAuth }
-): Promise<IUpvotePost> {
+): Promise<IResponse> {
   try {
     var payload = isAuth();
     var name = payload.userName as string;
@@ -32,7 +25,7 @@ export default async function (
   }
 
   try {
-    const updatedPost = await prisma.post.update({
+    await prisma.post.update({
       where: { id: postId },
       data: {
         upvotedBy: {
@@ -48,7 +41,6 @@ export default async function (
       code: "200",
       success: true,
       message: `Post '${postId}' upvoted by ${name}.`,
-      post: updatedPost,
     };
   } catch (error) {
     return {

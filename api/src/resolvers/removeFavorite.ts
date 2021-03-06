@@ -1,16 +1,11 @@
 import { prisma } from "./utils/prismaClient";
-
-interface IRemoveFavoriteResponse {
-  code: string;
-  success: boolean;
-  message: string;
-}
+import { IResponse } from "./utils/types";
 
 export default async function (
   _,
   { postId }: { postId: number },
   { isAuth }
-): Promise<IRemoveFavoriteResponse> {
+): Promise<IResponse> {
   try {
     var payload = isAuth();
   } catch (error) {

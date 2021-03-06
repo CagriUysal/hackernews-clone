@@ -83,9 +83,6 @@ const UPVOTE_POST = gql`
       code
       success
       message
-      post {
-        upvote
-      }
     }
   }
 `;
@@ -96,9 +93,6 @@ const UNVOTE_POST = gql`
       code
       success
       message
-      post {
-        upvote
-      }
     }
   }
 `;

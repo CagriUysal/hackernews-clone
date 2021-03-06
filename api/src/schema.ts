@@ -22,15 +22,6 @@ export const typeDefs = gql`
   }
 
   """
-  Response
-  """
-  type MutationResponse {
-    code: String!
-    success: Boolean!
-    message: String!
-  }
-
-  """
   Post
   """
   type Post {
@@ -49,32 +40,6 @@ export const typeDefs = gql`
   input AddPostInput {
     link: String!
     title: String!
-  }
-
-  type AddFavoriteResponse implements Response {
-    code: String!
-    success: Boolean!
-    message: String!
-  }
-
-  type RemoveFavoriteResponse implements Response {
-    code: String!
-    success: Boolean!
-    message: String!
-  }
-
-  type UpvotePostResponse implements Response {
-    code: String!
-    success: Boolean!
-    message: String!
-    post: Post
-  }
-
-  type UnvotePostResponse implements Response {
-    code: String!
-    success: Boolean!
-    message: String!
-    post: Post
   }
 
   input pastPostsInput {
@@ -159,19 +124,6 @@ export const typeDefs = gql`
     newPw: String!
   }
 
-  type ChangePwResponse implements Response {
-    code: String!
-    success: Boolean!
-    message: String!
-  }
-
-  type RegisterResponse implements Response {
-    code: String!
-    success: Boolean!
-    message: String!
-    user: PublicUser
-  }
-
   input LoginInput {
     name: String!
     password: String!
@@ -207,16 +159,22 @@ export const typeDefs = gql`
   Mutations
   """
   type Mutation {
-    addPost(post: AddPostInput!): MutationResponse
-    addComment(comment: AddCommentInput!): AddCommentResponse
-    addFavorite(postId: Int!): AddFavoriteResponse
-    removeFavorite(postId: Int!): RemoveFavoriteResponse
-    upvotePost(postId: Int!): UpvotePostResponse
-    unvotePost(postId: Int!): UnvotePostResponse
-    register(user: RegisterInput!): RegisterResponse
-    updateUser(input: UpdateUserInput!): UpdateUserResponse
-    changePw(input: ChangePwInput!): ChangePwResponse
-    login(user: LoginInput!): LoginResponse
-    logout: Boolean
+    addPost(post: AddPostInput!): MutationResponse!
+    addComment(comment: AddCommentInput!): AddCommentResponse!
+    addFavorite(postId: Int!): MutationResponse!
+    removeFavorite(postId: Int!): MutationResponse!
+    upvotePost(postId: Int!): MutationResponse!
+    unvotePost(postId: Int!): MutationResponse!
+    register(user: RegisterInput!): MutationResponse!
+    updateUser(input: UpdateUserInput!): UpdateUserResponse!
+    changePw(input: ChangePwInput!): MutationResponse!
+    login(user: LoginInput!): LoginResponse!
+    logout: Boolean!
+  }
+
+  type MutationResponse implements Response {
+    code: String!
+    success: Boolean!
+    message: String!
   }
 `;
