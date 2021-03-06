@@ -1,6 +1,6 @@
 import { User } from "@prisma/client/index";
 
-import { prisma } from "./prismaClient";
+import { prisma } from "./utils/prismaClient";
 import isValidEmail from "./utils/isValidEmail";
 
 interface IInput {

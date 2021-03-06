@@ -1,6 +1,6 @@
 import { Comment } from "@prisma/client/index";
 
-import { prisma } from "./prismaClient";
+import { prisma } from "./utils/prismaClient";
 
 interface IAddCommentInput {
   comment: {

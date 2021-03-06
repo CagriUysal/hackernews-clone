@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 
-import { prisma } from "./prismaClient";
+import { prisma } from "./utils/prismaClient";
 import validatePassword from "./utils/validatePassword";
 
 interface IInput {

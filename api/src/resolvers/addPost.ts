@@ -1,7 +1,7 @@
 import { URL } from "url";
 
 import { Post } from "@prisma/client/index";
-import { prisma } from "./prismaClient";
+import { prisma } from "./utils/prismaClient";
 
 interface IAddPostInput {
   post: {

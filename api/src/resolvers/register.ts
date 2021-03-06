@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import { Prisma } from "@prisma/client";
 import { User } from "@prisma/client/index";
 
-import { prisma } from "./prismaClient";
+import { prisma } from "./utils/prismaClient";
 
 const SALT_ROUNDS = 10;
 

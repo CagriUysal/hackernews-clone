@@ -1,5 +1,5 @@
 import { Post } from "@prisma/client";
-import { prisma } from "./prismaClient";
+import { prisma } from "./utils/prismaClient";
 
 interface IUpvotePost {
   code: string;

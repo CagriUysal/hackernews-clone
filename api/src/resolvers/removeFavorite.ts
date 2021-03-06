@@ -1,4 +1,4 @@
-import { prisma } from "./prismaClient";
+import { prisma } from "./utils/prismaClient";
 
 interface IRemoveFavoriteResponse {
   code: string;
