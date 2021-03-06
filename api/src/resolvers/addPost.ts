@@ -1,7 +1,7 @@
 import { URL } from "url";
 
-import { Post } from "@prisma/client/index";
 import { prisma } from "./utils/prismaClient";
+import { IResponse } from "./utils/types";
 
 interface IAddPostInput {
   post: {
@@ -10,18 +10,11 @@ interface IAddPostInput {
   };
 }
 
-interface IAddPostResponse {
-  code: string;
-  success: boolean;
-  message: string;
-  post?: Post;
-}
-
 export default async function (
   _,
   { post: { link, title } }: IAddPostInput,
   { isAuth }
-): Promise<IAddPostResponse> {
+): Promise<IResponse> {
   try {
     var payload = isAuth();
   } catch {
@@ -37,7 +30,7 @@ export default async function (
     const url = new URL(link);
     const domain = url.hostname;
 
-    const newPost = await prisma.post.create({
+    await prisma.post.create({
       data: {
         link,
         title,
@@ -53,7 +46,6 @@ export default async function (
       code: "200",
       success: true,
       message: "post created succesfully.",
-      post: newPost,
     };
   } catch (err) {
     console.error(err);

@@ -22,6 +22,15 @@ export const typeDefs = gql`
   }
 
   """
+  Response
+  """
+  type MutationResponse {
+    code: String!
+    success: Boolean!
+    message: String!
+  }
+
+  """
   Post
   """
   type Post {
@@ -40,13 +49,6 @@ export const typeDefs = gql`
   input AddPostInput {
     link: String!
     title: String!
-  }
-
-  type AddPostResponse implements Response {
-    code: String!
-    success: Boolean!
-    message: String!
-    post: Post
   }
 
   type AddFavoriteResponse implements Response {
@@ -205,7 +207,7 @@ export const typeDefs = gql`
   Mutations
   """
   type Mutation {
-    addPost(post: AddPostInput!): AddPostResponse
+    addPost(post: AddPostInput!): MutationResponse
     addComment(comment: AddCommentInput!): AddCommentResponse
     addFavorite(postId: Int!): AddFavoriteResponse
     removeFavorite(postId: Int!): RemoveFavoriteResponse
