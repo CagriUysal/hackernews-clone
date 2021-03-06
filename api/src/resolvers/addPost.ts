@@ -2,6 +2,7 @@ import { URL } from "url";
 
 import { prisma } from "./utils/prismaClient";
 import { IResponse } from "./utils/types";
+import validateSubmit from "./utils/validateSubmit";
 
 interface IAddPostInput {
   post: {
@@ -22,6 +23,16 @@ export default async function (
       code: "400",
       success: false,
       message: "Not authorized",
+    };
+  }
+
+  try {
+    validateSubmit({ title, link });
+  } catch (error) {
+    return {
+      code: "400",
+      success: false,
+      message: error.message,
     };
   }
 

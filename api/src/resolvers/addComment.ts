@@ -1,6 +1,7 @@
 import { Comment } from "@prisma/client/index";
 
 import { prisma } from "./utils/prismaClient";
+import validateComment from "./utils/validateComment";
 
 interface IAddCommentInput {
   comment: {
@@ -22,9 +23,8 @@ export default async function (
   { comment: { message, postId, parentId } }: IAddCommentInput,
   { isAuth }
 ): Promise<IAddCommentResponse> {
-  let payload;
   try {
-    payload = isAuth();
+    var payload = isAuth();
   } catch (error) {
     return {
       code: "401",
@@ -34,10 +34,21 @@ export default async function (
   }
 
   try {
+    validateComment(message);
+  } catch (error) {
+    return {
+      code: "400",
+      success: true,
+      message: error.message,
+    };
+  }
+
+  try {
+    const { userName: name } = payload;
     const newComment = await prisma.comment.create({
       data: {
         message,
-        author: { connect: { name: payload.userName } },
+        author: { connect: { name } },
         post: { connect: { id: postId } },
         parent: parentId ? { connect: { id: parentId } } : undefined,
       },
@@ -51,6 +62,7 @@ export default async function (
       comment: newComment,
     };
   } catch (error) {
+    console.log(error);
     return {
       code: "500",
       success: false,
