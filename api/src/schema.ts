@@ -160,6 +160,7 @@ export const typeDefs = gql`
   """
   type Mutation {
     addPost(post: AddPostInput!): MutationResponse!
+    deletePost(postId: Int!): MutationResponse!
     addComment(comment: AddCommentInput!): AddCommentResponse!
     addFavorite(postId: Int!): MutationResponse!
     removeFavorite(postId: Int!): MutationResponse!

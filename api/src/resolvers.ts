@@ -22,6 +22,7 @@ import upvotePost from "./resolvers/upvotePost";
 import unvotePost from "./resolvers/unvotePost";
 import updateUser from "./resolvers/updateUser";
 import changePw from "./resolvers/changePw";
+import deletePost from "./resolvers/deletePost";
 
 export const resolvers = {
   User: {
@@ -49,6 +50,7 @@ export const resolvers = {
 
   Mutation: {
     addPost,
+    deletePost,
     addComment,
     addFavorite,
     removeFavorite,
