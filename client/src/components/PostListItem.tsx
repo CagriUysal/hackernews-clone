@@ -2,12 +2,12 @@ import React, { FunctionComponent, useState, useEffect } from "react";
 import { Comment } from "@prisma/client/index";
 import { css } from "@emotion/react";
 import { formatDistanceToNowStrict } from "date-fns";
-import { gql, useMutation } from "@apollo/client";
-import { navigate } from "@reach/router";
+import { gql, useMutation, useQuery } from "@apollo/client";
+import { navigate, Link } from "@reach/router";
 
 // @ts-ignore
 import upArrow from "../assets/grayarrow2x.gif";
-import { Link } from "@reach/router";
+import isLessThanOneHour from "../utils/isLessThanOneHour";
 
 const styles = {
   container: css`
@@ -97,6 +97,14 @@ const UNVOTE_POST = gql`
   }
 `;
 
+const ME = gql`
+  query Me {
+    me {
+      name
+    }
+  }
+`;
+
 export interface IPost {
   id: number;
   title: string;
@@ -131,6 +139,7 @@ const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
     currentUserUpvoted,
   } = post;
 
+  const { data: meData } = useQuery(ME);
   const [isFavorited, setIsFavorited] = useState<null | boolean>(
     currentUserFavorited
   );
@@ -290,6 +299,14 @@ const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
           <Link to={`/post/${id}`} css={styles.link}>
             {comments.length === 0 ? "discuss" : `${comments.length} comments`}
           </Link>
+          {meData?.me?.name === name && isLessThanOneHour(createdAt) && (
+            <>
+              {" | "}
+              <Link to={`/delete-confirm/${id}`} css={styles.link}>
+                delete
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </div>
