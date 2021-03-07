@@ -123,9 +123,16 @@ export interface IPost {
 type ComponentProps = {
   post: IPost;
   rank?: number | null;
+  showUpvote?: boolean;
+  showComments?: boolean;
 };
 
-const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
+const PostListItem: FunctionComponent<ComponentProps> = ({
+  post,
+  rank,
+  showUpvote = true,
+  showComments = true,
+}) => {
   const {
     id,
     title,
@@ -235,19 +242,21 @@ const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
   return (
     <div css={styles.container}>
       <div css={styles.rank}>{rank && <span>{rank}.</span>}</div>
-      <div css={styles.upvote}>
-        {
-          <button
-            css={css`
-              ${styles.button};
-              visibility: ${isUpvoted ? "hidden" : undefined};
-            `}
-            onClick={handleUpvoteClick}
-          >
-            <img src={upArrow} alt="up arrow" height="12px" width="12px" />
-          </button>
-        }
-      </div>
+      {showUpvote && (
+        <div css={styles.upvote}>
+          {
+            <button
+              css={css`
+                ${styles.button};
+                visibility: ${isUpvoted ? "hidden" : undefined};
+              `}
+              onClick={handleUpvoteClick}
+            >
+              <img src={upArrow} alt="up arrow" height="12px" width="12px" />
+            </button>
+          }
+        </div>
+      )}
 
       <div>
         {/* upper row */}
@@ -273,36 +282,46 @@ const PostListItem: FunctionComponent<ComponentProps> = ({ post, rank }) => {
               addSuffix: true,
             })}
           </Link>
-          {" | "}
           {isUpvoted && (
             <>
+              {" | "}
               <button
                 onClick={handleUnvoteClick}
                 css={[styles.button, styles.textButton]}
               >
                 unvote
               </button>
-              {" | "}
             </>
           )}
           {currentUserFavorited !== null && (
             <>
+              {" | "}
               <button
                 css={[styles.button, styles.textButton]}
                 onClick={handleFavClick}
               >
                 {isFavorited ? "un-favorite" : "favorite"}
               </button>
-              {" | "}
             </>
           )}
-          <Link to={`/post/${id}`} css={styles.link}>
-            {comments.length === 0 ? "discuss" : `${comments.length} comments`}
-          </Link>
+          {showComments && (
+            <>
+              {" | "}
+              <Link to={`/post/${id}`} css={styles.link}>
+                {comments.length === 0
+                  ? "discuss"
+                  : `${comments.length} comments`}
+              </Link>
+            </>
+          )}
           {meData?.me?.name === name && isLessThanOneHour(createdAt) && (
             <>
               {" | "}
-              <Link to={`/delete-confirm/${id}`} css={styles.link}>
+              <Link
+                to={`/delete-confirm`}
+                state={{ post, forwardedFrom: window.location.pathname }}
+                css={styles.link}
+              >
                 delete
               </Link>
             </>
