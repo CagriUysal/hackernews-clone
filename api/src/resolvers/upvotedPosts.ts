@@ -32,11 +32,15 @@ export default async function favoritePosts(
 
     if (userName !== name) throw new Error();
 
+    const modifiedPosts = user.upvotes.map((post) => ({
+      ...post,
+      currentUserUpvoted: true,
+    }));
     return {
       code: "200",
       success: true,
       message: "Success.",
-      upvotes: user.upvotes,
+      upvotes: modifiedPosts,
     };
   } catch (error) {
     return {

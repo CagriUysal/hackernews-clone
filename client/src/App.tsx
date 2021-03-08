@@ -24,6 +24,7 @@ import UserComments from "./pages/UserComments";
 import Favorites from "./pages/Favorites";
 import ChangePw from "./pages/ChangePw";
 import DeleteConfirm from "./pages/DeleteConfirm";
+import Upvoted from "./pages/Upvoted";
 
 const App: FunctionComponent = () => {
   const [loading, setLoading] = useState(true);
@@ -95,6 +96,7 @@ const App: FunctionComponent = () => {
         <Favorites path="/user/:name/favorites" />
         <ChangePw path="/changepw" />
         <DeleteConfirm path="/delete-confirm" />
+        <Upvoted path="/user/:name/upvoted" />
       </Router>
     </>
   );
