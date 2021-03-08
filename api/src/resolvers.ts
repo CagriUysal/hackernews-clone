@@ -23,6 +23,7 @@ import unvotePost from "./resolvers/unvotePost";
 import updateUser from "./resolvers/updateUser";
 import changePw from "./resolvers/changePw";
 import deletePost from "./resolvers/deletePost";
+import upvotedPosts from "./resolvers/upvotedPosts";
 
 export const resolvers = {
   User: {
@@ -40,6 +41,7 @@ export const resolvers = {
     pastPosts,
     userPosts,
     favoritePosts,
+    upvotedPosts,
     postComments,
     comments,
     comment,

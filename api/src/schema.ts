@@ -37,6 +37,13 @@ export const typeDefs = gql`
     currentUserUpvoted: Boolean
   }
 
+  type upvotedPostsResponse implements Response {
+    code: String!
+    success: Boolean!
+    message: String!
+    upvotes: [Post!]
+  }
+
   input AddPostInput {
     link: String!
     title: String!
@@ -147,6 +154,7 @@ export const typeDefs = gql`
     pastPosts(input: pastPostsInput!): [Post!]!
     userPosts(name: String!): [Post!]
     favoritePosts(name: String!): [Post!]
+    upvotedPosts(name: String!): upvotedPostsResponse!
     postComments(postId: Int!): [Comment!]!
     comments: [Comment!]!
     comment(id: Int!): Comment
