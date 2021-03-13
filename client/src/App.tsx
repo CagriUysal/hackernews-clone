@@ -4,7 +4,7 @@ import { Router } from "@reach/router";
 import { Global, css } from "@emotion/react";
 
 import refreshAccessToken from "./utils/refreshAccessToken";
-import { setAccessToken } from "./accessToken";
+import { setAccessToken } from "./api/accessToken";
 
 import Home from "./pages/Home";
 import New from "./pages/New";

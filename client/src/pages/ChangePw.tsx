@@ -4,7 +4,7 @@ import { css, useTheme } from "@emotion/react";
 import { useQuery, gql, useMutation } from "@apollo/client";
 
 import Header from "../components/Header";
-import { setAccessToken } from "../accessToken";
+import { setAccessToken } from "../api/accessToken";
 
 const styles = {
   container: (theme) => css`

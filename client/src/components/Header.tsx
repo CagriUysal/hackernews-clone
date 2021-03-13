@@ -6,7 +6,7 @@ import { Link } from "@reach/router";
 
 // @ts-ignore
 import logo from "../assets/y18.gif";
-import { setAccessToken } from "../accessToken";
+import { setAccessToken } from "../api/accessToken";
 
 const styles = {
   container: css`

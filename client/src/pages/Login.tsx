@@ -3,7 +3,7 @@ import { css } from "@emotion/react";
 import { gql, useMutation } from "@apollo/client";
 import { Redirect, RouteComponentProps } from "@reach/router";
 
-import { setAccessToken } from "../accessToken";
+import { setAccessToken } from "../api/accessToken";
 import validateRegister from "../utils/validateRegister";
 
 const styles = {

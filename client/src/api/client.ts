@@ -9,7 +9,7 @@ import { TokenRefreshLink } from "apollo-link-token-refresh";
 import jwtDecode, { JwtPayload } from "jwt-decode";
 
 import { getAccessToken, setAccessToken } from "./accessToken";
-import refreshAccessToken from "./utils/refreshAccessToken";
+import refreshAccessToken from "../utils/refreshAccessToken";
 
 const httpLink = new HttpLink({
   uri: "http://localhost:4000",
