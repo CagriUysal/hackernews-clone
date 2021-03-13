@@ -35,6 +35,7 @@ export const typeDefs = gql`
     comments: [Comment!]
     currentUserFavorited: Boolean
     currentUserUpvoted: Boolean
+    currentUserHide: Boolean
   }
 
   type upvotedPostsResponse implements Response {
@@ -42,6 +43,13 @@ export const typeDefs = gql`
     success: Boolean!
     message: String!
     upvotes: [Post!]
+  }
+
+  type hiddenPostsResponse implements Response {
+    code: String!
+    success: Boolean!
+    message: String!
+    hidden: [Post!]
   }
 
   input AddPostInput {
@@ -155,6 +163,7 @@ export const typeDefs = gql`
     userPosts(name: String!): [Post!]
     favoritePosts(name: String!): [Post!]
     upvotedPosts(name: String!): upvotedPostsResponse!
+    hiddenPosts(name: String!): hiddenPostsResponse!
     postComments(postId: Int!): [Comment!]!
     comments: [Comment!]!
     comment(id: Int!): Comment

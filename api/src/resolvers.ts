@@ -26,6 +26,7 @@ import deletePost from "./resolvers/deletePost";
 import upvotedPosts from "./resolvers/upvotedPosts";
 import addHidden from "./resolvers/addHidden";
 import removeHidden from "./resolvers/removeHidden";
+import hiddenPosts from "./resolvers/hiddenPosts";
 
 export const resolvers = {
   User: {
@@ -44,6 +45,7 @@ export const resolvers = {
     userPosts,
     favoritePosts,
     upvotedPosts,
+    hiddenPosts,
     postComments,
     comments,
     comment,

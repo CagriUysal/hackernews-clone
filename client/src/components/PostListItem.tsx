@@ -97,6 +97,26 @@ const UNVOTE_POST = gql`
   }
 `;
 
+const ADD_HIDDEN = gql`
+  mutation AddHidden($postId: Int!) {
+    addHidden(postId: $postId) {
+      success
+      message
+      code
+    }
+  }
+`;
+
+const REMOVE_HIDDEN = gql`
+  mutation RemoveHidden($postId: Int!) {
+    removeHidden(postId: $postId) {
+      success
+      message
+      code
+    }
+  }
+`;
+
 const ME = gql`
   query Me {
     me {
@@ -118,6 +138,7 @@ export interface IPost {
   comments: Comment[];
   currentUserFavorited: boolean | null;
   currentUserUpvoted: boolean | null;
+  currentUserHide: boolean | null;
 }
 
 type ComponentProps = {
@@ -144,9 +165,9 @@ const PostListItem: FunctionComponent<ComponentProps> = ({
     comments,
     currentUserFavorited,
     currentUserUpvoted,
+    currentUserHide,
   } = post;
 
-  const { data: meData } = useQuery(ME);
   const [isFavorited, setIsFavorited] = useState<null | boolean>(
     currentUserFavorited
   );
@@ -155,6 +176,7 @@ const PostListItem: FunctionComponent<ComponentProps> = ({
   );
   const [upvote, setUpvote] = useState(initialUpvote);
 
+  const { data: meData } = useQuery(ME);
   const [addFavorite, { data: addFavoriteData }] = useMutation(ADD_FAVORITE, {
     variables: { postId: id },
   });
@@ -170,6 +192,15 @@ const PostListItem: FunctionComponent<ComponentProps> = ({
   const [unvotePost, { data: unvotePostData }] = useMutation(UNVOTE_POST, {
     variables: { postId: id },
   });
+  const [addHidden, { data: addHiddenData }] = useMutation(ADD_HIDDEN, {
+    variables: { postId: id },
+  });
+  const [removeHidden, { data: removeHiddenData }] = useMutation(
+    REMOVE_HIDDEN,
+    {
+      variables: { postId: id },
+    }
+  );
 
   const handleFavClick = () => {
     if (isFavorited === true) {
@@ -185,6 +216,14 @@ const PostListItem: FunctionComponent<ComponentProps> = ({
 
   const handleUnvoteClick = () => {
     unvotePost();
+  };
+
+  const handleHideClick = () => {
+    addHidden();
+  };
+
+  const handleUnhideClick = () => {
+    removeHidden();
   };
 
   useEffect(() => {
@@ -239,6 +278,20 @@ const PostListItem: FunctionComponent<ComponentProps> = ({
     }
   }, [removeFavoriteData]);
 
+  useEffect(() => {
+    if (addHiddenData) {
+      const { success, code } = addHiddenData.addHidden;
+      if (success === false && code === "401") {
+        navigate("/login", {
+          state: {
+            message: "You have to be logged in to hide.",
+            redirectedFrom: `${window.location.pathname}`,
+          },
+        });
+      }
+    }
+  }, [addHiddenData]);
+
   return (
     <div css={styles.container}>
       <div css={styles.rank}>{rank && <span>{rank}.</span>}</div>
@@ -282,6 +335,17 @@ const PostListItem: FunctionComponent<ComponentProps> = ({
               addSuffix: true,
             })}
           </Link>
+          {
+            <>
+              {" | "}
+              <button
+                onClick={currentUserHide ? handleUnhideClick : handleHideClick}
+                css={[styles.button, styles.textButton]}
+              >
+                {currentUserHide ? "un-hide" : "hide"}
+              </button>
+            </>
+          }
           {isUpvoted && (
             <>
               {" | "}
