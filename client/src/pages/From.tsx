@@ -1,30 +1,11 @@
 import React, { FunctionComponent } from "react";
 import { useTheme } from "@emotion/react";
 import { RouteComponentProps } from "@reach/router";
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 
 import Header from "../components/Header";
 import PostList from "../components/PostList";
-
-const DOMAIN_POSTS = gql`
-  query DomainPosts($domain: String!) {
-    domainPosts(domain: $domain) {
-      id
-      title
-      link
-      domain
-      upvote
-      createdAt
-      author {
-        name
-      }
-      comments {
-        id
-      }
-      currentUserUpvoted
-    }
-  }
-`;
+import { DOMAIN_POSTS } from "../api/queries";
 
 interface ComponentProps extends RouteComponentProps {
   domain?: string;

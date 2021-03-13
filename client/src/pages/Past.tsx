@@ -1,12 +1,13 @@
 import React, { FunctionComponent, useReducer } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { useTheme, css } from "@emotion/react";
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { subDays, addDays, format } from "date-fns";
 
 import Header from "../components/Header";
 import PostList from "../components/PostList";
 import PastTimeSelector, { reducer } from "../components/PastTimeSelector";
+import { PAST_POSTS } from "../api/queries";
 
 const styles = {
   selector: (theme) => css`
@@ -19,27 +20,6 @@ const styles = {
     background-color: ${theme.colors.bg};
   `,
 };
-
-const PAST_POSTS = gql`
-  query PastPosts($input: pastPostsInput!) {
-    pastPosts(input: $input) {
-      id
-      title
-      link
-      domain
-      upvote
-      createdAt
-      author {
-        name
-      }
-      comments {
-        id
-      }
-      currentUserFavorited
-      currentUserUpvoted
-    }
-  }
-`;
 
 const Past: FunctionComponent<RouteComponentProps> = () => {
   const theme = useTheme();

@@ -1,11 +1,13 @@
 import React, { FunctionComponent, useState, useEffect } from "react";
 import { css, useTheme } from "@emotion/react";
 import { RouteComponentProps } from "@reach/router";
-import { gql, useQuery, useMutation } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { Link } from "@reach/router";
 import { formatDistanceToNowStrict } from "date-fns";
 
 import Header from "../components/Header";
+import { USER } from "../api/queries";
+import { UPDATE_USER } from "../api/mutations";
 
 const styles = {
   container: (theme) =>
@@ -28,36 +30,6 @@ const styles = {
     text-decoration: underline;
   `,
 };
-
-const USER = gql`
-  query User($name: String!) {
-    user(name: $name) {
-      __typename
-      id
-      name
-      createdAt
-      karma
-      about
-      ... on PrivateUser {
-        email
-      }
-    }
-  }
-`;
-
-const UPDATE_USER = gql`
-  mutation UpdateUser($input: UpdateUserInput!) {
-    updateUser(input: $input) {
-      code
-      success
-      message
-      user {
-        about
-        email
-      }
-    }
-  }
-`;
 
 interface ComponentProps extends RouteComponentProps {
   name?: string;

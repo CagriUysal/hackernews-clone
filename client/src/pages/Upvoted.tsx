@@ -1,36 +1,11 @@
 import React, { FunctionComponent } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { useTheme, css } from "@emotion/react";
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 
 import Header from "../components/Header";
 import PostList from "../components/PostList";
-
-const UPVOTED_POSTS = gql`
-  query UpvotedPosts($name: String!) {
-    upvotedPosts(name: $name) {
-      code
-      success
-      message
-      upvotes {
-        id
-        title
-        link
-        domain
-        upvote
-        createdAt
-        author {
-          name
-        }
-        comments {
-          id
-        }
-        currentUserFavorited
-        currentUserUpvoted
-      }
-    }
-  }
-`;
+import { UPVOTED_POSTS } from "../api/queries";
 
 interface IProps extends RouteComponentProps {
   name?: string;
@@ -39,7 +14,10 @@ interface IProps extends RouteComponentProps {
 const Upvoted: FunctionComponent<IProps> = ({ name }) => {
   const theme = useTheme();
 
-  const { data } = useQuery(UPVOTED_POSTS, { variables: { name }, fetchPolicy: "network-only" });
+  const { data } = useQuery(UPVOTED_POSTS, {
+    variables: { name },
+    fetchPolicy: "network-only",
+  });
 
   if (data) {
     const { success, message, upvotes } = data.upvotedPosts;

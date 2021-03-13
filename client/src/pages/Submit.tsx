@@ -1,11 +1,13 @@
 import React, { useState, FunctionComponent } from "react";
 
-import { gql, useMutation, useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { Redirect, RouteComponentProps } from "@reach/router";
 import { css, useTheme } from "@emotion/react";
 
 import Header from "../components/Header";
 import validateSubmit from "../utils/validateSubmit";
+import { ME } from "../api/queries";
+import { ADD_POST } from "../api/mutations";
 
 const styles = {
   container: (theme) => css`
@@ -45,24 +47,6 @@ const styles = {
     padding-bottom: 3rem;
   `,
 };
-
-const ME = gql`
-  query Me {
-    me {
-      name
-    }
-  }
-`;
-
-const ADD_POST = gql`
-  mutation AddPost($post: AddPostInput!) {
-    addPost(post: $post) {
-      code
-      success
-      message
-    }
-  }
-`;
 
 interface IAddPostInput {
   link: string;

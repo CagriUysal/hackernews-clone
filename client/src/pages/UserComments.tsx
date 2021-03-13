@@ -1,30 +1,11 @@
 import React, { FunctionComponent } from "react";
 import { useTheme, css } from "@emotion/react";
 import { RouteComponentProps } from "@reach/router";
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 
 import Header from "../components/Header";
 import CommentList from "../components/CommentList";
-
-const USER_COMMENTS = gql`
-  query UserComments($name: String!) {
-    userComments(name: $name) {
-      id
-      message
-      createdAt
-      parent {
-        id
-      }
-      author {
-        name
-      }
-      post {
-        id
-        title
-      }
-    }
-  }
-`;
+import { USER_COMMENTS } from "../api/queries";
 
 interface ComponentProps extends RouteComponentProps {
   name?: string;

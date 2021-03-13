@@ -7,6 +7,8 @@ import { Link } from "@reach/router";
 // @ts-ignore
 import logo from "../assets/y18.gif";
 import { setAccessToken } from "../api/accessToken";
+import { ME } from "../api/queries";
+import { LOG_OUT } from "../api/mutations";
 
 const styles = {
   container: css`
@@ -69,20 +71,6 @@ const navigationMaps = [
     path: "/submit",
   },
 ];
-
-const ME = gql`
-  query Me {
-    me {
-      name
-    }
-  }
-`;
-
-const LOG_OUT = gql`
-  mutation Logout {
-    logout
-  }
-`;
 
 type ComponentProps = {
   // if given, only the title shown and navigation is hidden

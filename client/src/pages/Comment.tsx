@@ -1,13 +1,15 @@
 import React, { FunctionComponent, useState, useEffect } from "react";
 import { css, useTheme } from "@emotion/react";
 import { RouteComponentProps } from "@reach/router";
-import { useQuery, gql, useMutation } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { navigate } from "@reach/router";
 
 import Header from "../components/Header";
 import CommentListItem from "../components/CommentListItem";
 import CommentList from "../components/CommentList";
 import validateComment from "../utils/validateComment";
+import { COMMENT, POST_COMMENTS } from "../api/queries";
+import { ADD_COMMENT } from "../api/mutations";
 
 const styles = {
   container: (theme) => css`
@@ -29,70 +31,6 @@ const styles = {
     padding: 1em;
   `,
 };
-
-const COMMENT = gql`
-  query Comment($id: Int!) {
-    comment(id: $id) {
-      message
-      createdAt
-      parent {
-        id
-      }
-      author {
-        name
-      }
-      post {
-        id
-        title
-      }
-    }
-  }
-`;
-
-const POST_COMMENTS = gql`
-  query PostComments($postId: Int!) {
-    postComments(postId: $postId) {
-      id
-      message
-      createdAt
-      parent {
-        id
-      }
-      author {
-        name
-      }
-      post {
-        id
-        title
-      }
-    }
-  }
-`;
-
-const ADD_COMMENT = gql`
-  mutation AddComment($comment: AddCommentInput!) {
-    addComment(comment: $comment) {
-      code
-      success
-      message
-      comment {
-        id
-        message
-        createdAt
-        parent {
-          id
-        }
-        author {
-          name
-        }
-        post {
-          id
-          title
-        }
-      }
-    }
-  }
-`;
 
 interface IAddCommentInput {
   message: string;

@@ -1,10 +1,11 @@
 import React, { FunctionComponent } from "react";
 import { RouteComponentProps, navigate } from "@reach/router";
 import { useTheme, css } from "@emotion/react";
-import { gql, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 
 import Header from "../components/Header";
 import PostListItem from "../components/PostListItem";
+import { DELETE_POST } from "../api/mutations";
 
 const styles = {
   container: (theme) => css`
@@ -14,16 +15,6 @@ const styles = {
     color: ${theme.colors.primary};
   `,
 };
-
-const DELETE_POST = gql`
-  mutation DeletePost($postId: Int!) {
-    deletePost(postId: $postId) {
-      code
-      success
-      message
-    }
-  }
-`;
 
 const DeleteConfirm: FunctionComponent<RouteComponentProps> = ({
   location,

@@ -7,6 +7,8 @@ import Header from "../components/Header";
 import PostListItem from "../components/PostListItem";
 import CommentList from "../components/CommentList";
 import validateComment from "../utils/validateComment";
+import { POST, POST_COMMENTS } from "../api/queries";
+import { ADD_COMMENT } from "../api/mutations";
 
 const styles = {
   container: (theme) => css`
@@ -28,72 +30,6 @@ const styles = {
     padding: 1em;
   `,
 };
-
-const POST = gql`
-  query Post($id: Int!) {
-    post(id: $id) {
-      id
-      title
-      link
-      domain
-      upvote
-      createdAt
-      author {
-        name
-      }
-      comments {
-        id
-      }
-      currentUserFavorited
-      currentUserUpvoted
-    }
-  }
-`;
-
-const POST_COMMENTS = gql`
-  query PostComments($postId: Int!) {
-    postComments(postId: $postId) {
-      id
-      message
-      createdAt
-      parent {
-        id
-      }
-      author {
-        name
-      }
-      post {
-        id
-        title
-      }
-    }
-  }
-`;
-
-const ADD_COMMENT = gql`
-  mutation AddComment($comment: AddCommentInput!) {
-    addComment(comment: $comment) {
-      code
-      success
-      message
-      comment {
-        id
-        message
-        createdAt
-        parent {
-          id
-        }
-        author {
-          name
-        }
-        post {
-          id
-          title
-        }
-      }
-    }
-  }
-`;
 
 interface IAddCommentInput {
   message: string;

@@ -1,9 +1,10 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { css } from "@emotion/react";
-import { gql, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { Redirect, RouteComponentProps } from "@reach/router";
 
 import { setAccessToken } from "../api/accessToken";
+import { REGISTER, LOGIN } from "../api/mutations";
 import validateRegister from "../utils/validateRegister";
 
 const styles = {
@@ -22,27 +23,6 @@ const styles = {
     margin-bottom: 1em;
   `,
 };
-
-const REGISTER = gql`
-  mutation Register($user: RegisterInput!) {
-    register(user: $user) {
-      code
-      success
-      message
-    }
-  }
-`;
-
-const LOGIN = gql`
-  mutation Login($user: LoginInput!) {
-    login(user: $user) {
-      code
-      success
-      message
-      accessToken
-    }
-  }
-`;
 
 interface IUser {
   name: string;

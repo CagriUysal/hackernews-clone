@@ -1,37 +1,11 @@
 import React, { FunctionComponent } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { useTheme, css } from "@emotion/react";
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 
 import Header from "../components/Header";
 import PostList from "../components/PostList";
-
-const HIDDEN_POSTS = gql`
-  query HiddenPosts($name: String!) {
-    hiddenPosts(name: $name) {
-      code
-      success
-      message
-      hidden {
-        id
-        title
-        link
-        domain
-        upvote
-        createdAt
-        author {
-          name
-        }
-        comments {
-          id
-        }
-        currentUserFavorited
-        currentUserUpvoted
-        currentUserHide
-      }
-    }
-  }
-`;
+import { HIDDEN_POSTS } from "../api/queries";
 
 interface IProps extends RouteComponentProps {
   name?: string;

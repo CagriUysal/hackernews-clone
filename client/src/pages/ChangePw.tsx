@@ -1,10 +1,12 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { navigate, Redirect, RouteComponentProps } from "@reach/router";
 import { css, useTheme } from "@emotion/react";
-import { useQuery, gql, useMutation } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 
 import Header from "../components/Header";
 import { setAccessToken } from "../api/accessToken";
+import { ME } from "../api/queries";
+import { CHANGE_PW, LOG_OUT } from "../api/mutations";
 
 const styles = {
   container: (theme) => css`
@@ -18,30 +20,6 @@ const styles = {
     margin-bottom: 0.5em;
   `,
 };
-
-const ME = gql`
-  query me {
-    me {
-      name
-    }
-  }
-`;
-
-const CHANGE_PW = gql`
-  mutation ChangePw($input: ChangePwInput!) {
-    changePw(input: $input) {
-      success
-      message
-      code
-    }
-  }
-`;
-
-const LOG_OUT = gql`
-  mutation Logout {
-    logout
-  }
-`;
 
 const ChangePw: FunctionComponent<RouteComponentProps> = () => {
   const theme = useTheme();

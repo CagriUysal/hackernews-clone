@@ -1,31 +1,11 @@
 import React, { FunctionComponent } from "react";
 import { useTheme, css } from "@emotion/react";
 import { RouteComponentProps } from "@reach/router";
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 
 import Header from "../components/Header";
 import PostList from "../components/PostList";
-
-const USER_POSTS = gql`
-  query UserPosts($name: String!) {
-    userPosts(name: $name) {
-      id
-      title
-      link
-      domain
-      upvote
-      createdAt
-      author {
-        name
-      }
-      comments {
-        id
-      }
-      currentUserFavorited
-      currentUserUpvoted
-    }
-  }
-`;
+import { USER_POSTS } from "../api/queries";
 
 interface ComponentProps extends RouteComponentProps {
   name?: string;

@@ -8,6 +8,15 @@ import { navigate, Link } from "@reach/router";
 // @ts-ignore
 import upArrow from "../assets/grayarrow2x.gif";
 import isLessThanOneHour from "../utils/isLessThanOneHour";
+import { ME } from "../api/queries";
+import {
+  ADD_FAVORITE,
+  REMOVE_FAVORITE,
+  UPVOTE_POST,
+  UNVOTE_POST,
+  ADD_HIDDEN,
+  REMOVE_HIDDEN,
+} from "../api/mutations";
 
 const styles = {
   container: css`
@@ -56,74 +65,6 @@ const styles = {
     }
   `,
 };
-
-const ADD_FAVORITE = gql`
-  mutation AddFavorite($postId: Int!) {
-    addFavorite(postId: $postId) {
-      code
-      success
-      message
-    }
-  }
-`;
-
-const REMOVE_FAVORITE = gql`
-  mutation RemoveFavorite($postId: Int!) {
-    removeFavorite(postId: $postId) {
-      code
-      success
-      message
-    }
-  }
-`;
-
-const UPVOTE_POST = gql`
-  mutation upvotePost($postId: Int!) {
-    upvotePost(postId: $postId) {
-      code
-      success
-      message
-    }
-  }
-`;
-
-const UNVOTE_POST = gql`
-  mutation UnvotePost($postId: Int!) {
-    unvotePost(postId: $postId) {
-      code
-      success
-      message
-    }
-  }
-`;
-
-const ADD_HIDDEN = gql`
-  mutation AddHidden($postId: Int!) {
-    addHidden(postId: $postId) {
-      success
-      message
-      code
-    }
-  }
-`;
-
-const REMOVE_HIDDEN = gql`
-  mutation RemoveHidden($postId: Int!) {
-    removeHidden(postId: $postId) {
-      success
-      message
-      code
-    }
-  }
-`;
-
-const ME = gql`
-  query Me {
-    me {
-      name
-    }
-  }
-`;
 
 export interface IPost {
   id: number;

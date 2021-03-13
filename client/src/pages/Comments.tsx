@@ -1,30 +1,11 @@
 import React, { FunctionComponent } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { useTheme } from "@emotion/react";
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 
 import Header from "../components/Header";
 import CommentList from "../components/CommentList";
-
-const COMMENTS = gql`
-  query Comments {
-    comments {
-      id
-      message
-      createdAt
-      parent {
-        id
-      }
-      author {
-        name
-      }
-      post {
-        id
-        title
-      }
-    }
-  }
-`;
+import { COMMENTS } from "../api/queries";
 
 const Comments: FunctionComponent<RouteComponentProps> = () => {
   const theme = useTheme();
