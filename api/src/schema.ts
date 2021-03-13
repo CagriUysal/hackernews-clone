@@ -174,6 +174,8 @@ export const typeDefs = gql`
     removeFavorite(postId: Int!): MutationResponse!
     upvotePost(postId: Int!): MutationResponse!
     unvotePost(postId: Int!): MutationResponse!
+    addHidden(postId: Int!): MutationResponse!
+    removeHidden(postId: Int!): MutationResponse!
     register(user: RegisterInput!): MutationResponse!
     updateUser(input: UpdateUserInput!): UpdateUserResponse!
     changePw(input: ChangePwInput!): MutationResponse!

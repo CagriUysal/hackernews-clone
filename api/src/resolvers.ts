@@ -24,6 +24,8 @@ import updateUser from "./resolvers/updateUser";
 import changePw from "./resolvers/changePw";
 import deletePost from "./resolvers/deletePost";
 import upvotedPosts from "./resolvers/upvotedPosts";
+import addHidden from "./resolvers/addHidden";
+import removeHidden from "./resolvers/removeHidden";
 
 export const resolvers = {
   User: {
@@ -59,6 +61,8 @@ export const resolvers = {
     upvotePost,
     unvotePost,
     updateUser,
+    addHidden,
+    removeHidden,
     changePw,
     login,
     register,
