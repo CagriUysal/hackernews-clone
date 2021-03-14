@@ -115,6 +115,7 @@ const PostListItem: FunctionComponent<ComponentProps> = ({
   const [isUpvoted, setIsUpvoted] = useState<null | boolean>(
     currentUserUpvoted
   );
+  const [isHidden, setIsHidden] = useState<null | boolean>(currentUserHide);
   const [upvote, setUpvote] = useState(initialUpvote);
 
   const { data: meData } = useQuery(ME);
@@ -229,9 +230,20 @@ const PostListItem: FunctionComponent<ComponentProps> = ({
             redirectedFrom: `${window.location.pathname}`,
           },
         });
+      } else if (success === true) {
+        setIsHidden(true);
       }
     }
   }, [addHiddenData]);
+
+  useEffect(() => {
+    if (removeHiddenData) {
+      const { success } = removeHiddenData.removeHidden;
+      if (success === true) {
+        setIsHidden(false);
+      }
+    }
+  }, [removeHiddenData]);
 
   return (
     <div css={styles.container}>
@@ -280,10 +292,10 @@ const PostListItem: FunctionComponent<ComponentProps> = ({
             <>
               {" | "}
               <button
-                onClick={currentUserHide ? handleUnhideClick : handleHideClick}
+                onClick={isHidden ? handleUnhideClick : handleHideClick}
                 css={[styles.button, styles.textButton]}
               >
-                {currentUserHide ? "un-hide" : "hide"}
+                {isHidden ? "un-hide" : "hide"}
               </button>
             </>
           }

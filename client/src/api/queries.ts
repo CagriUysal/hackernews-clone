@@ -194,6 +194,7 @@ export const POST = gql`
       }
       currentUserFavorited
       currentUserUpvoted
+      currentUserHide
     }
   }
 `;
