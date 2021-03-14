@@ -10,21 +10,30 @@ export default async function pastPosts(
   const startDate = new Date(start); // target date
   const endDate = new Date(end); // target day + 1 day, exclusive
 
-  const posts = await prisma.post.findMany({
-    include: { author: true, comments: true },
-    where: {
-      createdAt: {
-        gte: startDate,
-        lt: endDate,
-      },
-    },
-  });
-
   try {
     const { userName } = isAuth();
 
+    const posts = await prisma.post.findMany({
+      include: { author: true, comments: true },
+      where: {
+        createdAt: {
+          gte: startDate,
+          lt: endDate,
+        },
+        hiddenBy: { none: { name: userName } },
+      },
+    });
+
     return await appendUpvoteInfo(posts, userName, prisma);
   } catch (error) {
-    return posts;
+    return await prisma.post.findMany({
+      include: { author: true, comments: true },
+      where: {
+        createdAt: {
+          gte: startDate,
+          lt: endDate,
+        },
+      },
+    });
   }
 }

@@ -11,16 +11,20 @@ export default async function latestPosts(
   __,
   { isAuth, appendUpvoteInfo }
 ): Promise<IPost[]> {
-  const posts = await prisma.post.findMany({
-    orderBy: { createdAt: "desc" },
-    include: { author: true, comments: true },
-  });
-
   try {
     const { userName } = isAuth();
 
+    const posts = await prisma.post.findMany({
+      orderBy: { createdAt: "desc" },
+      where: { hiddenBy: { none: { name: userName } } }, // don't include hidden posts.
+      include: { author: true, comments: true },
+    });
+
     return await appendUpvoteInfo(posts, userName, prisma);
   } catch (error) {
-    return posts;
+    return await prisma.post.findMany({
+      orderBy: { createdAt: "desc" },
+      include: { author: true, comments: true },
+    });
   }
 }
