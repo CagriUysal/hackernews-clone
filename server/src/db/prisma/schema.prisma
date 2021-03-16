@@ -13,9 +13,10 @@ generator client {
 model Post {
   @@map("posts") 
   id Int @id @default(autoincrement()) 
-  link String 
-  domain String
   title String
+  link String?
+  domain String?
+  text String?
   upvote Int @default(0)
   createdAt DateTime @default(now())
 

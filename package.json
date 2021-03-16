@@ -62,7 +62,7 @@
     "build": "parcel build client/index.html --out-dir client/dist"
   },
   "prisma": {
-    "schema": "api/src/db/prisma/schema.prisma"
+    "schema": "server/src/db/prisma/schema.prisma"
   },
   "browserslist": [
     "last 1 Chrome version"
