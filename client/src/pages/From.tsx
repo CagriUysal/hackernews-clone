@@ -21,7 +21,13 @@ const From: FunctionComponent<ComponentProps> = ({ domain }) => {
   return (
     <div css={theme.layout}>
       <Header />
-      {data && <PostList posts={data.domainPosts} />}
+      {data && (
+        <PostList
+          posts={data.domainPosts}
+          showHide={false}
+          showFavorite={false}
+        />
+      )}
     </div>
   );
 };

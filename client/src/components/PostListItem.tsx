@@ -1,14 +1,14 @@
-import React, { FunctionComponent, useState, useEffect } from "react";
+import React, { FunctionComponent } from "react";
 import { Comment } from "@prisma/client/index";
 import { css } from "@emotion/react";
 import { formatDistanceToNowStrict } from "date-fns";
-import { gql, useMutation, useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { navigate, Link } from "@reach/router";
 
 // @ts-ignore
 import upArrow from "../assets/grayarrow2x.gif";
 import isLessThanOneHour from "../utils/isLessThanOneHour";
-import { ME } from "../api/queries";
+import { ME, HIDDEN_POSTS } from "../api/queries";
 import {
   ADD_FAVORITE,
   REMOVE_FAVORITE,
@@ -87,6 +87,9 @@ type ComponentProps = {
   rank?: number | null;
   showUpvote?: boolean;
   showComments?: boolean;
+  showHide?: boolean;
+  showFavorite?: boolean;
+  refetch?: any;
 };
 
 const PostListItem: FunctionComponent<ComponentProps> = ({
@@ -94,13 +97,16 @@ const PostListItem: FunctionComponent<ComponentProps> = ({
   rank,
   showUpvote = true,
   showComments = true,
+  showHide = true,
+  showFavorite = true,
+  refetch,
 }) => {
   const {
     id,
     title,
     link,
     domain,
-    upvote: initialUpvote,
+    upvote,
     createdAt,
     author: { name },
     comments,
@@ -109,95 +115,13 @@ const PostListItem: FunctionComponent<ComponentProps> = ({
     currentUserHide,
   } = post;
 
-  const [isFavorited, setIsFavorited] = useState<null | boolean>(
-    currentUserFavorited
-  );
-  const [isUpvoted, setIsUpvoted] = useState<null | boolean>(
-    currentUserUpvoted
-  );
-  const [isHidden, setIsHidden] = useState<null | boolean>(currentUserHide);
-  const [upvote, setUpvote] = useState(initialUpvote);
-
+  /** Mutations */
   const { data: meData } = useQuery(ME);
-  const [addFavorite, { data: addFavoriteData }] = useMutation(ADD_FAVORITE, {
+
+  const [addFavorite] = useMutation(ADD_FAVORITE, {
     variables: { postId: id },
-  });
-  const [removeFavorite, { data: removeFavoriteData }] = useMutation(
-    REMOVE_FAVORITE,
-    {
-      variables: { postId: id },
-    }
-  );
-  const [upvotePost, { data: upvotePostData }] = useMutation(UPVOTE_POST, {
-    variables: { postId: id },
-  });
-  const [unvotePost, { data: unvotePostData }] = useMutation(UNVOTE_POST, {
-    variables: { postId: id },
-  });
-  const [addHidden, { data: addHiddenData }] = useMutation(ADD_HIDDEN, {
-    variables: { postId: id },
-  });
-  const [removeHidden, { data: removeHiddenData }] = useMutation(
-    REMOVE_HIDDEN,
-    {
-      variables: { postId: id },
-    }
-  );
-
-  const handleFavClick = () => {
-    if (isFavorited === true) {
-      removeFavorite();
-    } else if (isFavorited === false) {
-      addFavorite();
-    }
-  };
-
-  const handleUpvoteClick = () => {
-    upvotePost();
-  };
-
-  const handleUnvoteClick = () => {
-    unvotePost();
-  };
-
-  const handleHideClick = () => {
-    addHidden();
-  };
-
-  const handleUnhideClick = () => {
-    removeHidden();
-  };
-
-  useEffect(() => {
-    if (upvotePostData) {
-      const { success, code } = upvotePostData.upvotePost;
-      if (success === false && code === "401") {
-        navigate("/login", {
-          state: {
-            message: "You have to be logged in to vote.",
-            redirectedFrom: `${window.location.pathname}`,
-          },
-        });
-      } else if (success === true) {
-        setIsUpvoted(true);
-        setUpvote(upvote + 1); // show upvote effect to the user
-      }
-    }
-  }, [upvotePostData]);
-
-  useEffect(() => {
-    if (unvotePostData) {
-      const { success } = unvotePostData.unvotePost;
-      if (success === true) {
-        setIsUpvoted(false);
-        setUpvote(upvote - 1);
-      }
-    }
-  }, [unvotePostData]);
-
-  useEffect(() => {
-    if (addFavoriteData) {
-      const { success, code } = addFavoriteData.addFavorite;
+    update: (cache, { data: { addFavorite } }) => {
+      const { success, code } = addFavorite;
       if (success === false && code === "401") {
         navigate("/login", {
           state: {
@@ -206,23 +130,86 @@ const PostListItem: FunctionComponent<ComponentProps> = ({
           },
         });
       } else if (success === true) {
-        setIsFavorited(true);
+        cache.modify({
+          id: `Post:${id}`,
+          fields: {
+            currentUserFavorited() {
+              return true;
+            },
+          },
+        });
       }
-    }
-  }, [addFavoriteData]);
+    },
+  });
 
-  useEffect(() => {
-    if (removeFavoriteData) {
-      const { success } = removeFavoriteData.removeFavorite;
+  const [removeFavorite] = useMutation(REMOVE_FAVORITE, {
+    variables: { postId: id },
+    update(cache, { data: { removeFavorite } }) {
+      const { success } = removeFavorite;
+      if (success) {
+        cache.modify({
+          id: `Post:${id}`,
+          fields: {
+            currentUserFavorited() {
+              return false;
+            },
+          },
+        });
+      }
+    },
+  });
+
+  const [upvotePost] = useMutation(UPVOTE_POST, {
+    variables: { postId: id },
+    update(cache, { data: { upvotePost } }) {
+      const { success, code } = upvotePost;
+      if (success === false && code === "401") {
+        navigate("/login", {
+          state: {
+            message: "You have to be logged in to vote.",
+            redirectedFrom: `${window.location.pathname}`,
+          },
+        });
+      } else if (success === true) {
+        cache.modify({
+          id: `Post:${id}`,
+          fields: {
+            currentUserUpvoted() {
+              return true;
+            },
+            upvote(currentVote) {
+              return currentVote + 1;
+            },
+          },
+        });
+      }
+    },
+  });
+
+  const [unvotePost] = useMutation(UNVOTE_POST, {
+    variables: { postId: id },
+    update(cache, { data: { unvotePost } }) {
+      const { success } = unvotePost;
       if (success === true) {
-        setIsFavorited(false);
+        cache.modify({
+          id: `Post:${id}`,
+          fields: {
+            currentUserUpvoted() {
+              return false;
+            },
+            upvote(currentVote) {
+              return currentVote - 1;
+            },
+          },
+        });
       }
-    }
-  }, [removeFavoriteData]);
+    },
+  });
 
-  useEffect(() => {
-    if (addHiddenData) {
-      const { success, code } = addHiddenData.addHidden;
+  const [addHidden] = useMutation(ADD_HIDDEN, {
+    variables: { postId: id },
+    update(_, { data: { addHidden } }) {
+      const { success, code } = addHidden;
       if (success === false && code === "401") {
         navigate("/login", {
           state: {
@@ -231,19 +218,42 @@ const PostListItem: FunctionComponent<ComponentProps> = ({
           },
         });
       } else if (success === true) {
-        setIsHidden(true);
+        if (refetch !== undefined) refetch(); // refetch page after this item added to hidden.
       }
-    }
-  }, [addHiddenData]);
+    },
+  });
 
-  useEffect(() => {
-    if (removeHiddenData) {
-      const { success } = removeHiddenData.removeHidden;
-      if (success === true) {
-        setIsHidden(false);
-      }
-    }
-  }, [removeHiddenData]);
+  const [removeHidden] = useMutation(REMOVE_HIDDEN, {
+    variables: { postId: id },
+    update(cache) {
+      const data = cache.readQuery({
+        query: HIDDEN_POSTS,
+        variables: { name: meData?.me?.name },
+      });
+
+      if (data === null) return;
+
+      const { hidden } = data.hiddenPosts;
+
+      cache.writeQuery({
+        query: HIDDEN_POSTS,
+        variables: { name: meData?.me?.name },
+        data: {
+          hiddenPosts: {
+            hidden: hidden.filter((hiddenPost) => hiddenPost.id !== id),
+          },
+        },
+      });
+    },
+  });
+
+  /** Event Handlers */
+  const handleFavClick = () => addFavorite();
+  const handleUnfavClick = () => removeFavorite();
+  const handleUpvoteClick = () => upvotePost();
+  const handleUnvoteClick = () => unvotePost();
+  const handleHideClick = () => addHidden();
+  const handleUnhideClick = () => removeHidden();
 
   return (
     <div css={styles.container}>
@@ -254,7 +264,7 @@ const PostListItem: FunctionComponent<ComponentProps> = ({
             <button
               css={css`
                 ${styles.button};
-                visibility: ${isUpvoted ? "hidden" : undefined};
+                visibility: ${currentUserUpvoted ? "hidden" : undefined};
               `}
               onClick={handleUpvoteClick}
             >
@@ -288,18 +298,18 @@ const PostListItem: FunctionComponent<ComponentProps> = ({
               addSuffix: true,
             })}
           </Link>
-          {
+          {showHide && (
             <>
               {" | "}
               <button
-                onClick={isHidden ? handleUnhideClick : handleHideClick}
+                onClick={currentUserHide ? handleUnhideClick : handleHideClick}
                 css={[styles.button, styles.textButton]}
               >
-                {isHidden ? "un-hide" : "hide"}
+                {currentUserHide ? "un-hide" : "hide"}
               </button>
             </>
-          }
-          {isUpvoted && (
+          )}
+          {currentUserUpvoted && (
             <>
               {" | "}
               <button
@@ -310,14 +320,16 @@ const PostListItem: FunctionComponent<ComponentProps> = ({
               </button>
             </>
           )}
-          {currentUserFavorited !== null && (
+          {showFavorite && (
             <>
               {" | "}
               <button
                 css={[styles.button, styles.textButton]}
-                onClick={handleFavClick}
+                onClick={
+                  currentUserFavorited ? handleUnfavClick : handleFavClick
+                }
               >
-                {isFavorited ? "un-favorite" : "favorite"}
+                {currentUserFavorited ? "un-favorite" : "favorite"}
               </button>
             </>
           )}

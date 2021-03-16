@@ -5,7 +5,7 @@ import { useQuery } from "@apollo/client";
 
 import Header from "../components/Header";
 import PostList from "../components/PostList";
-import { FAVORITE_POSTS } from "../api/queries";
+import { FAVORITE_POSTS, ME } from "../api/queries";
 
 interface ComponentProps extends RouteComponentProps {
   name?: string;
@@ -17,6 +17,7 @@ const Favorites: FunctionComponent<ComponentProps> = ({ name }) => {
     variables: { name },
     fetchPolicy: "network-only",
   });
+  const { data: meData } = useQuery(ME);
 
   if (data && data.favoritePosts === null) {
     return (
@@ -33,7 +34,11 @@ const Favorites: FunctionComponent<ComponentProps> = ({ name }) => {
     return (
       <div css={theme.layout}>
         <Header />
-        <PostList posts={data.favoritePosts} />
+        <PostList
+          posts={data.favoritePosts}
+          showHide={false}
+          showFavorite={meData?.me?.name === name}
+        />
       </div>
     );
   } else {

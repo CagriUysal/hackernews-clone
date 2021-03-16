@@ -10,12 +10,20 @@ import { LATEST_POSTS } from "../api/queries";
 const New: FunctionComponent<RouteComponentProps> = () => {
   const theme = useTheme();
 
-  const { data } = useQuery(LATEST_POSTS, { fetchPolicy: "network-only" });
+  const { data, refetch } = useQuery(LATEST_POSTS, {
+    fetchPolicy: "network-only",
+  });
 
   return (
     <div css={theme.layout}>
       <Header />
-      {data && <PostList posts={data.latestPosts} />}
+      {data && (
+        <PostList
+          posts={data.latestPosts}
+          refetch={refetch}
+          showFavorite={false}
+        />
+      )}
     </div>
   );
 };

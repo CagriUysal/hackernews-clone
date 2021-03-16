@@ -50,7 +50,13 @@ const DeleteConfirm: FunctionComponent<RouteComponentProps> = ({
     return (
       <div css={theme.layout}>
         <Header onlyTitle="Confirm" />
-        <PostListItem post={post} showUpvote={false} showComments={false} />
+        <PostListItem
+          post={post}
+          showUpvote={false}
+          showComments={false}
+          showFavorite={false}
+          showHide={false}
+        />
 
         <div css={styles.container}>
           <p

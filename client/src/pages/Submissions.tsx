@@ -29,7 +29,13 @@ const Submission: FunctionComponent<ComponentProps> = ({ name }) => {
     return (
       <div css={theme.layout}>
         <Header />
-        {<PostList posts={data.userPosts} />}
+        {
+          <PostList
+            posts={data.userPosts}
+            showHide={false}
+            showFavorite={false}
+          />
+        }
       </div>
     );
   } else {

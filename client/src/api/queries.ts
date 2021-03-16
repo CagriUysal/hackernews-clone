@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 export const ME = gql`
-  query me {
+  query Me {
     me {
       name
     }
@@ -104,6 +104,8 @@ export const DOMAIN_POSTS = gql`
         id
       }
       currentUserUpvoted
+      currentUserFavorited
+      currentUserHide
     }
   }
 `;
@@ -145,6 +147,7 @@ export const LATEST_POSTS = gql`
       upvote
       createdAt
       author {
+        id
         name
       }
       comments {
@@ -152,6 +155,7 @@ export const LATEST_POSTS = gql`
       }
       currentUserFavorited
       currentUserUpvoted
+      currentUserHide
     }
   }
 `;

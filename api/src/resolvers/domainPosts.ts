@@ -7,18 +7,16 @@ export default async function domainPosts(
   { domain }: { domain: string },
   { isAuth, appendUpvoteInfo }
 ): Promise<Post[]> {
+  const posts = await prisma.post.findMany({
+    where: { domain },
+    include: { author: true, comments: true },
+  });
+
   try {
     const { userName } = isAuth();
-    const posts = await prisma.post.findMany({
-      where: { hiddenBy: { none: { name: userName } }, domain },
-      include: { author: true, comments: true },
-    });
 
     return await appendUpvoteInfo(posts, userName, prisma);
   } catch (error) {
-    return await prisma.post.findMany({
-      where: { domain },
-      include: { author: true, comments: true },
-    });
+    return posts;
   }
 }

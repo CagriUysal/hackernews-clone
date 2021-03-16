@@ -24,7 +24,7 @@ const styles = {
 const Past: FunctionComponent<RouteComponentProps> = () => {
   const theme = useTheme();
   const [targetDate, dispatch] = useReducer(reducer, subDays(new Date(), 1)); // default past date is yesterday.
-  const { data } = useQuery(PAST_POSTS, {
+  const { data, refetch } = useQuery(PAST_POSTS, {
     variables: {
       input: {
         start: format(targetDate, "yyyy-MM-dd"),
@@ -42,7 +42,13 @@ const Past: FunctionComponent<RouteComponentProps> = () => {
           <PastTimeSelector targetDate={targetDate} dispatch={dispatch} />
         </div>
 
-        {data && <PostList posts={data.pastPosts} />}
+        {data && (
+          <PostList
+            posts={data.pastPosts}
+            refetch={refetch}
+            showFavorite={false}
+          />
+        )}
       </div>
     </div>
   );
