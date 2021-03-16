@@ -7,7 +7,7 @@ import { navigate } from "@reach/router";
 import Header from "../components/Header";
 import CommentListItem from "../components/CommentListItem";
 import CommentList from "../components/CommentList";
-import validateComment from "../utils/validateComment";
+import validateComment from "../../../common/validateComment";
 import { COMMENT, POST_COMMENTS } from "../api/queries";
 import { ADD_COMMENT } from "../api/mutations";
 

@@ -5,7 +5,7 @@ import { Redirect, RouteComponentProps } from "@reach/router";
 
 import { setAccessToken } from "../api/accessToken";
 import { REGISTER, LOGIN } from "../api/mutations";
-import validateRegister from "../utils/validateRegister";
+import validateRegister from "../../../common/validateRegister";
 
 const styles = {
   container: css`

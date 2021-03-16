@@ -2,18 +2,19 @@ import { URL } from "url";
 
 import { prisma } from "./utils/prismaClient";
 import { IResponse } from "./utils/types";
-import validateSubmit from "./utils/validateSubmit";
+import validateSubmit from "../../../common/validateSubmit";
 
 interface IAddPostInput {
   post: {
     link: string;
     title: string;
+    text: string;
   };
 }
 
 export default async function (
   _,
-  { post: { link, title } }: IAddPostInput,
+  { post: { link, title, text } }: IAddPostInput,
   { isAuth }
 ): Promise<IResponse> {
   try {
@@ -27,7 +28,7 @@ export default async function (
   }
 
   try {
-    validateSubmit({ title, link });
+    validateSubmit({ title, link, text });
   } catch (error) {
     return {
       code: "400",

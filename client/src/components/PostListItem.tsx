@@ -7,7 +7,7 @@ import { navigate, Link } from "@reach/router";
 
 // @ts-ignore
 import upArrow from "../assets/grayarrow2x.gif";
-import isLessThanOneHour from "../utils/isLessThanOneHour";
+import isLessThanOneHour from "../../../common/isLessThanOneHour";
 import { ME, HIDDEN_POSTS } from "../api/queries";
 import {
   ADD_FAVORITE,

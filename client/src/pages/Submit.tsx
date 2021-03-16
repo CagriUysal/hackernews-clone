@@ -1,11 +1,11 @@
 import React, { useState, FunctionComponent } from "react";
 
 import { useMutation, useQuery } from "@apollo/client";
-import { Redirect, RouteComponentProps } from "@reach/router";
+import { navigate, RouteComponentProps, Redirect } from "@reach/router";
 import { css, useTheme } from "@emotion/react";
 
 import Header from "../components/Header";
-import validateSubmit from "../utils/validateSubmit";
+import validateSubmit from "../../../common/validateSubmit";
 import { ME } from "../api/queries";
 import { ADD_POST } from "../api/mutations";
 
@@ -51,6 +51,7 @@ const styles = {
 interface IAddPostInput {
   link: string;
   title: string;
+  text: string;
 }
 
 const Submit: FunctionComponent<RouteComponentProps> = () => {
@@ -58,37 +59,33 @@ const Submit: FunctionComponent<RouteComponentProps> = () => {
 
   const [title, setTitle] = useState("");
   const [link, setLink] = useState("");
+  const [text, setText] = useState("");
   const [errorMessage, setErrorMessage] = useState<null | string>(null);
 
   const { data, loading } = useQuery(ME, { fetchPolicy: "network-only" });
-  const [addPost, { data: postData }] = useMutation(ADD_POST);
+  const [addPost] = useMutation(ADD_POST, {
+    update(_, { data: { addPost } }) {
+      const { success, message } = addPost;
+      if (success) {
+        return navigate("/newest");
+      } else {
+        setErrorMessage(message);
+      }
+    },
+  });
 
   const handleSubmit = (post: IAddPostInput) => {
     try {
-      validateSubmit({ title, link });
+      validateSubmit({ title, link, text });
+      addPost({ variables: { post } });
     } catch (error) {
       setErrorMessage(error.message);
-      return;
     }
-
-    addPost({ variables: { post } });
-
-    setTitle("");
-    setLink("");
   };
-
-  if (postData && postData.addPost) {
-    const { success, message } = postData.addPost;
-    if (success) {
-      return <Redirect to="/" noThrow />;
-    } else {
-      console.log(message);
-    }
-  }
 
   if (loading) {
     return null;
-  } else if (data && data.me) {
+  } else if (data?.me) {
     return (
       <div css={theme.layout}>
         <Header onlyTitle="Submit" />
@@ -140,12 +137,19 @@ const Submit: FunctionComponent<RouteComponentProps> = () => {
             <label htmlFor="text" css={styles.label}>
               text
             </label>
-            <textarea name="text" id="text" css={styles.input} rows={4} />
+            <textarea
+              name="text"
+              id="text"
+              css={styles.input}
+              rows={4}
+              value={text}
+              onChange={(event) => setText(event.target.value)}
+            />
           </div>
 
           <button
             css={styles.button}
-            onClick={() => handleSubmit({ link, title })}
+            onClick={() => handleSubmit({ link, title, text })}
           >
             submit
           </button>

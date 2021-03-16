@@ -55,6 +55,7 @@ export const typeDefs = gql`
   input AddPostInput {
     link: String!
     title: String!
+    text: String!
   }
 
   input pastPostsInput {
