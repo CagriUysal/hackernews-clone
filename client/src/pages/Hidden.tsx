@@ -26,7 +26,7 @@ const Hidden: FunctionComponent<IProps> = ({ name }) => {
       return (
         <div css={theme.layout}>
           <Header />
-          <PostList posts={hidden} />
+          <PostList posts={hidden} showFavorite={false} />
         </div>
       );
     } else {
