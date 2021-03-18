@@ -75,9 +75,13 @@ const navigationMaps = [
 type ComponentProps = {
   // if given, only the title shown and navigation is hidden
   onlyTitle?: string;
+  appendedTab?: string;
 };
 
-const Header: FunctionComponent<ComponentProps> = ({ onlyTitle }) => {
+const Header: FunctionComponent<ComponentProps> = ({
+  onlyTitle,
+  appendedTab,
+}) => {
   const currentPath = window.location.pathname;
 
   const { data } = useQuery(ME, { fetchPolicy: "network-only" });
@@ -129,10 +133,29 @@ const Header: FunctionComponent<ComponentProps> = ({ onlyTitle }) => {
                   >
                     {name}
                   </Link>
-                  <span>{i !== navigationMaps.length - 1 ? " | " : ""}</span>
+                  {i !== navigationMaps.length - 1 && <span>{" | "}</span>}
                 </React.Fragment>
               ))}
             </nav>
+
+            {appendedTab && (
+              <div>
+                <span
+                  css={css`
+                    white-space: pre;
+                  `}
+                >
+                  {" | "}
+                </span>
+                <span
+                  css={css`
+                    color: #fff;
+                  `}
+                >
+                  {appendedTab}
+                </span>
+              </div>
+            )}
 
             <div
               css={css`

@@ -25,7 +25,7 @@ const Upvoted: FunctionComponent<IProps> = ({ name }) => {
     if (success) {
       return (
         <div css={theme.layout}>
-          <Header />
+          <Header appendedTab="upvoted" />
           <PostList posts={upvotes} showFavorite={false} showHide={false} />
         </div>
       );

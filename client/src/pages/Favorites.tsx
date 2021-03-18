@@ -33,7 +33,7 @@ const Favorites: FunctionComponent<ComponentProps> = ({ name }) => {
   } else if (data && data.favoritePosts) {
     return (
       <div css={theme.layout}>
-        <Header />
+        <Header appendedTab={`${name}'s favorites`} />
         <PostList
           posts={data.favoritePosts}
           showHide={false}

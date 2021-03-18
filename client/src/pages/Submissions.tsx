@@ -28,7 +28,7 @@ const Submission: FunctionComponent<ComponentProps> = ({ name }) => {
   } else if (data && data.userPosts) {
     return (
       <div css={theme.layout}>
-        <Header />
+        <Header appendedTab={`${name}'s submissions`} />
         {
           <PostList
             posts={data.userPosts}

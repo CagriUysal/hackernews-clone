@@ -28,7 +28,7 @@ const UserComments: FunctionComponent<ComponentProps> = ({ name }) => {
   } else if (data && data.userComments) {
     return (
       <div css={theme.layout}>
-        <Header />
+        <Header appendedTab={`${name}'s comments`} />
         {<CommentList comments={data.userComments} extendAll showReply />}
       </div>
     );
