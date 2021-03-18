@@ -18,7 +18,7 @@ export default async function (
   { isAuth }
 ): Promise<IResponse> {
   try {
-    var payload = isAuth();
+    var { userName } = isAuth();
   } catch {
     return {
       code: "400",
@@ -38,21 +38,44 @@ export default async function (
   }
 
   try {
-    // extract domain from link
-    const url = new URL(link);
-    const domain = url.hostname;
+    if (link !== "") {
+      const url = new URL(link);
+      const domain = url.hostname;
 
-    await prisma.post.create({
-      data: {
-        link,
-        title,
-        domain,
-        author: {
-          connect: { name: payload.userName },
+      const post = await prisma.post.create({
+        data: {
+          link,
+          title,
+          domain,
+          author: {
+            connect: { name: userName },
+          },
         },
-      },
-      include: { author: true },
-    });
+        include: { author: true },
+      });
+
+      // when provided with link,
+      // text is appended as a the first comment in the post
+      if (text !== "") {
+        await prisma.comment.create({
+          data: {
+            message: text,
+            post: { connect: { id: post.id } },
+            author: { connect: { name: userName } },
+          },
+        });
+      }
+    } else {
+      await prisma.post.create({
+        data: {
+          title,
+          author: {
+            connect: { name: userName },
+          },
+          text: text !== "" ? text : null,
+        },
+      });
+    }
 
     return {
       code: "200",
@@ -60,7 +83,6 @@ export default async function (
       message: "post created succesfully.",
     };
   } catch (err) {
-    console.error(err);
     return {
       code: "500",
       success: false,
