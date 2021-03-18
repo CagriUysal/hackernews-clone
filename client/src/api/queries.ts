@@ -188,6 +188,7 @@ export const POST = gql`
       title
       link
       domain
+      text
       upvote
       createdAt
       author {

@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState, useEffect } from "react";
 import { css, useTheme } from "@emotion/react";
-import { useQuery, gql, useMutation } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { navigate, RouteComponentProps } from "@reach/router";
 
 import Header from "../components/Header";
@@ -13,21 +13,31 @@ import { ADD_COMMENT } from "../api/mutations";
 const styles = {
   container: (theme) => css`
     background-color: ${theme.colors.bg};
+    padding-bottom: 2em;
+    margin-left: 0.5em;
   `,
   commentInput: css`
     width: 40em;
-    margin-left: 2.5em;
     margin-top: 0.5em;
+    margin-left: 1.5em;
   `,
   button: css`
     display: block;
-    margin-left: 2.5em;
     margin-top: 1em;
     margin-bottom: 3em;
+    margin-left: 1.5rem;
   `,
   errorMessage: (theme) => css`
     color: ${theme.colors.primary};
-    padding: 1em;
+    margin-left: 1.5em;
+    margin-top: 1em;
+  `,
+  text: (theme) => css`
+    font-size: 0.95rem;
+    color: ${theme.colors.primary};
+    margin-left: 1.5em;
+    margin-top: 1em;
+    margin-bottom: 1em;
   `,
 };
 
@@ -53,26 +63,34 @@ const Post: FunctionComponent<ComponentProps> = ({ postId }) => {
     variables: { postId: Number(postId) },
   });
 
-  const [addComment, { data: addCommentData }] = useMutation(ADD_COMMENT, {
+  const [addComment] = useMutation(ADD_COMMENT, {
     update(cache, { data: { addComment } }) {
-      const { comment } = addComment;
+      const { comment, success, code } = addComment;
 
-      if (comment === null) {
-        return; // unsuccessful. don't update cache.
+      if (success === false && code === "401") {
+        navigate("/login", {
+          state: {
+            message: "You have to be logged in to comment.",
+            redirectedFrom: `/post/${postId}`,
+          },
+        });
+      } else if (success === true) {
+        const { postComments } = cache.readQuery({
+          query: POST_COMMENTS,
+          variables: { postId: Number(postId) },
+        });
+
+        cache.writeQuery({
+          query: POST_COMMENTS,
+          variables: { postId: Number(postId) },
+          data: {
+            postComments: [...postComments, comment],
+          },
+        });
+
+        if (errorMessage !== null) setErrorMessage(null);
+        setComment("");
       }
-
-      const { postComments } = cache.readQuery({
-        query: POST_COMMENTS,
-        variables: { postId: Number(postId) },
-      });
-
-      cache.writeQuery({
-        query: POST_COMMENTS,
-        variables: { postId: Number(postId) },
-        data: {
-          postComments: [...postComments, comment],
-        },
-      });
     },
   });
 
@@ -82,32 +100,15 @@ const Post: FunctionComponent<ComponentProps> = ({ postId }) => {
   const handleAddComment = (comment: IAddCommentInput) => {
     try {
       validateComment(comment.message);
+      addComment({ variables: { comment } });
     } catch {
       setErrorMessage("Please try again.");
-      return;
     }
-
-    addComment({ variables: { comment } });
   };
 
-  useEffect(() => {
-    if (addCommentData) {
-      const { success, code } = addCommentData.addComment;
-      if (success === false && code === "401") {
-        navigate("/login", {
-          state: {
-            message: "You have to be logged in to comment.",
-            redirectedFrom: `/post/${postId}`,
-          },
-        });
-      } else if (success === true) {
-        if (errorMessage !== null) setErrorMessage(null);
-        setComment("");
-      }
-    }
-  }, [addCommentData]);
+  if (data?.post) {
+    const { text } = data.post;
 
-  if (data && data.post) {
     return (
       <div css={theme.layout}>
         <Header />
@@ -115,6 +116,8 @@ const Post: FunctionComponent<ComponentProps> = ({ postId }) => {
           {errorMessage && <p css={styles.errorMessage}>{errorMessage}</p>}
 
           <PostListItem post={data.post} rank={null} />
+
+          {text !== null && <p css={styles.text}>{text}</p>}
 
           <textarea
             name="text"

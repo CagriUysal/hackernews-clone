@@ -33,7 +33,7 @@ const styles = {
     margin-right: 0.3em;
   `,
   upvote: css`
-    margin-right: 0.3em;
+    width: 1.5em;
   `,
   domain: (theme) => css`
     color: ${theme.colors.primary};
@@ -69,8 +69,9 @@ const styles = {
 export interface IPost {
   id: number;
   title: string;
-  link: string;
-  domain: string;
+  link: string | null;
+  domain: string | null;
+  text: string | null;
   upvote: number;
   createdAt: number;
   author: {
@@ -257,7 +258,7 @@ const PostListItem: FunctionComponent<ComponentProps> = ({
 
   return (
     <div css={styles.container}>
-      <div css={styles.rank}>{rank && <span>{rank}.</span>}</div>
+      {rank && <div css={styles.rank}>{rank && <span>{rank}.</span>}</div>}
       {showUpvote && (
         <div css={styles.upvote}>
           {
@@ -277,14 +278,20 @@ const PostListItem: FunctionComponent<ComponentProps> = ({
       <div>
         {/* upper row */}
         <div>
-          <a href={link}>{title}</a>
-          <span css={styles.domain}>
-            (
-            <Link to={`/from/${domain}`} css={styles.link}>
-              {domain}
-            </Link>
-            )
-          </span>
+          {link !== null ? (
+            <>
+              <a href={link}>{title}</a>
+              <span css={styles.domain}>
+                (
+                <Link to={`/from/${domain}`} css={styles.link}>
+                  {domain}
+                </Link>
+                )
+              </span>
+            </>
+          ) : (
+            <Link to={`/post/${id}`}>{title}</Link>
+          )}
         </div>
 
         {/* bottom row */}
