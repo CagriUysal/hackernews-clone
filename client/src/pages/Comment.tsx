@@ -14,15 +14,16 @@ import { ADD_COMMENT } from "../api/mutations";
 const styles = {
   container: (theme) => css`
     background-color: ${theme.colors.bg};
+    margin-left: 1em;
   `,
   commentInput: css`
     width: 40em;
-    margin-left: 2.5em;
+    margin-left: 1rem;
     margin-top: 0.5em;
   `,
   button: css`
     display: block;
-    margin-left: 2.5em;
+    margin-left: 1rem;
     margin-top: 1em;
     margin-bottom: 3em;
   `,

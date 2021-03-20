@@ -90,7 +90,7 @@ const CommentList: FunctionComponent<ComponentProps> = ({
     const orderedComments = getOrderedComments(comments, parentId);
 
     return (
-      <main css={styles.container}>
+      <div css={styles.container}>
         {orderedComments.map(([comment, level]) => {
           return (
             <CommentListItem
@@ -102,11 +102,11 @@ const CommentList: FunctionComponent<ComponentProps> = ({
             />
           );
         })}
-      </main>
+      </div>
     );
   } else {
     return (
-      <main css={styles.container}>
+      <div css={styles.container}>
         {comments.map((comment) => {
           return (
             <CommentListItem
@@ -117,7 +117,7 @@ const CommentList: FunctionComponent<ComponentProps> = ({
             />
           );
         })}
-      </main>
+      </div>
     );
   }
 };

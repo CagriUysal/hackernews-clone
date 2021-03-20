@@ -33,7 +33,7 @@ const styles = {
     margin-right: 0.3em;
   `,
   upvote: css`
-    width: 1.5em;
+    width: 1rem;
   `,
   domain: (theme) => css`
     color: ${theme.colors.primary};
@@ -269,7 +269,7 @@ const PostListItem: FunctionComponent<ComponentProps> = ({
               `}
               onClick={handleUpvoteClick}
             >
-              <img src={upArrow} alt="up arrow" height="12px" width="12px" />
+              <img src={upArrow} alt="up arrow" height="10px" width="10px" />
             </button>
           }
         </div>

@@ -14,18 +14,18 @@ const styles = {
   container: (theme) => css`
     background-color: ${theme.colors.bg};
     padding-bottom: 2em;
-    margin-left: 0.5em;
+    margin-left: 1em;
   `,
   commentInput: css`
     width: 40em;
     margin-top: 0.5em;
-    margin-left: 1.5em;
+    margin-left: 1rem;
   `,
   button: css`
     display: block;
     margin-top: 1em;
     margin-bottom: 3em;
-    margin-left: 1.5rem;
+    margin-left: 1rem;
   `,
   errorMessage: (theme) => css`
     color: ${theme.colors.primary};
