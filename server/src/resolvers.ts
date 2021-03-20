@@ -1,4 +1,3 @@
-import posts from "./resolvers/posts";
 import post from "./resolvers/post";
 import me from "./resolvers/me";
 import addPost from "./resolvers/addPost";
@@ -27,6 +26,7 @@ import upvotedPosts from "./resolvers/upvotedPosts";
 import addHidden from "./resolvers/addHidden";
 import removeHidden from "./resolvers/removeHidden";
 import hiddenPosts from "./resolvers/hiddenPosts";
+import upvoteComment from "./resolvers/upvoteComment";
 
 export const resolvers = {
   User: {
@@ -37,7 +37,7 @@ export const resolvers = {
   },
 
   Query: {
-    posts,
+    // Post
     post,
     domainPosts,
     latestPosts,
@@ -46,26 +46,38 @@ export const resolvers = {
     favoritePosts,
     upvotedPosts,
     hiddenPosts,
-    postComments,
+
+    // Comment
     comments,
     comment,
+    postComments,
     userComments,
+
+    // User
     me,
     user,
   },
 
   Mutation: {
+    // Post
     addPost,
     deletePost,
-    addComment,
     addFavorite,
     removeFavorite,
     upvotePost,
     unvotePost,
-    updateUser,
     addHidden,
     removeHidden,
+
+    // Comment
+    addComment,
+    upvoteComment,
+
+    // User
+    updateUser,
     changePw,
+
+    // Authentication
     login,
     register,
     logout,

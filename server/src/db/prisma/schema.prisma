@@ -55,7 +55,7 @@ model Comment {
   @@map("comments")
   id Int @default(autoincrement()) @id
   message String
-  upvotes Int @default(0)
+  upvote Int @default(0)
   createdAt DateTime @default(now())
 
   post Post @relation(fields: [postId], references: [id])

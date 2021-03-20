@@ -257,9 +257,9 @@ export const USER = gql`
       __typename
       id
       name
+      about
       createdAt
       karma
-      about
       ... on PrivateUser {
         email
       }

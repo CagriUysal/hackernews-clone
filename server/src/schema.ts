@@ -16,9 +16,6 @@ export const typeDefs = gql`
     about: String!
     createdAt: Float!
     karma: Int!
-    posts: [Post!]!
-    comments: [Comment!]!
-    favorites: [Post!]!
   }
 
   """
@@ -99,13 +96,8 @@ export const typeDefs = gql`
     about: String!
     createdAt: Float!
     karma: Int!
-    posts: [Post!]!
-    comments: [Comment!]!
-    favorites: [Post!]!
 
     email: String
-    hidden: [Post!]!
-    upvotedPosts: [Post!]!
   }
 
   type PublicUser implements User {
@@ -114,9 +106,6 @@ export const typeDefs = gql`
     about: String!
     createdAt: Float!
     karma: Int!
-    posts: [Post!]!
-    comments: [Comment!]!
-    favorites: [Post!]!
   }
 
   input RegisterInput {
@@ -157,7 +146,9 @@ export const typeDefs = gql`
   Queries
   """
   type Query {
-    posts: [Post!]!
+    """
+    Post
+    """
     post(id: Int!): Post
     domainPosts(domain: String!): [Post!]!
     latestPosts: [Post!]!
@@ -166,10 +157,18 @@ export const typeDefs = gql`
     favoritePosts(name: String!): [Post!]
     upvotedPosts(name: String!): upvotedPostsResponse!
     hiddenPosts(name: String!): hiddenPostsResponse!
-    postComments(postId: Int!): [Comment!]!
+
+    """
+    Comment
+    """
     comments: [Comment!]!
     comment(id: Int!): Comment
+    postComments(postId: Int!): [Comment!]!
     userComments(name: String!): [Comment!]
+
+    """
+    User
+    """
     user(name: String!): User
     me: PrivateUser
   }
@@ -178,18 +177,34 @@ export const typeDefs = gql`
   Mutations
   """
   type Mutation {
+    """
+    Post
+    """
     addPost(post: AddPostInput!): MutationResponse!
     deletePost(postId: Int!): MutationResponse!
-    addComment(comment: AddCommentInput!): AddCommentResponse!
     addFavorite(postId: Int!): MutationResponse!
     removeFavorite(postId: Int!): MutationResponse!
     upvotePost(postId: Int!): MutationResponse!
     unvotePost(postId: Int!): MutationResponse!
     addHidden(postId: Int!): MutationResponse!
     removeHidden(postId: Int!): MutationResponse!
-    register(user: RegisterInput!): MutationResponse!
+
+    """
+    Comments
+    """
+    addComment(comment: AddCommentInput!): AddCommentResponse!
+    upvoteComment(commentId: Int!): MutationResponse!
+
+    """
+    User
+    """
     updateUser(input: UpdateUserInput!): UpdateUserResponse!
     changePw(input: ChangePwInput!): MutationResponse!
+
+    """
+    Authentication
+    """
+    register(user: RegisterInput!): MutationResponse!
     login(user: LoginInput!): LoginResponse!
     logout: Boolean!
   }
