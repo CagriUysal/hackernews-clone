@@ -3,6 +3,7 @@ import { gql } from "@apollo/client";
 export const ME = gql`
   query Me {
     me {
+      id
       name
     }
   }
@@ -11,6 +12,7 @@ export const ME = gql`
 export const COMMENT = gql`
   query Comment($id: Int!) {
     comment(id: $id) {
+      id
       message
       createdAt
       parent {
@@ -24,6 +26,7 @@ export const COMMENT = gql`
         title
       }
       currentUserUpvoted
+      currentUserFavorited
     }
   }
 `;

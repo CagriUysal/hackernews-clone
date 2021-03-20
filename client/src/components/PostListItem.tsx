@@ -127,7 +127,7 @@ const PostListItem: FunctionComponent<ComponentProps> = ({
         navigate("/login", {
           state: {
             message: "Please log in.",
-            redirectedFrom: `/post/${id}`,
+            redirectedFrom: `${window.location.pathname}`,
           },
         });
       } else if (success === true) {

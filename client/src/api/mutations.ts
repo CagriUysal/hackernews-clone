@@ -175,3 +175,13 @@ export const UNVOTE_COMMENT = gql`
     }
   }
 `;
+
+export const ADD_FAVORITE_COMMENT = gql`
+  mutation AddFavoriteComment($commentId: Int!) {
+    addFavoriteComment(commentId: $commentId) {
+      code
+      success
+      message
+    }
+  }
+`;

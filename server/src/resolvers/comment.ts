@@ -4,6 +4,7 @@ import { prisma } from "./utils/prismaClient";
 
 interface IComment extends Comment {
   currentUserUpvoted?: boolean;
+  currentUserFavorited?: boolean;
 }
 
 export default async function comment(
@@ -21,12 +22,14 @@ export default async function comment(
         parent: true,
         post: true,
         upvotedBy: { where: { name: userName } },
+        favoritedBy: { where: { name: userName } },
       },
     });
 
     return {
       ...comment,
       currentUserUpvoted: comment.upvotedBy.length > 0,
+      currentUserFavorited: comment.favoritedBy.length > 0,
     };
   } catch (error) {
     return await prisma.comment.findUnique({

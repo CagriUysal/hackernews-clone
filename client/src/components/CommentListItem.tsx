@@ -4,7 +4,11 @@ import { Link, navigate } from "@reach/router";
 import { formatDistanceToNowStrict } from "date-fns";
 import { useMutation } from "@apollo/client";
 
-import { UPVOTE_COMMENT, UNVOTE_COMMENT } from "../api/mutations";
+import {
+  UPVOTE_COMMENT,
+  UNVOTE_COMMENT,
+  ADD_FAVORITE_COMMENT,
+} from "../api/mutations";
 
 // @ts-ignore
 import upArrow from "../assets/grayarrow2x.gif";
@@ -73,6 +77,7 @@ export interface IComment {
     title: string;
   };
   currentUserUpvoted: boolean | null;
+  currentUserFavorited: boolean | null;
 }
 
 type ComponentProps = {
@@ -80,6 +85,7 @@ type ComponentProps = {
   level?: number;
   extendedDisplay?: boolean;
   showReply?: boolean;
+  showFavorite?: boolean;
 };
 
 const CommentListItem: FunctionComponent<ComponentProps> = ({
@@ -87,6 +93,7 @@ const CommentListItem: FunctionComponent<ComponentProps> = ({
   level = 0,
   extendedDisplay = false,
   showReply = false,
+  showFavorite = false,
 }) => {
   const {
     id,
@@ -95,6 +102,7 @@ const CommentListItem: FunctionComponent<ComponentProps> = ({
     author: { name },
     post: { id: postId, title },
     currentUserUpvoted,
+    currentUserFavorited,
   } = comment;
 
   const [upvoteComment] = useMutation(UPVOTE_COMMENT, {
@@ -138,8 +146,34 @@ const CommentListItem: FunctionComponent<ComponentProps> = ({
     },
   });
 
+  const [addFavoriteComment] = useMutation(ADD_FAVORITE_COMMENT, {
+    variables: { commentId: id },
+    update(cache, { data: { addFavoriteComment } }) {
+      const { success, code } = addFavoriteComment;
+      if (success === false && code === "401") {
+        navigate("/login", {
+          state: {
+            message: "Please log in.",
+            redirectedFrom: `${window.location.pathname}`,
+          },
+        });
+      } else if (success === true) {
+        cache.modify({
+          id: `Comment:${id}`,
+          fields: {
+            currentUserFavorited() {
+              return true;
+            },
+          },
+        });
+      }
+    },
+  });
+
   const handleUpvoteClick = () => upvoteComment();
   const handleUnvoteClick = () => unvoteComment();
+  const handleFavClick = () => addFavoriteComment();
+  const handleUnfavClick = () => {};
 
   return (
     <div
@@ -202,6 +236,19 @@ const CommentListItem: FunctionComponent<ComponentProps> = ({
                   </Link>
                 </>
               ))}
+            {showFavorite && (
+              <>
+                {" | "}
+                <button
+                  css={[styles.button, styles.textButton]}
+                  onClick={
+                    currentUserFavorited ? handleUnfavClick : handleFavClick
+                  }
+                >
+                  {currentUserFavorited ? "un-favorite" : "favorite"}
+                </button>
+              </>
+            )}
             {extendedDisplay && (
               <>
                 {" | on "}

@@ -117,7 +117,11 @@ const Comment: FunctionComponent<ComponentProps> = ({ commentId, postId }) => {
             `}
           >
             {errorMessage && <p css={styles.errorMessage}>{errorMessage}</p>}
-            <CommentListItem comment={data.comment} extendedDisplay />
+            <CommentListItem
+              comment={data.comment}
+              extendedDisplay
+              showFavorite
+            />
 
             <textarea
               name="text"
