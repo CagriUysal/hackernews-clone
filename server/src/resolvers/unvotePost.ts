@@ -19,10 +19,10 @@ export default async function (
 
     const user = await prisma.user.findUnique({
       where: { name },
-      include: { upvotes: { where: { id: postId } } },
+      include: { upvotedPosts: { where: { id: postId } } },
     });
 
-    if (user.upvotes.length === 0)
+    if (user.upvotedPosts.length === 0)
       throw new Error("Post isn't upvoted, cannot unvote.");
   } catch (error) {
     return {

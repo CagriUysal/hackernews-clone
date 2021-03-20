@@ -12,10 +12,10 @@ export default async function (
 
     const user = await prisma.user.findUnique({
       where: { name },
-      include: { upvotes: { where: { id: postId } } },
+      include: { upvotedPosts: { where: { id: postId } } },
     });
 
-    if (user.upvotes.length !== 0) throw new Error("Already Upvoted.");
+    if (user.upvotedPosts.length !== 0) throw new Error("Already Upvoted.");
   } catch (error) {
     return {
       code: "401",

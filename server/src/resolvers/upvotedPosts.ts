@@ -7,7 +7,7 @@ interface upvotedPostsResponse extends IResponse {
   upvotes?: Post[];
 }
 
-export default async function favoritePosts(
+export default async function (
   _,
   { name }: { name: string },
   { isAuth }
@@ -15,7 +15,7 @@ export default async function favoritePosts(
   const user = await prisma.user.findUnique({
     where: { name },
     select: {
-      upvotes: { include: { author: true, comments: true } },
+      upvotedPosts: { include: { author: true, comments: true } },
     },
   });
 
@@ -32,7 +32,7 @@ export default async function favoritePosts(
 
     if (userName !== name) throw new Error();
 
-    const modifiedPosts = user.upvotes.map((post) => ({
+    const modifiedPosts = user.upvotedPosts.map((post) => ({
       ...post,
       currentUserUpvoted: true,
     }));

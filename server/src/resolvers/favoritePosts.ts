@@ -14,7 +14,7 @@ export default async function favoritePosts(
   const user = await prisma.user.findUnique({
     where: { name },
     select: {
-      favorites: { include: { author: true, comments: true } },
+      favoritePosts: { include: { author: true, comments: true } },
     },
   });
 
@@ -26,7 +26,7 @@ export default async function favoritePosts(
     const { userName } = isAuth();
 
     const modifiedPosts = await appendUpvoteInfo(
-      user.favorites,
+      user.favoritePosts,
       userName,
       prisma
     );
@@ -42,6 +42,6 @@ export default async function favoritePosts(
       return modifiedPosts;
     }
   } catch {
-    return user.favorites;
+    return user.favoritePosts;
   }
 }

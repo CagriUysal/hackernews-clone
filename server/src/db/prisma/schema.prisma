@@ -23,8 +23,8 @@ model Post {
   author User @relation("Posts", fields: [authorId], references: [id])
   authorId Int
 
-  favoritedBy User[] @relation("Favorites") 
-  upvotedBy User[] @relation("Upvotes") 
+  favoritedBy User[] @relation("FavoritePosts") 
+  upvotedBy User[] @relation("UpvotedPosts") 
   hiddenBy User[] @relation("Hidden")
 
   comments Comment[]
@@ -42,12 +42,13 @@ model User {
   tokenVersion Int @default(0)
 
   posts Post[] @relation("Posts") 
-
-  favorites Post[] @relation("Favorites") 
-  upvotes Post[] @relation("Upvotes")
+  favoritePosts Post[] @relation("FavoritePosts") 
+  upvotedPosts Post[] @relation("UpvotedPosts")
   hidden Post[] @relation("Hidden")
 
   comments Comment[]
+  favoritedComments Comment[] @relation("FavoritedComments")
+  upvotedComments Comment[] @relation("UpvotedComments")
 }
 
 model Comment {
@@ -62,6 +63,9 @@ model Comment {
 
   author User @relation(fields: [authorId], references: [id])
   authorId Int
+
+  favoritedBy User[] @relation("FavoritedComments") 
+  upvotedBy User[] @relation("UpvotedComments") 
 
   parentId Int?
   parent Comment? @relation(fields:[parentId], references: [id])

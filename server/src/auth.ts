@@ -53,9 +53,9 @@ export const appendUpvoteInfo = async (
   const postIds = posts.map((post) => post.id);
   const user = await client.user.findUnique({
     where: { name },
-    include: { upvotes: { where: { id: { in: postIds } } } },
+    include: { upvotedPosts: { where: { id: { in: postIds } } } },
   });
-  const upvoteIds = user.upvotes.map((post) => post.id);
+  const upvoteIds = user.upvotedPosts.map((post) => post.id);
 
   return posts.map((post) => ({
     ...post,

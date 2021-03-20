@@ -21,7 +21,7 @@ export default async function (
     await prisma.user.update({
       where: { name },
       data: {
-        favorites: {
+        favoritePosts: {
           disconnect: {
             id: postId,
           },
