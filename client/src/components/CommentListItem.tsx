@@ -4,7 +4,7 @@ import { Link, navigate } from "@reach/router";
 import { formatDistanceToNowStrict } from "date-fns";
 import { useMutation } from "@apollo/client";
 
-import { UPVOTE_COMMENT } from "../api/mutations";
+import { UPVOTE_COMMENT, UNVOTE_COMMENT } from "../api/mutations";
 
 // @ts-ignore
 import upArrow from "../assets/grayarrow2x.gif";
@@ -20,6 +20,13 @@ const styles = {
     padding: 0;
     &:hover {
       cursor: pointer;
+    }
+  `,
+  textButton: (theme) => css`
+    font-size: inherit;
+    color: ${theme.colors.primary};
+    &:hover {
+      text-decoration: underline;
     }
   `,
   upvote: css`
@@ -114,7 +121,25 @@ const CommentListItem: FunctionComponent<ComponentProps> = ({
     },
   });
 
+  const [unvoteComment] = useMutation(UNVOTE_COMMENT, {
+    variables: { commentId: id },
+    update(cache, { data: { unvoteComment } }) {
+      const { success } = unvoteComment;
+      if (success === true) {
+        cache.modify({
+          id: `Comment:${id}`,
+          fields: {
+            currentUserUpvoted() {
+              return false;
+            },
+          },
+        });
+      }
+    },
+  });
+
   const handleUpvoteClick = () => upvoteComment();
+  const handleUnvoteClick = () => unvoteComment();
 
   return (
     <div
@@ -147,6 +172,17 @@ const CommentListItem: FunctionComponent<ComponentProps> = ({
                 addSuffix: true,
               })}
             </Link>
+            {currentUserUpvoted && (
+              <>
+                {" | "}
+                <button
+                  onClick={handleUnvoteClick}
+                  css={[styles.button, styles.textButton]}
+                >
+                  unvote
+                </button>
+              </>
+            )}
             {extendedDisplay &&
               (comment.parent !== null ? (
                 <>

@@ -165,3 +165,13 @@ export const UPVOTE_COMMENT = gql`
     }
   }
 `;
+
+export const UNVOTE_COMMENT = gql`
+  mutation UnvoteComment($commentId: Int!) {
+    unvoteComment(commentId: $commentId) {
+      code
+      success
+      message
+    }
+  }
+`;
