@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { Post } from "@prisma/client/index";
+import { Post, Comment } from "@prisma/client/index";
 import { verify, sign } from "jsonwebtoken";
 import { Request } from "express";
 
@@ -49,7 +49,6 @@ export const appendUpvoteInfo = async (
   client: PrismaClient
 ) => {
   // NOTE: appending `currentUserUpvoted` field can be solved more elegantly?
-
   const postIds = posts.map((post) => post.id);
   const user = await client.user.findUnique({
     where: { name },
@@ -60,5 +59,24 @@ export const appendUpvoteInfo = async (
   return posts.map((post) => ({
     ...post,
     currentUserUpvoted: upvoteIds.includes(post.id), // append graphql field
+  }));
+};
+
+export const appendCommentUpvote = async (
+  comments: Comment[],
+  name: string,
+  client: PrismaClient
+) => {
+  // NOTE: appending `currentUserUpvoted` field can be solved more elegantly?
+  const commentId = comments.map((post) => post.id);
+  const user = await client.user.findUnique({
+    where: { name },
+    include: { upvotedComments: { where: { id: { in: commentId } } } },
+  });
+  const upvoteIds = user.upvotedComments.map((post) => post.id);
+
+  return comments.map((comment) => ({
+    ...comment,
+    currentUserUpvoted: upvoteIds.includes(comment.id), // append graphql field
   }));
 };

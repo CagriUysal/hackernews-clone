@@ -1,7 +1,10 @@
 import React, { FunctionComponent } from "react";
 import { css } from "@emotion/react";
-import { Link } from "@reach/router";
+import { Link, navigate } from "@reach/router";
 import { formatDistanceToNowStrict } from "date-fns";
+import { useMutation } from "@apollo/client";
+
+import { UPVOTE_COMMENT } from "../api/mutations";
 
 // @ts-ignore
 import upArrow from "../assets/grayarrow2x.gif";
@@ -62,6 +65,7 @@ export interface IComment {
     id: number;
     title: string;
   };
+  currentUserUpvoted: boolean | null;
 }
 
 type ComponentProps = {
@@ -83,8 +87,34 @@ const CommentListItem: FunctionComponent<ComponentProps> = ({
     createdAt,
     author: { name },
     post: { id: postId, title },
-    // parent: { id: parentId }, // parent can be null, so can't destruct its id!
+    currentUserUpvoted,
   } = comment;
+
+  const [upvoteComment] = useMutation(UPVOTE_COMMENT, {
+    variables: { commentId: id },
+    update(cache, { data: { upvoteComment } }) {
+      const { success, code } = upvoteComment;
+      if (success === false && code === "401") {
+        navigate("/login", {
+          state: {
+            message: "You have to be logged in to vote.",
+            redirectedFrom: `${window.location.pathname}`,
+          },
+        });
+      } else if (success === true) {
+        cache.modify({
+          id: `Comment:${id}`,
+          fields: {
+            currentUserUpvoted() {
+              return true;
+            },
+          },
+        });
+      }
+    },
+  });
+
+  const handleUpvoteClick = () => upvoteComment();
 
   return (
     <div
@@ -94,7 +124,13 @@ const CommentListItem: FunctionComponent<ComponentProps> = ({
       `}
     >
       <div css={styles.upvote}>
-        <button css={styles.button}>
+        <button
+          css={css`
+            ${styles.button}
+            visibility: ${currentUserUpvoted ? "hidden" : undefined};
+          `}
+          onClick={handleUpvoteClick}
+        >
           <img src={upArrow} alt="up arrow" height="10px" width="10px" />
         </button>
       </div>

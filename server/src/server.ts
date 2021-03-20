@@ -3,7 +3,7 @@ import { ApolloServer } from "apollo-server";
 
 import { resolvers } from "./resolvers";
 import { typeDefs } from "./schema";
-import { isAuth, appendUpvoteInfo } from "./auth";
+import { isAuth, appendUpvoteInfo, appendCommentUpvote } from "./auth";
 
 dotenv.config();
 
@@ -16,6 +16,7 @@ const server = new ApolloServer({
     req,
     isAuth: () => isAuth(req),
     appendUpvoteInfo,
+    appendCommentUpvote,
   }),
   cors: {
     origin: "http://localhost:1234",

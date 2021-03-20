@@ -155,3 +155,13 @@ export const REMOVE_HIDDEN = gql`
     }
   }
 `;
+
+export const UPVOTE_COMMENT = gql`
+  mutation UpvoteComment($commentId: Int!) {
+    upvoteComment(commentId: $commentId) {
+      code
+      success
+      message
+    }
+  }
+`;

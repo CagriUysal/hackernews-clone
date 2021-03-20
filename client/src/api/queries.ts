@@ -23,6 +23,7 @@ export const COMMENT = gql`
         id
         title
       }
+      currentUserUpvoted
     }
   }
 `;
@@ -43,6 +44,7 @@ export const POST_COMMENTS = gql`
         id
         title
       }
+      currentUserUpvoted
     }
   }
 `;
@@ -63,6 +65,7 @@ export const COMMENTS = gql`
         id
         title
       }
+      currentUserUpvoted
     }
   }
 `;
@@ -283,6 +286,7 @@ export const USER_COMMENTS = gql`
         id
         title
       }
+      currentUserUpvoted
     }
   }
 `;

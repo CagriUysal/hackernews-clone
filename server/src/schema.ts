@@ -72,6 +72,7 @@ export const typeDefs = gql`
     post: Post!
     author: PublicUser!
     parent: Comment
+    currentUserUpvoted: Boolean
   }
 
   input AddCommentInput {
