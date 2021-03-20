@@ -3,7 +3,7 @@ import { IResponse } from "./utils/types";
 
 export default async function (
   _,
-  { postId }: { postId: number },
+  { commentId }: { commentId: number },
   { isAuth }
 ): Promise<IResponse> {
   try {
@@ -12,11 +12,11 @@ export default async function (
 
     const user = await prisma.user.findUnique({
       where: { name },
-      include: { upvotedPosts: { where: { id: postId } } },
+      include: { upvotedComments: { where: { id: commentId } } },
     });
 
-    if (user.upvotedPosts.length === 0)
-      throw new Error("Post isn't upvoted, cannot unvote.");
+    if (user.upvotedComments.length === 0)
+      throw new Error("Comment isn't upvoted, cannot unvote.");
   } catch (error) {
     return {
       code: "401",
@@ -26,8 +26,8 @@ export default async function (
   }
 
   try {
-    await prisma.post.update({
-      where: { id: postId },
+    await prisma.comment.update({
+      where: { id: commentId },
       data: {
         upvotedBy: {
           disconnect: {
@@ -41,7 +41,7 @@ export default async function (
     return {
       code: "200",
       success: true,
-      message: `Post '${postId}' unvoted by ${name}.`,
+      message: `Post '${commentId}' unvoted by ${name}.`,
     };
   } catch (error) {
     return {

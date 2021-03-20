@@ -27,6 +27,7 @@ import addHidden from "./resolvers/addHidden";
 import removeHidden from "./resolvers/removeHidden";
 import hiddenPosts from "./resolvers/hiddenPosts";
 import upvoteComment from "./resolvers/upvoteComment";
+import unvoteComment from "./resolvers/unvoteComment";
 
 export const resolvers = {
   User: {
@@ -72,6 +73,7 @@ export const resolvers = {
     // Comment
     addComment,
     upvoteComment,
+    unvoteComment,
 
     // User
     updateUser,
