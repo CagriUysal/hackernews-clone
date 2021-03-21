@@ -89,6 +89,13 @@ export const typeDefs = gql`
     comment: Comment
   }
 
+  type upvotedCommentResponse implements Response {
+    code: String!
+    success: Boolean!
+    message: String!
+    upvotes: [Comment!]
+  }
+
   """
   User
   """
@@ -167,6 +174,7 @@ export const typeDefs = gql`
     comment(id: Int!): Comment
     postComments(postId: Int!): [Comment!]!
     userComments(name: String!): [Comment!]
+    upvotedComments(name: String!): upvotedCommentResponse!
 
     """
     User

@@ -30,6 +30,7 @@ import upvoteComment from "./resolvers/upvoteComment";
 import unvoteComment from "./resolvers/unvoteComment";
 import addFavoriteComment from "./resolvers/addFavoriteComment";
 import removeFavoriteComment from "./resolvers/removeFavoriteComment";
+import upvotedComments from "./resolvers/upvotedComments";
 
 export const resolvers = {
   User: {
@@ -55,6 +56,7 @@ export const resolvers = {
     comment,
     postComments,
     userComments,
+    upvotedComments,
 
     // User
     me,
