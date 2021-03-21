@@ -40,7 +40,8 @@ const FavoriteComments: FunctionComponent<ComponentProps> = ({ name }) => {
       </p>
     );
   } else if (data?.favoriteComments) {
-    const { name: currentUserName } = meData?.me;
+    const currentUserName = meData?.me?.name;
+
     return (
       <div css={theme.layout}>
         <Header appendedTab={`${name}'s favorites`} />

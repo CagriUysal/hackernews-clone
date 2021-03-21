@@ -1,6 +1,14 @@
 import React, { FunctionComponent } from "react";
+import { css } from "@emotion/react";
 
 import PostListItem, { IPost } from "./PostListItem";
+
+const styles = {
+  container: (theme) => css`
+    background-color: ${theme.colors.bg};
+    padding-bottom: 5em;
+  `,
+};
 
 type ComponentProps = {
   posts: IPost[];
@@ -20,7 +28,7 @@ const PostList: FunctionComponent<ComponentProps> = ({
   showFavorite = true,
 }) => {
   return (
-    <main>
+    <div css={styles.container}>
       {posts.map((post, index) => (
         <PostListItem
           post={post}
@@ -33,7 +41,7 @@ const PostList: FunctionComponent<ComponentProps> = ({
           showFavorite={showFavorite}
         />
       ))}
-    </main>
+    </div>
   );
 };
 

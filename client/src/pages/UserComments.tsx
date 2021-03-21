@@ -29,7 +29,7 @@ const UserComments: FunctionComponent<ComponentProps> = ({ name }) => {
     return (
       <div css={theme.layout}>
         <Header appendedTab={`${name}'s comments`} />
-        {<CommentList comments={data.userComments} extendAll showReply />}
+        {<CommentList comments={data.userComments} extendAll />}
       </div>
     );
   } else {
