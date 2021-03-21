@@ -18,6 +18,7 @@ export const COMMENT = gql`
         id
       }
       author {
+        id
         name
       }
       post {
@@ -40,6 +41,7 @@ export const POST_COMMENTS = gql`
         id
       }
       author {
+        id
         name
       }
       post {
@@ -61,6 +63,7 @@ export const COMMENTS = gql`
         id
       }
       author {
+        id
         name
       }
       post {
@@ -82,6 +85,7 @@ export const FAVORITE_POSTS = gql`
       upvote
       createdAt
       author {
+        id
         name
       }
       comments {
@@ -103,6 +107,7 @@ export const DOMAIN_POSTS = gql`
       upvote
       createdAt
       author {
+        id
         name
       }
       comments {
@@ -129,6 +134,7 @@ export const HIDDEN_POSTS = gql`
         upvote
         createdAt
         author {
+          id
           name
         }
         comments {
@@ -175,6 +181,7 @@ export const PAST_POSTS = gql`
       upvote
       createdAt
       author {
+        id
         name
       }
       comments {
@@ -197,6 +204,7 @@ export const POST = gql`
       upvote
       createdAt
       author {
+        id
         name
       }
       comments {
@@ -219,6 +227,7 @@ export const USER_POSTS = gql`
       upvote
       createdAt
       author {
+        id
         name
       }
       comments {
@@ -244,6 +253,7 @@ export const UPVOTED_POSTS = gql`
         upvote
         createdAt
         author {
+          id
           name
         }
         comments {
@@ -282,6 +292,7 @@ export const USER_COMMENTS = gql`
         id
       }
       author {
+        id
         name
       }
       post {
@@ -289,6 +300,33 @@ export const USER_COMMENTS = gql`
         title
       }
       currentUserUpvoted
+    }
+  }
+`;
+
+export const UPVOTED_COMMENTS = gql`
+  query UpvotedComments($name: String!) {
+    upvotedComments(name: $name) {
+      code
+      success
+      message
+      upvotes {
+        id
+        message
+        createdAt
+        parent {
+          id
+        }
+        author {
+          id
+          name
+        }
+        post {
+          id
+          title
+        }
+        currentUserUpvoted
+      }
     }
   }
 `;

@@ -205,12 +205,19 @@ const User: FunctionComponent<ComponentProps> = ({ name }) => {
 
             <div>
               {isPrivateUser && (
-                <Link
-                  to={`/user/${name}/upvoted/submissions`}
-                  css={styles.link}
-                >
-                  upvoted submissions
-                </Link>
+                <>
+                  <Link
+                    to={`/user/${name}/upvoted/submissions`}
+                    css={styles.link}
+                  >
+                    upvoted submissions
+                  </Link>
+                  <span>{" / "}</span>
+                  <Link to={`/user/${name}/upvoted/comments`} css={styles.link}>
+                    comments
+                  </Link>
+                  <span> (private)</span>
+                </>
               )}
             </div>
 

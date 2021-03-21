@@ -6,6 +6,7 @@ import CommentListItem, { IComment } from "./CommentListItem";
 const styles = {
   container: (theme) => css`
     background-color: ${theme.colors.bg};
+    padding-bottom: 5em;
   `,
 };
 
