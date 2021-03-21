@@ -21,12 +21,13 @@ import From from "./pages/From";
 import User from "./pages/User";
 import Submissions from "./pages/Submissions";
 import UserComments from "./pages/UserComments";
-import Favorites from "./pages/Favorites";
+import FavoritePosts from "./pages/FavoritePosts";
 import ChangePw from "./pages/ChangePw";
 import DeleteConfirm from "./pages/DeleteConfirm";
 import UpvotedSubmissions from "./pages/UpvotedSubmissions";
 import Hidden from "./pages/Hidden";
 import UpvotedComments from "./pages/UpvotedComments";
+import FavoriteComments from "./pages/FavoriteComments";
 
 const App: FunctionComponent = () => {
   const [loading, setLoading] = useState(true);
@@ -95,7 +96,8 @@ const App: FunctionComponent = () => {
         <User path="/user/:name" />
         <Submissions path="/user/:name/submissions" />
         <UserComments path="/user/:name/comments" />
-        <Favorites path="/user/:name/favorites" />
+        <FavoritePosts path="/user/:name/favorites/submissions" />
+        <FavoriteComments path="/user/:name/favorites/comments" />
         <ChangePw path="/changepw" />
         <DeleteConfirm path="/delete-confirm" />
         <UpvotedSubmissions path="/user/:name/upvoted/submissions" />

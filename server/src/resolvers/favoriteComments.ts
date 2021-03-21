@@ -1,20 +1,22 @@
-import { Post } from "@prisma/client/index";
+import { Comment } from "@prisma/client/index";
 
 import { prisma } from "./utils/prismaClient";
 
-interface IPost extends Post {
+interface IComment extends Comment {
   currentUserFavorited?: boolean;
 }
 
 export default async function (
   _,
   { name }: { name: string },
-  { isAuth, appendUpvoteInfo }
-): Promise<IPost[]> {
+  { isAuth, appendCommentUpvote }
+): Promise<IComment[]> {
   const user = await prisma.user.findUnique({
     where: { name },
     select: {
-      favoritePosts: { include: { author: true, comments: true } },
+      favoritedComments: {
+        include: { author: true, post: true, parent: true },
+      },
     },
   });
 
@@ -25,8 +27,8 @@ export default async function (
   try {
     const { userName } = isAuth();
 
-    const modifiedPosts = await appendUpvoteInfo(
-      user.favoritePosts,
+    const modifiedComments = await appendCommentUpvote(
+      user.favoritedComments,
       userName,
       prisma
     );
@@ -34,14 +36,14 @@ export default async function (
     if (userName === name) {
       // if authorized user is the same with the user selected,
       // give authorized user the ability to unfavorite posts.
-      return modifiedPosts.map((post) => ({
-        ...post,
+      return modifiedComments.map((comment) => ({
+        ...comment,
         currentUserFavorited: true,
       }));
     } else {
-      return modifiedPosts;
+      return modifiedComments;
     }
   } catch {
-    return user.favoritePosts;
+    return user.favoritedComments;
   }
 }

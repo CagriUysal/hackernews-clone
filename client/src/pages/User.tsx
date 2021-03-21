@@ -222,9 +222,31 @@ const User: FunctionComponent<ComponentProps> = ({ name }) => {
             </div>
 
             <div>
-              <Link to={`/user/${name}/favorites`} css={styles.link}>
-                favorites
-              </Link>
+              {isPrivateUser ? (
+                <>
+                  <Link
+                    to={`/user/${name}/favorites/submissions`}
+                    css={styles.link}
+                  >
+                    favorite submissions
+                  </Link>
+                  <span>{" / "}</span>
+                  <Link
+                    to={`/user/${name}/favorites/comments`}
+                    css={styles.link}
+                  >
+                    comments
+                  </Link>
+                  <span> (shared)</span>
+                </>
+              ) : (
+                <Link
+                  to={`/user/${name}/favorites/submissions`}
+                  css={styles.link}
+                >
+                  favorite
+                </Link>
+              )}
             </div>
           </div>
           {isPrivateUser && (

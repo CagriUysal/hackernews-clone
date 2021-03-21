@@ -175,6 +175,7 @@ export const typeDefs = gql`
     postComments(postId: Int!): [Comment!]!
     userComments(name: String!): [Comment!]
     upvotedComments(name: String!): upvotedCommentResponse!
+    favoriteComments(name: String!): [Comment!]
 
     """
     User

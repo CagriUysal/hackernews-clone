@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client";
+import FavoriteComments from "../pages/FavoriteComments";
 
 export const ME = gql`
   query Me {
@@ -327,6 +328,29 @@ export const UPVOTED_COMMENTS = gql`
         }
         currentUserUpvoted
       }
+    }
+  }
+`;
+
+export const FAVORITE_COMMENTS = gql`
+  query FavoriteComments($name: String!) {
+    favoriteComments(name: $name) {
+      id
+      message
+      createdAt
+      parent {
+        id
+      }
+      author {
+        id
+        name
+      }
+      post {
+        id
+        title
+      }
+      currentUserUpvoted
+      currentUserFavorited
     }
   }
 `;

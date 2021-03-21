@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react";
-import { RouteComponentProps } from "@reach/router";
+import { RouteComponentProps, Link } from "@reach/router";
 import { useTheme, css } from "@emotion/react";
 import { useQuery } from "@apollo/client";
 
@@ -7,11 +7,20 @@ import Header from "../components/Header";
 import PostList from "../components/PostList";
 import { FAVORITE_POSTS, ME } from "../api/queries";
 
+const styles = {
+  linkContainer: (theme) => css`
+    color: ${theme.colors.primary};
+    margin-top: 1rem;
+    margin-left: 3rem;
+    margin-bottom: 1rem;
+  `,
+};
+
 interface ComponentProps extends RouteComponentProps {
   name?: string;
 }
 
-const Favorites: FunctionComponent<ComponentProps> = ({ name }) => {
+const FavoritePosts: FunctionComponent<ComponentProps> = ({ name }) => {
   const theme = useTheme();
   const { data } = useQuery(FAVORITE_POSTS, {
     variables: { name },
@@ -34,6 +43,11 @@ const Favorites: FunctionComponent<ComponentProps> = ({ name }) => {
     return (
       <div css={theme.layout}>
         <Header appendedTab={`${name}'s favorites`} />
+        <div css={styles.linkContainer}>
+          <Link to={`/user/${name}/favorites/submissions`}>submissions</Link>
+          <span>{" | "}</span>
+          <Link to={`/user/${name}/favorites/comments`}>comments</Link>
+        </div>
         <PostList
           posts={data.favoritePosts}
           showHide={false}
@@ -46,4 +60,4 @@ const Favorites: FunctionComponent<ComponentProps> = ({ name }) => {
   }
 };
 
-export default Favorites;
+export default FavoritePosts;
