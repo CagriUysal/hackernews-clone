@@ -198,6 +198,7 @@ export const typeDefs = gql`
     upvoteComment(commentId: Int!): MutationResponse!
     unvoteComment(commentId: Int!): MutationResponse!
     addFavoriteComment(commentId: Int!): MutationResponse!
+    removeFavoriteComment(commentId: Int!): MutationResponse!
 
     """
     User
