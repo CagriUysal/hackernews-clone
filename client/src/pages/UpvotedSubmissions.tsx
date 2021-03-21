@@ -11,7 +11,7 @@ interface IProps extends RouteComponentProps {
   name?: string;
 }
 
-const Upvoted: FunctionComponent<IProps> = ({ name }) => {
+const UpvotedSubmissions: FunctionComponent<IProps> = ({ name }) => {
   const theme = useTheme();
 
   const { data } = useQuery(UPVOTED_POSTS, {
@@ -46,4 +46,4 @@ const Upvoted: FunctionComponent<IProps> = ({ name }) => {
   }
 };
 
-export default Upvoted;
+export default UpvotedSubmissions;
