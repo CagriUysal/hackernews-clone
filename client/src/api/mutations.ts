@@ -185,3 +185,13 @@ export const ADD_FAVORITE_COMMENT = gql`
     }
   }
 `;
+
+export const REMOVE_FAVORITE_COMMENT = gql`
+  mutation RemoveFavoriteComment($commentId: Int!) {
+    removeFavoriteComment(commentId: $commentId) {
+      code
+      success
+      message
+    }
+  }
+`;

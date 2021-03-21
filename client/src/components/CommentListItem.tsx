@@ -8,6 +8,7 @@ import {
   UPVOTE_COMMENT,
   UNVOTE_COMMENT,
   ADD_FAVORITE_COMMENT,
+  REMOVE_FAVORITE_COMMENT,
 } from "../api/mutations";
 
 // @ts-ignore
@@ -170,10 +171,27 @@ const CommentListItem: FunctionComponent<ComponentProps> = ({
     },
   });
 
+  const [removeFavoriteComment] = useMutation(REMOVE_FAVORITE_COMMENT, {
+    variables: { commentId: id },
+    update(cache, { data: { removeFavoriteComment } }) {
+      const { success } = removeFavoriteComment;
+      if (success === true) {
+        cache.modify({
+          id: `Comment:${id}`,
+          fields: {
+            currentUserFavorited() {
+              return false;
+            },
+          },
+        });
+      }
+    },
+  });
+
   const handleUpvoteClick = () => upvoteComment();
   const handleUnvoteClick = () => unvoteComment();
   const handleFavClick = () => addFavoriteComment();
-  const handleUnfavClick = () => {};
+  const handleUnfavClick = () => removeFavoriteComment();
 
   return (
     <div
