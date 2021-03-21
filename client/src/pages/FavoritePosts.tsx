@@ -1,11 +1,12 @@
-import React, { FunctionComponent } from "react";
+import React, { useContext, FunctionComponent } from "react";
 import { RouteComponentProps, Link } from "@reach/router";
 import { useTheme, css } from "@emotion/react";
 import { useQuery } from "@apollo/client";
 
 import Header from "../components/Header";
 import PostList from "../components/PostList";
-import { FAVORITE_POSTS, ME } from "../api/queries";
+import { FAVORITE_POSTS } from "../api/queries";
+import { MeContext } from "../api/meContext";
 
 const styles = {
   linkContainer: (theme) => css`
@@ -22,11 +23,12 @@ interface ComponentProps extends RouteComponentProps {
 
 const FavoritePosts: FunctionComponent<ComponentProps> = ({ name }) => {
   const theme = useTheme();
+  const { me } = useContext(MeContext);
+
   const { data } = useQuery(FAVORITE_POSTS, {
     variables: { name },
     fetchPolicy: "network-only",
   });
-  const { data: meData } = useQuery(ME);
 
   if (data && data.favoritePosts === null) {
     return (
@@ -51,7 +53,7 @@ const FavoritePosts: FunctionComponent<ComponentProps> = ({ name }) => {
         <PostList
           posts={data.favoritePosts}
           showHide={false}
-          showFavorite={meData?.me?.name === name}
+          showFavorite={me === name}
         />
       </div>
     );

@@ -6,12 +6,15 @@ import { ThemeProvider } from "@emotion/react";
 
 import client from "./api/client";
 import App from "./App";
+import MeContextProvider from "./api/meContext";
 import { theme } from "./theme";
 
 render(
   <ApolloProvider client={client}>
     <ThemeProvider theme={theme}>
-      <App />
+      <MeContextProvider>
+        <App />
+      </MeContextProvider>
     </ThemeProvider>
   </ApolloProvider>,
   document.getElementById("root")

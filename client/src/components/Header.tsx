@@ -1,14 +1,14 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useContext } from "react";
 
-import { gql, useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { css } from "@emotion/react";
 import { Link } from "@reach/router";
 
 // @ts-ignore
 import logo from "../assets/y18.gif";
 import { setAccessToken } from "../api/accessToken";
-import { ME } from "../api/queries";
 import { LOG_OUT } from "../api/mutations";
+import { MeContext } from "../api/meContext";
 
 const styles = {
   container: css`
@@ -82,9 +82,8 @@ const Header: FunctionComponent<ComponentProps> = ({
   onlyTitle,
   appendedTab,
 }) => {
-  const currentPath = window.location.pathname;
+  const { me } = useContext(MeContext);
 
-  const { data } = useQuery(ME, { fetchPolicy: "network-only" });
   const [logOut, { client }] = useMutation(LOG_OUT);
 
   const handleLogout = async () => {
@@ -128,7 +127,9 @@ const Header: FunctionComponent<ComponentProps> = ({
                   <Link
                     to={path}
                     css={css`
-                      color: ${currentPath === path ? "#FFF" : undefined};
+                      color: ${window.location.pathname === path
+                        ? "#FFF"
+                        : undefined};
                     `}
                   >
                     {name}
@@ -162,9 +163,9 @@ const Header: FunctionComponent<ComponentProps> = ({
                 ${styles.login}
               `}
             >
-              {data?.me ? (
+              {me ? (
                 <>
-                  <Link to={`/user/${data.me.name}`}>{data.me.name}</Link>
+                  <Link to={`/user/${me}`}>{me}</Link>
                   {" | "}
                   <button css={styles.logout} onClick={handleLogout}>
                     logout

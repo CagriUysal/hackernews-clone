@@ -1,10 +1,11 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent, useState, useContext } from "react";
 import { css } from "@emotion/react";
 import { useMutation } from "@apollo/client";
-import { Redirect, RouteComponentProps } from "@reach/router";
+import { navigate, RouteComponentProps } from "@reach/router";
 
 import { setAccessToken } from "../api/accessToken";
 import { REGISTER, LOGIN } from "../api/mutations";
+import { MeContext } from "../api/meContext";
 import validateRegister from "../../../common/validateRegister";
 
 const styles = {
@@ -30,6 +31,8 @@ interface IUser {
 }
 
 const Login: FunctionComponent<RouteComponentProps> = ({ location }) => {
+  const { refetch } = useContext(MeContext);
+
   const [loginName, setLoginName] = useState("");
   const [loginPass, setLoginPass] = useState("");
   const [registerName, setRegisterName] = useState("");
@@ -38,8 +41,33 @@ const Login: FunctionComponent<RouteComponentProps> = ({ location }) => {
     location?.state.message
   );
 
-  const [register, { data: registerData }] = useMutation(REGISTER);
-  const [login, { data: loginData }] = useMutation(LOGIN);
+  const [register, { data: registerData }] = useMutation(REGISTER, {
+    update(_, { data: { register } }) {
+      const { success, message } = register;
+      if (success === false) {
+        setFeedbackMessage(message);
+      }
+    },
+  });
+
+  const [login] = useMutation(LOGIN, {
+    async update(_, { data: { login } }) {
+      const { message, success, accessToken } = login;
+      if (success === false) {
+        setFeedbackMessage(message);
+      } else {
+        setAccessToken(accessToken);
+        await refetch(); // update `ME` query
+        navigate(
+          `${
+            location?.state.redirectedFrom
+              ? `${location.state.redirectedFrom}`
+              : "/"
+          }`
+        );
+      }
+    },
+  });
 
   const handleLoginClick = (user: IUser) => {
     login({ variables: { user } });
@@ -55,35 +83,6 @@ const Login: FunctionComponent<RouteComponentProps> = ({ location }) => {
 
     register({ variables: { user } });
   };
-
-  useEffect(() => {
-    if (registerData) {
-      const { message } = registerData.register;
-      setFeedbackMessage(message);
-    }
-  }, [registerData]);
-
-  useEffect(() => {
-    if (loginData) {
-      const { message } = loginData.login;
-      setFeedbackMessage(message);
-    }
-  }, [loginData]);
-
-  if (loginData && loginData.login.success === true) {
-    setAccessToken(loginData.login.accessToken);
-
-    return (
-      <Redirect
-        to={
-          location?.state.redirectedFrom
-            ? `${location.state.redirectedFrom}`
-            : "/"
-        }
-        noThrow
-      />
-    );
-  }
 
   return (
     <div css={styles.container}>

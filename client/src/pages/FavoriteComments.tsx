@@ -1,11 +1,12 @@
-import React, { FunctionComponent } from "react";
+import React, { useContext, FunctionComponent } from "react";
 import { RouteComponentProps, Link } from "@reach/router";
 import { useTheme, css } from "@emotion/react";
 import { useQuery } from "@apollo/client";
 
 import Header from "../components/Header";
 import CommentList from "../components/CommentList";
-import { FAVORITE_COMMENTS, ME } from "../api/queries";
+import { FAVORITE_COMMENTS } from "../api/queries";
+import { MeContext } from "../api/meContext";
 
 const styles = {
   linkContainer: (theme) => css`
@@ -22,11 +23,12 @@ interface ComponentProps extends RouteComponentProps {
 
 const FavoriteComments: FunctionComponent<ComponentProps> = ({ name }) => {
   const theme = useTheme();
+  const { me } = useContext(MeContext);
+
   const { data } = useQuery(FAVORITE_COMMENTS, {
     variables: { name },
     fetchPolicy: "network-only",
   });
-  const { data: meData } = useQuery(ME);
 
   if (data?.favoriteComments === null) {
     return (
@@ -40,8 +42,6 @@ const FavoriteComments: FunctionComponent<ComponentProps> = ({ name }) => {
       </p>
     );
   } else if (data?.favoriteComments) {
-    const currentUserName = meData?.me?.name;
-
     return (
       <div css={theme.layout}>
         <Header appendedTab={`${name}'s favorites`} />
@@ -53,7 +53,7 @@ const FavoriteComments: FunctionComponent<ComponentProps> = ({ name }) => {
         <CommentList
           comments={data.favoriteComments}
           extendAll
-          showFavorite={currentUserName === name}
+          showFavorite={me === name}
         />
       </div>
     );

@@ -1,14 +1,14 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useContext } from "react";
 import { Comment } from "@prisma/client/index";
 import { css } from "@emotion/react";
 import { formatDistanceToNowStrict } from "date-fns";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { navigate, Link } from "@reach/router";
 
 // @ts-ignore
 import upArrow from "../assets/grayarrow2x.gif";
 import isLessThanOneHour from "../../../common/isLessThanOneHour";
-import { ME, HIDDEN_POSTS } from "../api/queries";
+import { HIDDEN_POSTS } from "../api/queries";
 import {
   ADD_FAVORITE,
   REMOVE_FAVORITE,
@@ -17,6 +17,7 @@ import {
   ADD_HIDDEN,
   REMOVE_HIDDEN,
 } from "../api/mutations";
+import { MeContext } from "../api/meContext";
 
 const styles = {
   container: css`
@@ -116,9 +117,9 @@ const PostListItem: FunctionComponent<ComponentProps> = ({
     currentUserHide,
   } = post;
 
-  /** Mutations */
-  const { data: meData } = useQuery(ME);
+  const { me } = useContext(MeContext);
 
+  /** Mutations */
   const [addFavorite] = useMutation(ADD_FAVORITE, {
     variables: { postId: id },
     update: (cache, { data: { addFavorite } }) => {
@@ -229,7 +230,7 @@ const PostListItem: FunctionComponent<ComponentProps> = ({
     update(cache) {
       const data = cache.readQuery({
         query: HIDDEN_POSTS,
-        variables: { name: meData?.me?.name },
+        variables: { name: me },
       });
 
       if (data === null) return;
@@ -238,7 +239,7 @@ const PostListItem: FunctionComponent<ComponentProps> = ({
 
       cache.writeQuery({
         query: HIDDEN_POSTS,
-        variables: { name: meData?.me?.name },
+        variables: { name: me },
         data: {
           hiddenPosts: {
             hidden: hidden.filter((hiddenPost) => hiddenPost.id !== id),
@@ -350,7 +351,7 @@ const PostListItem: FunctionComponent<ComponentProps> = ({
               </Link>
             </>
           )}
-          {meData?.me?.name === name && isLessThanOneHour(createdAt) && (
+          {me === name && isLessThanOneHour(createdAt) && (
             <>
               {" | "}
               <Link

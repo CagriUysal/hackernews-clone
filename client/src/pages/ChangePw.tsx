@@ -1,12 +1,12 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent, useState, useContext } from "react";
 import { navigate, Redirect, RouteComponentProps } from "@reach/router";
 import { css, useTheme } from "@emotion/react";
-import { useQuery, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 
 import Header from "../components/Header";
 import { setAccessToken } from "../api/accessToken";
-import { ME } from "../api/queries";
 import { CHANGE_PW, LOG_OUT } from "../api/mutations";
+import { MeContext } from "../api/meContext";
 
 const styles = {
   container: (theme) => css`
@@ -23,9 +23,19 @@ const styles = {
 
 const ChangePw: FunctionComponent<RouteComponentProps> = () => {
   const theme = useTheme();
+  const { me } = useContext(MeContext);
 
-  const { data } = useQuery(ME, { fetchPolicy: "network-only" });
-  const [changePw, { data: changePwData }] = useMutation(CHANGE_PW);
+  const [changePw] = useMutation(CHANGE_PW, {
+    async update(_, { data: { changePw } }) {
+      const { success, message } = changePw;
+      if (success === false) {
+        setFeedBackMessage(message);
+      } else {
+        await handleLogOut();
+        navigate("/");
+      }
+    },
+  });
   const [logOut, { client }] = useMutation(LOG_OUT);
 
   const [feedbackMessage, setFeedBackMessage] = useState<null | string>(null);
@@ -42,21 +52,7 @@ const ChangePw: FunctionComponent<RouteComponentProps> = () => {
     await client.resetStore();
   };
 
-  useEffect(() => {
-    (async function () {
-      if (changePwData) {
-        const { success, message } = changePwData.changePw;
-        if (success === false) {
-          setFeedBackMessage(message);
-        } else {
-          await handleLogOut();
-          navigate("/");
-        }
-      }
-    })();
-  }, [changePwData]);
-
-  if (data?.me === null) {
+  if (me === null) {
     return (
       <Redirect
         to="/login"
@@ -67,12 +63,10 @@ const ChangePw: FunctionComponent<RouteComponentProps> = () => {
         noThrow
       />
     );
-  } else if (data?.me) {
-    const { name } = data?.me;
-
+  } else {
     return (
       <div css={theme.layout}>
-        <Header onlyTitle={`Reset password for ${name}`} />
+        <Header onlyTitle={`Reset password for ${me}`} />
         <div css={styles.container}>
           {feedbackMessage && (
             <p
@@ -118,9 +112,6 @@ const ChangePw: FunctionComponent<RouteComponentProps> = () => {
         </div>
       </div>
     );
-  } else {
-    // data loading
-    return null;
   }
 };
 

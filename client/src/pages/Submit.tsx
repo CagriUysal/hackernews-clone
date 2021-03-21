@@ -1,13 +1,13 @@
-import React, { useState, FunctionComponent } from "react";
+import React, { useState, useContext, FunctionComponent } from "react";
 
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { navigate, RouteComponentProps, Redirect } from "@reach/router";
 import { css, useTheme } from "@emotion/react";
 
 import Header from "../components/Header";
 import validateSubmit from "../../../common/validateSubmit";
-import { ME } from "../api/queries";
 import { ADD_POST } from "../api/mutations";
+import { MeContext } from "../api/meContext";
 
 const styles = {
   container: (theme) => css`
@@ -56,13 +56,13 @@ interface IAddPostInput {
 
 const Submit: FunctionComponent<RouteComponentProps> = () => {
   const theme = useTheme();
+  const { me } = useContext(MeContext);
 
   const [title, setTitle] = useState("");
   const [link, setLink] = useState("");
   const [text, setText] = useState("");
   const [errorMessage, setErrorMessage] = useState<null | string>(null);
 
-  const { data, loading } = useQuery(ME, { fetchPolicy: "network-only" });
   const [addPost] = useMutation(ADD_POST, {
     update(_, { data: { addPost } }) {
       const { success, message } = addPost;
@@ -83,9 +83,7 @@ const Submit: FunctionComponent<RouteComponentProps> = () => {
     }
   };
 
-  if (loading) {
-    return null;
-  } else if (data?.me) {
+  if (me) {
     return (
       <div css={theme.layout}>
         <Header onlyTitle="Submit" />

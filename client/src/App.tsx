@@ -1,10 +1,16 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, {
+  FunctionComponent,
+  useEffect,
+  useState,
+  useContext,
+} from "react";
 
 import { Router } from "@reach/router";
 import { Global, css } from "@emotion/react";
 
 import refreshAccessToken from "./utils/refreshAccessToken";
 import { setAccessToken } from "./api/accessToken";
+import { MeContext } from "./api/meContext";
 
 import Home from "./pages/Home";
 import New from "./pages/New";
@@ -30,24 +36,25 @@ import UpvotedComments from "./pages/UpvotedComments";
 import FavoriteComments from "./pages/FavoriteComments";
 
 const App: FunctionComponent = () => {
+  const { refetch } = useContext(MeContext);
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // prevent login in every refresh
-    const fetchToken = async () => {
+    (async function fetchToken() {
       try {
         const response = await refreshAccessToken();
         const { accessToken } = await response.json();
 
         setAccessToken(accessToken);
+        refetch(); // update `ME` query
       } catch (err) {
         console.log(err);
       } finally {
         setLoading(false);
       }
-    };
-
-    fetchToken();
+    })();
   }, []);
 
   if (loading) {
