@@ -1,5 +1,4 @@
 import { gql } from "@apollo/client";
-import FavoriteComments from "../pages/FavoriteComments";
 
 export const ME = gql`
   query Me {
