@@ -8,7 +8,6 @@ import { navigate, Link } from "@reach/router";
 // @ts-ignore
 import upArrow from "../assets/grayarrow2x.gif";
 import isLessThanOneHour from "../../../common/isLessThanOneHour";
-import { HIDDEN_POSTS } from "../api/queries";
 import {
   ADD_FAVORITE,
   REMOVE_FAVORITE,
@@ -210,7 +209,7 @@ const PostListItem: FunctionComponent<ComponentProps> = ({
 
   const [addHidden] = useMutation(ADD_HIDDEN, {
     variables: { postId: id },
-    update(_, { data: { addHidden } }) {
+    update(cache, { data: { addHidden } }) {
       const { success, code } = addHidden;
       if (success === false && code === "401") {
         navigate("/login", {
@@ -220,32 +219,37 @@ const PostListItem: FunctionComponent<ComponentProps> = ({
           },
         });
       } else if (success === true) {
-        if (refetch !== undefined) refetch(); // refetch page after this item added to hidden.
+        if (refetch !== undefined) {
+          refetch(); // refetch page after this item added to hidden.
+          return; // don't need to modify cache, page will be updated due to refetch
+        }
+
+        cache.modify({
+          id: `Post:${id}`,
+          fields: {
+            currentUserHide() {
+              return true;
+            },
+          },
+        });
       }
     },
   });
 
   const [removeHidden] = useMutation(REMOVE_HIDDEN, {
     variables: { postId: id },
-    update(cache) {
-      const data = cache.readQuery({
-        query: HIDDEN_POSTS,
-        variables: { name: me },
-      });
-
-      if (data === null) return;
-
-      const { hidden } = data.hiddenPosts;
-
-      cache.writeQuery({
-        query: HIDDEN_POSTS,
-        variables: { name: me },
-        data: {
-          hiddenPosts: {
-            hidden: hidden.filter((hiddenPost) => hiddenPost.id !== id),
+    update(cache, { data: { removeHidden } }) {
+      const { success } = removeHidden;
+      if (success) {
+        cache.modify({
+          id: `Post:${id}`,
+          fields: {
+            currentUserHide() {
+              return false;
+            },
           },
-        },
-      });
+        });
+      }
     },
   });
 
