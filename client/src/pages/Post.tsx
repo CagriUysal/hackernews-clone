@@ -38,6 +38,9 @@ const styles = {
     margin-left: 1.5em;
     margin-top: 1em;
     margin-bottom: 1em;
+    a {
+      color: #000;
+    }
   `,
 };
 
@@ -117,7 +120,12 @@ const Post: FunctionComponent<ComponentProps> = ({ postId }) => {
 
           <PostListItem post={data.post} rank={null} />
 
-          {text !== null && <p css={styles.text}>{text}</p>}
+          {text !== null && (
+            <div
+              css={styles.text}
+              dangerouslySetInnerHTML={{ __html: text }} // this makes me nervous
+            />
+          )}
 
           <textarea
             name="text"
