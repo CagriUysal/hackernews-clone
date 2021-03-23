@@ -6,7 +6,7 @@ import { useMutation } from "@apollo/client";
 import Header from "../components/Header";
 import { setAccessToken } from "../api/accessToken";
 import { CHANGE_PW, LOG_OUT } from "../api/mutations";
-import { MeContext } from "../api/meContext";
+import { MeContext } from "../api/MeContext";
 
 const styles = {
   container: (theme) => css`

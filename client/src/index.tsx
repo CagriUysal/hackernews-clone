@@ -6,7 +6,7 @@ import { ThemeProvider } from "@emotion/react";
 
 import client from "./api/client";
 import App from "./App";
-import MeContextProvider from "./api/meContext";
+import MeContextProvider from "./api/MeContext";
 import { theme } from "./theme";
 
 render(

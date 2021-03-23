@@ -6,7 +6,7 @@ import { useQuery } from "@apollo/client";
 import Header from "../components/Header";
 import PostList from "../components/PostList";
 import { FAVORITE_POSTS } from "../api/queries";
-import { MeContext } from "../api/meContext";
+import { MeContext } from "../api/MeContext";
 
 const styles = {
   linkContainer: (theme) => css`

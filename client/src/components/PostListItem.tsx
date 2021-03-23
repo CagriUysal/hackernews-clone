@@ -16,7 +16,7 @@ import {
   ADD_HIDDEN,
   REMOVE_HIDDEN,
 } from "../api/mutations";
-import { MeContext } from "../api/meContext";
+import { MeContext } from "../api/MeContext";
 
 const styles = {
   container: css`

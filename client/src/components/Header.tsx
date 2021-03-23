@@ -8,7 +8,7 @@ import { Link } from "@reach/router";
 import logo from "../assets/y18.gif";
 import { setAccessToken } from "../api/accessToken";
 import { LOG_OUT } from "../api/mutations";
-import { MeContext } from "../api/meContext";
+import { MeContext } from "../api/MeContext";
 
 const styles = {
   container: css`

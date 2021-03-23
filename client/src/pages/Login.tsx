@@ -5,7 +5,7 @@ import { navigate, RouteComponentProps } from "@reach/router";
 
 import { setAccessToken } from "../api/accessToken";
 import { REGISTER, LOGIN } from "../api/mutations";
-import { MeContext } from "../api/meContext";
+import { MeContext } from "../api/MeContext";
 import validateRegister from "../../../common/validateRegister";
 
 const styles = {
