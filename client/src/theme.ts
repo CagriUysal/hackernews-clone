@@ -9,10 +9,11 @@ export const theme = {
     width: 85%;
     margin: 0 auto;
     background-color: #f6f6ef;
+    padding-bottom: 3em;
   `,
   pageButton: css`
     color: #000;
-    margin-left: 3rem;
-    padding-bottom: 2em;
+    margin-left: 3.3rem;
+    margin-top: 1rem;
   `,
 };

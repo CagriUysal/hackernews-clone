@@ -54,8 +54,8 @@ export const POST_COMMENTS = gql`
 `;
 
 export const COMMENTS = gql`
-  query Comments {
-    comments {
+  query Comments($page: Int) {
+    comments(page: $page) {
       id
       message
       createdAt

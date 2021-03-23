@@ -61,6 +61,12 @@ const styles = {
     text-decoration: underline;
     font-size: 0.8em;
   `,
+  message: css`
+    a {
+      color: #000;
+      text-decoration: underline;
+    }
+  `,
 };
 
 export interface IComment {
@@ -280,7 +286,10 @@ const CommentListItem: FunctionComponent<ComponentProps> = ({
 
         {/* buttom row  */}
         <div css={styles.bottomRow}>
-          <p>{message}</p>
+          <div
+            css={styles.message}
+            dangerouslySetInnerHTML={{ __html: message }} // this makes me nervous
+          />
           {showReply && (
             <Link to={`/post/${postId}/comment/${id}`} css={styles.reply}>
               reply

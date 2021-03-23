@@ -91,7 +91,7 @@ const App: FunctionComponent = () => {
         <Home path="/" />
         <New path="/newest/*page" />
         <Past path="/front/*page" />
-        <Comments path="/newcomments" />
+        <Comments path="/newcomments/*page" />
         <Ask path="/ask" />
         <Show path="/show" />
         <Jobs path="/jobs" />

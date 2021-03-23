@@ -170,7 +170,7 @@ export const typeDefs = gql`
     """
     Comment
     """
-    comments: [Comment!]!
+    comments(page: Int): [Comment!]!
     comment(id: Int!): Comment
     postComments(postId: Int!): [Comment!]!
     userComments(name: String!): [Comment!]
