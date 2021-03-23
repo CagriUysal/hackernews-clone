@@ -1,5 +1,5 @@
-import React, { FunctionComponent, useReducer } from "react";
-import { Link, RouteComponentProps } from "@reach/router";
+import React, { FunctionComponent, useReducer, useEffect } from "react";
+import { Link, navigate, RouteComponentProps } from "@reach/router";
 import { useTheme, css } from "@emotion/react";
 import { useQuery } from "@apollo/client";
 import { subDays, addDays, format } from "date-fns";
@@ -40,6 +40,13 @@ const Past: FunctionComponent<IProps> = ({ page }) => {
       page: _page,
     },
   });
+
+  useEffect(() => {
+    // this allows us to move to page 1 (/front),
+    // when the route was in another page e.g. /front/2
+    // For every date, we want to start from page 1.
+    navigate("/front");
+  }, [targetDate]);
 
   if (data) {
     const { pastPosts } = data;
