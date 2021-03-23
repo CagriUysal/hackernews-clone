@@ -10,7 +10,7 @@ import { Global, css } from "@emotion/react";
 
 import refreshAccessToken from "./utils/refreshAccessToken";
 import { setAccessToken } from "./api/accessToken";
-import { MeContext } from "./api/meContext";
+import { MeContext } from "./api/MeContext";
 
 import Home from "./pages/Home";
 import New from "./pages/New";
@@ -89,8 +89,8 @@ const App: FunctionComponent = () => {
       />
       <Router>
         <Home path="/" />
-        <New path="/newest" />
-        <Past path="/front" />
+        <New path="/newest/*page" />
+        <Past path="/front/*page" />
         <Comments path="/newcomments" />
         <Ask path="/ask" />
         <Show path="/show" />

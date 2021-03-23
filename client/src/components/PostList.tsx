@@ -6,7 +6,6 @@ import PostListItem, { IPost } from "./PostListItem";
 const styles = {
   container: (theme) => css`
     background-color: ${theme.colors.bg};
-    padding-bottom: 5em;
   `,
 };
 

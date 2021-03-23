@@ -1,10 +1,14 @@
 import { Post } from "@prisma/client/index";
 
 import { prisma } from "./utils/prismaClient";
+import { ITEM_PER_PAGE } from "../../../common/constants";
 
 export default async function pastPosts(
   _,
-  { input: { start, end } }: { input: { start: string; end: string } },
+  {
+    input: { start, end },
+    page = 1,
+  }: { input: { start: string; end: string }; page: number },
   { isAuth, appendUpvoteInfo }
 ): Promise<Post[]> {
   const startDate = new Date(start); // target date
@@ -22,6 +26,8 @@ export default async function pastPosts(
         },
         hiddenBy: { none: { name: userName } },
       },
+      skip: (page - 1) * ITEM_PER_PAGE,
+      take: ITEM_PER_PAGE,
     });
 
     return await appendUpvoteInfo(posts, userName, prisma);
@@ -34,6 +40,8 @@ export default async function pastPosts(
           lt: endDate,
         },
       },
+      skip: (page - 1) * ITEM_PER_PAGE,
+      take: ITEM_PER_PAGE,
     });
   }
 }

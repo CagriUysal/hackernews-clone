@@ -28,7 +28,7 @@ const styles = {
   `,
   rank: (theme) => css`
     color: ${theme.colors.primary};
-    width: 2em;
+    width: 2rem;
     text-align: right;
     margin-right: 0.3em;
   `,

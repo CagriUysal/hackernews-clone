@@ -10,4 +10,9 @@ export const theme = {
     margin: 0 auto;
     background-color: #f6f6ef;
   `,
+  pageButton: css`
+    color: #000;
+    margin-left: 3rem;
+    padding-bottom: 2em;
+  `,
 };

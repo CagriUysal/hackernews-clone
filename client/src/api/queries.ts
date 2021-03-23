@@ -149,8 +149,8 @@ export const HIDDEN_POSTS = gql`
 `;
 
 export const LATEST_POSTS = gql`
-  query latestPosts {
-    latestPosts {
+  query latestPosts($page: Int) {
+    latestPosts(page: $page) {
       id
       title
       link
@@ -172,8 +172,8 @@ export const LATEST_POSTS = gql`
 `;
 
 export const PAST_POSTS = gql`
-  query PastPosts($input: pastPostsInput!) {
-    pastPosts(input: $input) {
+  query PastPosts($input: pastPostsInput!, $page: Int) {
+    pastPosts(input: $input, page: $page) {
       id
       title
       link

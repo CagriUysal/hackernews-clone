@@ -1,6 +1,7 @@
 import { Post } from "@prisma/client/index";
 
 import { prisma } from "./utils/prismaClient";
+import { ITEM_PER_PAGE } from "../../../common/constants";
 
 interface IPost extends Post {
   currentUserUpvoted?: boolean;
@@ -8,7 +9,7 @@ interface IPost extends Post {
 
 export default async function latestPosts(
   _,
-  __,
+  { page = 1 },
   { isAuth, appendUpvoteInfo }
 ): Promise<IPost[]> {
   try {
@@ -18,6 +19,8 @@ export default async function latestPosts(
       orderBy: { createdAt: "desc" },
       where: { hiddenBy: { none: { name: userName } } }, // don't include hidden posts.
       include: { author: true, comments: true },
+      skip: (page - 1) * ITEM_PER_PAGE,
+      take: ITEM_PER_PAGE,
     });
 
     return await appendUpvoteInfo(posts, userName, prisma);
@@ -25,6 +28,8 @@ export default async function latestPosts(
     return await prisma.post.findMany({
       orderBy: { createdAt: "desc" },
       include: { author: true, comments: true },
+      skip: (page - 1) * ITEM_PER_PAGE,
+      take: ITEM_PER_PAGE,
     });
   }
 }
