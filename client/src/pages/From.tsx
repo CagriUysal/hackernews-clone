@@ -16,11 +16,9 @@ const From: FunctionComponent<ComponentProps> = ({ domain }) => {
 
   const { data } = useQuery(DOMAIN_POSTS, { variables: { domain } });
 
-  console.log(data);
-
   return (
     <div css={theme.layout}>
-      <Header />
+      <Header appendedTab="from" />
       {data && (
         <PostList
           posts={data.domainPosts}

@@ -22,6 +22,10 @@ const styles = {
   `,
 };
 
+const convertToIsoDate = (date: Date) => {
+  return date.toISOString().split("T")[0];
+};
+
 interface IProps extends RouteComponentProps {
   page?: string;
 }
@@ -54,7 +58,7 @@ const Past: FunctionComponent<IProps> = ({ page }) => {
     return (
       <div css={theme.layout}>
         <div css={styles.container}>
-          <Header />
+          <Header appendedTab={convertToIsoDate(targetDate)} />
 
           <div css={styles.selector}>
             <PastTimeSelector targetDate={targetDate} dispatch={dispatch} />

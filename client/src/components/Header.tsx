@@ -72,6 +72,13 @@ const navigationMaps = [
   },
 ];
 
+const getCurrentPath = () => {
+  // return current path without including page.
+  const fullPath = window.location.pathname;
+  const [, mainRoute] = fullPath.split("/");
+  return `/${mainRoute}`;
+};
+
 type ComponentProps = {
   // if given, only the title shown and navigation is hidden
   onlyTitle?: string;
@@ -127,7 +134,8 @@ const Header: FunctionComponent<ComponentProps> = ({
                   <Link
                     to={path}
                     css={css`
-                      color: ${window.location.pathname === path
+                      color: ${getCurrentPath() === path &&
+                      appendedTab === undefined // only highlight the appended tab
                         ? "#FFF"
                         : undefined};
                     `}
