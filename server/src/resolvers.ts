@@ -32,6 +32,7 @@ import addFavoriteComment from "./resolvers/addFavoriteComment";
 import removeFavoriteComment from "./resolvers/removeFavoriteComment";
 import upvotedComments from "./resolvers/upvotedComments";
 import favoriteComments from "./resolvers/favoriteComments";
+import homePosts from "./resolvers/homePosts";
 
 export const resolvers = {
   User: {
@@ -43,6 +44,7 @@ export const resolvers = {
 
   Query: {
     // Post
+    homePosts,
     post,
     domainPosts,
     latestPosts,

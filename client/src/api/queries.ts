@@ -148,8 +148,31 @@ export const HIDDEN_POSTS = gql`
   }
 `;
 
+export const HOME_POSTS = gql`
+  query HomePosts($page: Int) {
+    homePosts(page: $page) {
+      id
+      title
+      link
+      domain
+      upvote
+      createdAt
+      author {
+        id
+        name
+      }
+      comments {
+        id
+      }
+      currentUserFavorited
+      currentUserUpvoted
+      currentUserHide
+    }
+  }
+`;
+
 export const LATEST_POSTS = gql`
-  query latestPosts($page: Int) {
+  query LatestPosts($page: Int) {
     latestPosts(page: $page) {
       id
       title

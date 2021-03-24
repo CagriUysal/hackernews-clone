@@ -88,7 +88,7 @@ const App: FunctionComponent = () => {
         `}
       />
       <Router>
-        <Home path="/" />
+        <Home path="/*page" />
         <New path="/newest/*page" />
         <Past path="/front/*page" />
         <Comments path="/newcomments/*page" />

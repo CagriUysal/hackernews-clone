@@ -158,10 +158,11 @@ export const typeDefs = gql`
     """
     Post
     """
-    post(id: Int!): Post
-    domainPosts(domain: String!): [Post!]!
+    homePosts(page: Int): [Post!]!
     latestPosts(page: Int): [Post!]!
     pastPosts(input: pastPostsInput!, page: Int): [Post!]!
+    post(id: Int!): Post
+    domainPosts(domain: String!): [Post!]!
     userPosts(name: String!): [Post!]
     favoritePosts(name: String!): [Post!]
     upvotedPosts(name: String!): upvotedPostsResponse!
