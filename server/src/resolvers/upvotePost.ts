@@ -1,6 +1,4 @@
 import { prisma } from "../utils/prismaClient";
-import submittedLessThan2Days from "../utils/submittedLessThan2Days";
-import getRankingScore from "../utils/getRankingScore";
 import { IResponse } from "./types";
 
 export default async function (
@@ -27,7 +25,7 @@ export default async function (
   }
 
   try {
-    const post = await prisma.post.update({
+    await prisma.post.update({
       where: { id: postId },
       data: {
         upvotedBy: {
@@ -38,18 +36,6 @@ export default async function (
         upvote: { increment: 1 },
       },
     });
-
-    // Posts which created less than 2 days ago considered at rankings,
-    // Don't need to update rankingScore if it was more 2 days after submissions.
-    const { createdAt, upvote } = post;
-    if (submittedLessThan2Days(createdAt)) {
-      await prisma.post.update({
-        where: { id: postId },
-        data: {
-          rankingScore: getRankingScore(upvote, createdAt),
-        },
-      });
-    }
 
     return {
       code: "200",
