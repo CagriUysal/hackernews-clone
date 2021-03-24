@@ -19,6 +19,7 @@ model Post {
   text String?
   upvote Int @default(0)
   createdAt DateTime @default(now())
+  rankingScore Float @default(0)
 
   author User @relation("Posts", fields: [authorId], references: [id])
   authorId Int

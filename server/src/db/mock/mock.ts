@@ -3,6 +3,7 @@ import { URL } from "url";
 import axios from "axios";
 import bcrypt from "bcrypt";
 import { PrismaClient } from "@prisma/client";
+import getRankingScore from "../../utils/getRankingScore";
 
 const prisma = new PrismaClient();
 const COMMENT_PER_POST = 2;
@@ -56,12 +57,14 @@ const mockComment = async (comment: IItem, postId: number) => {
       },
     });
   } catch (error) {
-    console.log(error);
+    // pass, discard that post if some error occured while mocking
   }
 };
 
 const mockStory = async (story: IItem) => {
   const { by: name, title, url, text, score, time } = story;
+
+  const createdAt = new Date(time * 1000); // convert unix time to date object
 
   try {
     var post = await prisma.post.create({
@@ -78,13 +81,14 @@ const mockStory = async (story: IItem) => {
         },
         link: url,
         upvote: score,
-        createdAt: new Date(time * 1000), // convert unix time to date object
+        createdAt,
         domain: url && new URL(url).hostname,
         text: text,
+        rankingScore: getRankingScore(score, createdAt),
       },
     });
   } catch (error) {
-    console.log(error.message);
+    // pass, discard that comment if some error occured while mocking
   }
 
   return post;
@@ -94,9 +98,13 @@ const mockStory = async (story: IItem) => {
   const topStoryIds = await getTopStoryIds();
   const topStories = await Promise.all(topStoryIds.map(getItem));
 
-  const posts = await Promise.all(topStories.map(mockStory));
-  const mockedPostIds = posts.map(({ id }) => id);
+  // const posts = await Promise.all(topStories.map(mockStory)); // results in error sometimes, race conditions?
+  const posts = [];
+  for (const post of topStories) {
+    posts.push(await mockStory(post));
+  }
 
+  const mockedPostIds = posts.map(({ id }) => id);
   const kidsPostPair: [number[], number][] = topStories.map(({ kids }, i) => [
     kids,
     mockedPostIds[i], // for connecting comment to post in database.
