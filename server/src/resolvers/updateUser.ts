@@ -1,7 +1,7 @@
 import { User } from "@prisma/client/index";
 
-import { prisma } from "./utils/prismaClient";
-import isValidEmail from "./utils/isValidEmail";
+import { prisma } from "../utils/prismaClient";
+import isValidEmail from "../utils/isValidEmail";
 
 interface IInput {
   about: string;

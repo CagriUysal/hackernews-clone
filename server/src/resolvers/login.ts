@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 
-import { prisma } from "./utils/prismaClient";
-import sendRefreshToken from "../sendRefreshToken";
+import { prisma } from "../utils/prismaClient";
+import sendRefreshToken from "../utils/sendRefreshToken";
 import { createAccessToken, createRefreshToken } from "../auth";
 
 interface ILoginResponse {

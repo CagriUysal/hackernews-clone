@@ -1,6 +1,6 @@
 import { Post } from "@prisma/client/index";
 
-import { prisma } from "./utils/prismaClient";
+import { prisma } from "../utils/prismaClient";
 
 interface IPost extends Post {
   currentUserFavorited: boolean;

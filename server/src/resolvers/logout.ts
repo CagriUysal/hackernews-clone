@@ -1,4 +1,4 @@
-import sendRefreshToken from "../sendRefreshToken";
+import sendRefreshToken from "../utils/sendRefreshToken";
 
 export default function (_, __, { isAuth, res }): boolean {
   try {

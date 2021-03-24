@@ -1,6 +1,6 @@
 import { Post } from "@prisma/client/index";
 
-import { prisma } from "./utils/prismaClient";
+import { prisma } from "../utils/prismaClient";
 import { ITEM_PER_PAGE } from "../../../common/constants";
 
 export default async function pastPosts(

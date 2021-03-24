@@ -7,7 +7,7 @@ interface IPost extends Post {
   currentUserUpvoted?: boolean;
 }
 
-export default async function latestPosts(
+export default async function (
   _,
   { page = 1 },
   { isAuth, appendUpvoteInfo }

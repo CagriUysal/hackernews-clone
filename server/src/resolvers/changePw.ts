@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 
-import { prisma } from "./utils/prismaClient";
-import validatePassword from "./utils/validatePassword";
+import { prisma } from "../utils/prismaClient";
+import validatePassword from "../utils/validatePassword";
 
 interface IInput {
   currentPw: string;

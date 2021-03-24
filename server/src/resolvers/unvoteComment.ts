@@ -1,5 +1,5 @@
-import { prisma } from "./utils/prismaClient";
-import { IResponse } from "./utils/types";
+import { prisma } from "../utils/prismaClient";
+import { IResponse } from "./types";
 
 export default async function (
   _,

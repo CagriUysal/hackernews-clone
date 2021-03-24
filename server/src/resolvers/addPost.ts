@@ -1,7 +1,7 @@
 import { URL } from "url";
 
-import { prisma } from "./utils/prismaClient";
-import { IResponse } from "./utils/types";
+import { prisma } from "../utils/prismaClient";
+import { IResponse } from "./types";
 import validateSubmit from "../../../common/validateSubmit";
 
 interface IAddPostInput {

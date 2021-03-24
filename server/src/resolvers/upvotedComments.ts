@@ -1,7 +1,7 @@
 import { Comment } from "@prisma/client/index";
 
-import { prisma } from "./utils/prismaClient";
-import { IResponse } from "./utils/types";
+import { prisma } from "../utils/prismaClient";
+import { IResponse } from "./types";
 
 interface upvotedPostsResponse extends IResponse {
   upvotes?: Comment[];

@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 
-import { prisma } from "./utils/prismaClient";
-import { IResponse } from "./utils/types";
+import { prisma } from "../utils/prismaClient";
+import { IResponse } from "./types";
 import validateRegister from "../../../common/validateRegister";
 
 const SALT_ROUNDS = 10;

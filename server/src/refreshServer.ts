@@ -6,7 +6,7 @@ import { verify } from "jsonwebtoken";
 import { PrismaClient } from "@prisma/client";
 
 import { createAccessToken, createRefreshToken } from "./auth";
-import sendRefreshToken from "./sendRefreshToken";
+import sendRefreshToken from "./utils/sendRefreshToken";
 
 dotenv.config();
 
@@ -45,7 +45,7 @@ const PORT = 3000;
       }
 
       // update refresh token, so
-      // user can logged in if they are using the site continuously
+      // user can stay logged in if they are using the site continuously
       sendRefreshToken(
         res,
         await createRefreshToken(userName, tokenVersion + 1, prisma)
