@@ -1,0 +1,7 @@
+FROM node:12-alpine
+WORKDIR /code
+COPY package.json .
+RUN yarn install
+COPY common .
+COPY server .
+CMD [ "yarn", "server", "&", "yarn", "refresh-server", "&" , "yarn" ,"update-ranks" ]  
