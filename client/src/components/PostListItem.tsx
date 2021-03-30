@@ -6,7 +6,7 @@ import { useMutation } from "@apollo/client";
 import { navigate, Link } from "@reach/router";
 
 // @ts-ignore
-import upArrow from "../assets/grayarrow2x.gif";
+import upArrow from "url:../assets/grayarrow2x.gif";
 import isLessThanOneHour from "../../../common/isLessThanOneHour";
 import {
   ADD_FAVORITE,

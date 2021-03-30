@@ -5,7 +5,7 @@ import { css } from "@emotion/react";
 import { Link } from "@reach/router";
 
 // @ts-ignore
-import logo from "../assets/y18.gif";
+import logo from "url:../assets/y18.gif";
 import { setAccessToken } from "../api/accessToken";
 import { LOG_OUT } from "../api/mutations";
 import { MeContext } from "../api/MeContext";
