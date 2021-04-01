@@ -2,7 +2,6 @@
   "name": "hackernews-react-client",
   "version": "1.0.0",
   "description": "React client for hackernews clone",
-  "main": "src/index.jsx",
   "author": "CagriUysal",
   "license": "MIT",
   "private": true,

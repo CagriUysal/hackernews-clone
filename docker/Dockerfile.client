@@ -1,7 +1,17 @@
-FROM node:12-alpine
-WORKDIR /code
-COPY package.json .
-RUN yarn install
-COPY common .
-COPY client .
-CMD [ "yarn", "dev" ]
+FROM node:14
+
+WORKDIR /app 
+
+COPY client/package.json client/package.json
+COPY client/yarn.lock client/yarn.lock
+
+# package.json is in client/ folder, 
+# cd there to install dependencies
+RUN cd client && yarn install
+
+# common folder has some functionalites used both in client and server
+COPY common common
+COPY client client
+
+WORKDIR /app/client
+CMD ["yarn", "start"]
