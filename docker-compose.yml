@@ -1,0 +1,20 @@
+version: "3"
+services:
+  server:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.server
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./common:/app/common
+      - ./server:/app/server
+      - /app/server/node_modules
+    links:
+      - db
+  db:
+    image: postgres:12.0-alpine
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_PASSWORD=postgres

@@ -37,11 +37,11 @@
   "scripts": {
     "migrate": "prisma migrate dev",
     "generate": "prisma generate",
-    "server": "nodemon --watch src/**/*.ts  --exec 'ts-node --project tsconfig.json src/server.ts'",
+    "initDB": "yarn migrate && yarn generate",
+    "start": "nodemon --watch src  -e ts,json --exec 'ts-node --project tsconfig.json ./src/server.ts'",
+    "mock": "ts-node src/db/mock/mock.ts",
     "refresh-server": "nodemon --watch src/refreshServer.ts  --exec 'ts-node --project tsconfig.json src/refreshServer.ts'",
-    "mock": "ts-node --project tsconfig.json src/db/mock/mock.ts",
-    "update-ranks": "ts-node --project tsconfig.json server/src/services/updateRankings.ts",
-    "lint": "eslint src/**/*.ts"
+    "update-ranks": "ts-node --project tsconfig.json server/src/services/updateRankings.ts"
   },
   "prisma": {
     "schema": "src/db/prisma/schema.prisma"
