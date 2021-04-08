@@ -26,8 +26,10 @@ const PORT = 3000;
 
   app.post("/refresh", async (req, res) => {
     const token = req.cookies[process.env.COOKIE_NAME];
+
     if (!token) {
       res.send({ ok: false, accessToken: "" });
+      return;
     }
 
     try {
@@ -38,13 +40,15 @@ const PORT = 3000;
 
       if (!user) {
         res.send({ ok: false, accessToken: "" });
+        return;
       }
 
       if (tokenVersion !== user.tokenVersion) {
         res.send({ ok: false, accessToken: "" });
+        return;
       }
 
-      // update refresh token, so
+      // update refresh token
       // user can stay logged in if they are using the site continuously
       sendRefreshToken(
         res,

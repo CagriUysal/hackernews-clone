@@ -7,18 +7,31 @@ services:
     volumes:
       - ./client:/app
       - /app/node_modules
-    links:
+    depends_on:
       - server
     
   server:
+    image: common_server_image
     build: ./server
     ports:
       - "4000:4000"
     volumes:
       - ./server:/app
       - /app/node_modules
-    links:
+    depends_on:
       - db
+
+  refresh-server:
+    image: common_server_image
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    depends_on:
+      - server
+    # yarn generate, initialize prisma client
+    command: ["sh", "-c", "yarn generate && yarn refresh-server"]
 
   db:
     image: postgres:12.0-alpine

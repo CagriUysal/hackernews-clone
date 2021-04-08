@@ -12,3 +12,9 @@ First create `.env` file in the server/ folder.
 ```
 docker-compose up 
 ```
+
+## Mocking
+
+```
+docker-compose exec server yarn mock
+```

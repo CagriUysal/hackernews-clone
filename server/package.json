@@ -39,8 +39,8 @@
     "generate": "prisma generate",
     "initDB": "yarn migrate && yarn generate",
     "start": "nodemon --watch src  -e ts,json --exec 'ts-node --project tsconfig.json ./src/server.ts'",
+    "refresh-server": "nodemon --watch src -e ts,json  --exec 'ts-node --project tsconfig.json ./src/refreshServer.ts'",
     "mock": "ts-node src/db/mock/mock.ts",
-    "refresh-server": "nodemon --watch src/refreshServer.ts  --exec 'ts-node --project tsconfig.json src/refreshServer.ts'",
     "update-ranks": "ts-node --project tsconfig.json server/src/services/updateRankings.ts"
   },
   "prisma": {
