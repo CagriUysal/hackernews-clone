@@ -41,11 +41,16 @@ const Login: FunctionComponent<RouteComponentProps> = ({ location }) => {
     location?.state.message
   );
 
-  const [register, { data: registerData }] = useMutation(REGISTER, {
+  const [register] = useMutation(REGISTER, {
     update(_, { data: { register } }) {
       const { success, message } = register;
       if (success === false) {
         setFeedbackMessage(message);
+      } else if (success === true) {
+        // auto-fill login info after user creation
+        setFeedbackMessage("User craeted succesfully.");
+        setLoginName(registerName);
+        setLoginPass(registerPass);
       }
     },
   });
