@@ -1,7 +1,7 @@
 import { Comment } from "@prisma/client/index";
 
 import { prisma } from "../utils/prismaClient";
-import { ITEM_PER_PAGE } from "../../../common/constants";
+import { ITEM_PER_PAGE } from "../utils/constants";
 
 export default async function comments(
   _,

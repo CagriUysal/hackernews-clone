@@ -1,7 +1,0 @@
-#  common 
-*/node_modules 
-.git/
-
-# client 
-*/.parcel-cache
-*/dist

@@ -10,17 +10,13 @@ services:
     links:
       - server
     
-
   server:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.server
+    build: ./server
     ports:
       - "4000:4000"
     volumes:
-      - ./common:/app/common
-      - ./server:/app/server
-      - /app/server/node_modules
+      - ./server:/app
+      - /app/node_modules
     links:
       - db
 

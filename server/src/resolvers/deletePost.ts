@@ -1,6 +1,6 @@
 import { prisma } from "../utils/prismaClient";
 import { IResponse } from "./types";
-import isLessThanOneHour from "../../../common/isLessThanOneHour";
+import isLessThanOneHour from "../utils/isLessThanOneHour";
 
 export default async function (
   _,
