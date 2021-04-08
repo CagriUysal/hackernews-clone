@@ -32,5 +32,5 @@ schedule.scheduleJob("*/10 * * * *", async function updateRankings() {
     })();
   });
 
-  console.log("ranks updated.");
+  console.log("Home page ranks updated!");
 });

@@ -11,7 +11,7 @@ services:
       - server
     
   server:
-    image: common_server_image
+    image: hackernews-clone_server
     build: ./server
     ports:
       - "4000:4000"
@@ -22,7 +22,7 @@ services:
       - db
 
   refresh-server:
-    image: common_server_image
+    image: hackernews-clone_server
     ports:
       - "3000:3000"
     volumes:
@@ -32,6 +32,14 @@ services:
       - server
     # yarn generate, initialize prisma client
     command: ["sh", "-c", "yarn generate && yarn refresh-server"]
+  
+  update-rankings:
+    image: hackernews-clone_server
+    volumes:
+      - ./server/src/services/updateRankings.ts:/app/src/services/updateRankings.ts 
+    depends_on:
+      - server
+    command: ["sh", "-c", "yarn generate && yarn update-rankings"]
 
   db:
     image: postgres:12.0-alpine

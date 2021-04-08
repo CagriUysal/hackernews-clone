@@ -38,10 +38,10 @@
     "migrate": "prisma migrate dev",
     "generate": "prisma generate",
     "initDB": "yarn migrate && yarn generate",
-    "start": "nodemon --watch src  -e ts,json --exec 'ts-node --project tsconfig.json ./src/server.ts'",
+    "start": "nodemon --watch src -e ts,json --exec 'ts-node --project tsconfig.json ./src/server.ts'",
     "refresh-server": "nodemon --watch src -e ts,json  --exec 'ts-node --project tsconfig.json ./src/refreshServer.ts'",
-    "mock": "ts-node src/db/mock/mock.ts",
-    "update-ranks": "ts-node --project tsconfig.json server/src/services/updateRankings.ts"
+    "update-rankings": "nodemon --watch src/services/updateRankings.ts --exec 'ts-node --project tsconfig.json ./src/services/updateRankings.ts'",
+    "mock": "ts-node src/db/mock/mock.ts"
   },
   "prisma": {
     "schema": "src/db/prisma/schema.prisma"
