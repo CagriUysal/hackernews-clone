@@ -6,7 +6,7 @@ import { navigate, RouteComponentProps } from "@reach/router";
 import Header from "../components/Header";
 import PostListItem from "../components/PostListItem";
 import CommentList from "../components/CommentList";
-import validateComment from "../../../common/validateComment";
+import validateComment from "../utils/validateComment";
 import { POST, POST_COMMENTS } from "../api/queries";
 import { ADD_COMMENT } from "../api/mutations";
 

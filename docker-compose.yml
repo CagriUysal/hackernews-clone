@@ -1,5 +1,16 @@
 version: "3"
 services:
+  web:
+    build: ./client
+    ports:
+      - "1234:1234"
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    links:
+      - server
+    
+
   server:
     build:
       context: .
@@ -12,6 +23,7 @@ services:
       - /app/server/node_modules
     links:
       - db
+
   db:
     image: postgres:12.0-alpine
     expose:

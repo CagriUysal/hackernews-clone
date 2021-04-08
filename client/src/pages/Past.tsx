@@ -8,7 +8,7 @@ import Header from "../components/Header";
 import PostList from "../components/PostList";
 import PastTimeSelector, { reducer } from "../components/PastTimeSelector";
 import { PAST_POSTS } from "../api/queries";
-import { ITEM_PER_PAGE } from "../../../common/constants";
+import { ITEM_PER_PAGE } from "../utils/constants";
 
 const styles = {
   selector: (theme) => css`

@@ -5,7 +5,7 @@ import { navigate, RouteComponentProps, Redirect } from "@reach/router";
 import { css, useTheme } from "@emotion/react";
 
 import Header from "../components/Header";
-import validateSubmit from "../../../common/validateSubmit";
+import validateSubmit from "../utils/validateSubmit";
 import { ADD_POST } from "../api/mutations";
 import { MeContext } from "../api/MeContext";
 

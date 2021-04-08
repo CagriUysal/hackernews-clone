@@ -6,7 +6,7 @@ import { useQuery } from "@apollo/client";
 import Header from "../components/Header";
 import CommentList from "../components/CommentList";
 import { COMMENTS } from "../api/queries";
-import { ITEM_PER_PAGE } from "../../../common/constants";
+import { ITEM_PER_PAGE } from "../utils/constants";
 
 interface IProps extends RouteComponentProps {
   page?: string;
