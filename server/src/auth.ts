@@ -4,7 +4,9 @@ import { verify, sign } from "jsonwebtoken";
 import { Request } from "express";
 
 export const createAccessToken = (userName: string): string => {
-  return sign({ userName }, process.env.ACCESS_TOKEN, { expiresIn: "15m" });
+  return sign({ userName }, process.env.ACCESS_TOKEN_SECRET, {
+    expiresIn: "15m",
+  });
 };
 
 export const createRefreshToken = async (
@@ -19,7 +21,7 @@ export const createRefreshToken = async (
 
   return sign(
     { userName, tokenVersion: newTokenVersion },
-    process.env.REFRESH_TOKEN,
+    process.env.REFRESH_TOKEN_SECRET,
     {
       expiresIn: "7d",
     }
@@ -35,7 +37,7 @@ export const isAuth = (req: Request) => {
 
   try {
     const token = authHeader.split(" ")[1];
-    const payload = verify(token, process.env.ACCESS_TOKEN); // throws an error if not valid
+    const payload = verify(token, process.env.ACCESS_TOKEN_SECRET); // throws an error if not valid
 
     return payload;
   } catch (error) {

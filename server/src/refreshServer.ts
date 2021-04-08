@@ -33,7 +33,7 @@ const PORT = 3000;
     }
 
     try {
-      const payload = verify(token, process.env.REFRESH_TOKEN);
+      const payload = verify(token, process.env.REFRESH_TOKEN_SECRET);
 
       const { userName, tokenVersion } = payload as any;
       const user = await prisma.user.findUnique({ where: { name: userName } });
