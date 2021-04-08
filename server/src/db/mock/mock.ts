@@ -95,6 +95,8 @@ const mockStory = async (story: IItem) => {
 };
 
 (async function mock() {
+  console.log("Because this uses live data, mocking can take couple seconds..");
+
   const topStoryIds = await getTopStoryIds();
   const topStories = await Promise.all(topStoryIds.map(getItem));
 
@@ -103,6 +105,9 @@ const mockStory = async (story: IItem) => {
   for (const post of topStories) {
     posts.push(await mockStory(post));
   }
+
+  console.log(`${posts.length} posts mocked from Hackernews API.`);
+  console.log(`Mocking ${COMMENT_PER_POST} for each post...`);
 
   const mockedPostIds = posts.map(({ id }) => id);
   const kidsPostPair: [number[], number][] = topStories.map(({ kids }, i) => [
@@ -125,6 +130,8 @@ const mockStory = async (story: IItem) => {
       })()
     )
   );
+
+  console.log("finished.");
 
   prisma.$disconnect();
 })();

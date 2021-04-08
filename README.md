@@ -1,6 +1,6 @@
 ## Hackernews Clone
 
-A full stack hackernews clone build with React, Graphql, Prisma and Postgres.
+A full stack hackernews clone build with React, GraphQL, Prisma and Postgres.
 
 ## Run
 
@@ -26,6 +26,8 @@ docker-compose up
 ```
 
 in the *root* folder.
+
+Then, you can go to `localhost:1234` for web client, and, `localhost:4000` for GraphQL playground.
 
 ## Mocking
 
