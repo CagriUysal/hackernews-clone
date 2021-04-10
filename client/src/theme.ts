@@ -10,6 +10,11 @@ export const theme = {
     margin: 0 auto;
     background-color: #f6f6ef;
     padding-bottom: 3em;
+
+    @media (max-width: 750px) {
+      width: 100%;
+      margin: 0;
+    }
   `,
   pageButton: css`
     color: #000;

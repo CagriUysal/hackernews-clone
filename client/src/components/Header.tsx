@@ -16,15 +16,28 @@ const styles = {
     padding: 2px;
     background-color: #ff6600;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    position: relative;
+    @media (max-width: 750px) {
+      margin-top: 0;
+      font-size: 0.9rem;
+      padding-top: 0.5em;
+      padding-bottom: 0.5em;
+    }
+  `,
+  navigation: css`
+    display: flex;
+    align-items: center;
   `,
   logo: css`
     border: 1px white solid;
+    margin-top
   `,
   login: css`
-    position: absolute;
-    right: 0.5em;
+    margin-right: 0.5em;
+    text-align: right;
+    white-space: nowrap;
+    margin-left: 0.5em;
   `,
   logout: css`
     border: none;
@@ -35,9 +48,11 @@ const styles = {
     padding: 0;
   `,
   title: css`
-    margin-left: 0.5em;
-    margin-right: 0.5em;
+    margin-left: 0.5rem;
     font-weight: bold;
+    @media (max-width: 750px) {
+      font-size: 1.1rem;
+    }
   `,
 };
 
@@ -80,8 +95,7 @@ const getCurrentPath = () => {
 };
 
 type ComponentProps = {
-  // if given, only the title shown and navigation is hidden
-  onlyTitle?: string;
+  onlyTitle?: string; // if given, only the title shown and navigation is hidden
   appendedTab?: string;
 };
 
@@ -100,8 +114,8 @@ const Header: FunctionComponent<ComponentProps> = ({
   };
 
   return (
-    <header>
-      <div css={styles.container}>
+    <header css={styles.container}>
+      <div css={styles.navigation}>
         <Link
           to="/"
           css={css`
@@ -121,14 +135,23 @@ const Header: FunctionComponent<ComponentProps> = ({
         {onlyTitle ? (
           <p css={styles.title}>{onlyTitle}</p>
         ) : (
-          <Link to="/" css={styles.title}>
-            Hacker News
-          </Link>
-        )}
+          <div
+            css={css`
+              @media (min-width: 750px) {
+                display: flex; // make nav and title align in single row
+                flex-wrap: wrap;
+              }
+            `}
+          >
+            <Link to="/" css={styles.title}>
+              Hacker News
+            </Link>
 
-        {!onlyTitle && (
-          <>
-            <nav>
+            <nav
+              css={css`
+                margin-left: 0.5rem;
+              `}
+            >
               {navigationMaps.map(({ name, path }, i) => (
                 <React.Fragment key={path}>
                   <Link
@@ -142,50 +165,53 @@ const Header: FunctionComponent<ComponentProps> = ({
                   >
                     {name}
                   </Link>
+
                   {i !== navigationMaps.length - 1 && <span>{" | "}</span>}
                 </React.Fragment>
               ))}
-            </nav>
 
-            {appendedTab && (
-              <div>
-                <span
-                  css={css`
-                    white-space: pre;
-                  `}
-                >
-                  {" | "}
-                </span>
-                <span
-                  css={css`
-                    color: #fff;
-                  `}
-                >
-                  {appendedTab}
-                </span>
-              </div>
-            )}
-
-            <div
-              css={css`
-                ${styles.login}
-              `}
-            >
-              {me ? (
+              {appendedTab && (
                 <>
-                  <Link to={`/user/${me}`}>{me}</Link>
-                  {" | "}
-                  <button css={styles.logout} onClick={handleLogout}>
-                    logout
-                  </button>
+                  <span
+                    css={css`
+                      white-space: pre;
+                    `}
+                  >
+                    {" | "}
+                  </span>
+                  <span
+                    css={css`
+                      color: #fff;
+                    `}
+                  >
+                    {appendedTab}
+                  </span>
                 </>
-              ) : (
-                <Link to="/login">login</Link>
               )}
-            </div>
-          </>
+            </nav>
+          </div>
         )}
       </div>
+
+      {!onlyTitle && (
+        <div
+          css={css`
+            ${styles.login};
+          `}
+        >
+          {me ? (
+            <>
+              <Link to={`/user/${me}`}>{me}</Link>
+              {" | "}
+              <button css={styles.logout} onClick={handleLogout}>
+                logout
+              </button>
+            </>
+          ) : (
+            <Link to="/login">login</Link>
+          )}
+        </div>
+      )}
     </header>
   );
 };

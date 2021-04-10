@@ -20,6 +20,7 @@ const styles = {
 
   formInput: css`
     margin-bottom: 0.5em;
+    display: flex;
   `,
   label: css`
     display: inline-block;
@@ -28,7 +29,8 @@ const styles = {
     width: 3em;
   `,
   input: css`
-    width: 40em;
+    width: 80%;
+    max-width: 40em;
   `,
   textContainer: css`
     margin-top: 0.5em;

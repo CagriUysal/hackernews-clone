@@ -27,13 +27,13 @@ const styles = {
     margin-bottom: 0.5em;
   `,
   rank: (theme) => css`
+    min-width: 2rem;
     color: ${theme.colors.primary};
-    width: 2rem;
     text-align: right;
     margin-right: 0.3em;
   `,
   upvote: css`
-    width: 1rem;
+    min-width: 1rem;
   `,
   domain: (theme) => css`
     color: ${theme.colors.primary};
