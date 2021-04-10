@@ -12,6 +12,7 @@ const MeContextProvider: FunctionComponent = ({ children }) => {
 
   return (
     <MeContext.Provider
+      // ternariy operation is for casting undefined values to null
       value={{ me: data?.me?.name ? data.me.name : null, refetch }}
     >
       {children}
