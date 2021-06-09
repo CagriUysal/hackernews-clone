@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, useEffect } from "react";
+import React, { FunctionComponent, useState } from "react";
 import { css, useTheme } from "@emotion/react";
 import { useQuery, useMutation } from "@apollo/client";
 import { navigate, RouteComponentProps } from "@reach/router";
@@ -120,12 +120,7 @@ const Post: FunctionComponent<ComponentProps> = ({ postId }) => {
 
           <PostListItem post={data.post} rank={null} />
 
-          {text !== null && (
-            <div
-              css={styles.text}
-              dangerouslySetInnerHTML={{ __html: text }} // this makes me nervous
-            />
-          )}
+          {text !== null && <div css={styles.text}>{text}</div>}
 
           <textarea
             name="text"

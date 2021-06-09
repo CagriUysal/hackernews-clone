@@ -286,10 +286,7 @@ const CommentListItem: FunctionComponent<ComponentProps> = ({
 
         {/* buttom row  */}
         <div css={styles.bottomRow}>
-          <div
-            css={styles.message}
-            dangerouslySetInnerHTML={{ __html: message }} // this makes me nervous
-          />
+          <div css={styles.message}>{message}</div>
           {showReply && (
             <Link to={`/post/${postId}/comment/${id}`} css={styles.reply}>
               reply
