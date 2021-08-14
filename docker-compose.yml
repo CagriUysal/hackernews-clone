@@ -9,7 +9,7 @@ services:
       - /app/node_modules
     depends_on:
       - server
-    
+
   server:
     image: hackernews-clone_server
     build: ./server
@@ -20,6 +20,7 @@ services:
       - /app/node_modules
     depends_on:
       - db
+    command: ["sh", "-c", "yarn initDB && yarn dev"]
 
   refresh-server:
     image: hackernews-clone_server
@@ -31,15 +32,15 @@ services:
     depends_on:
       - server
     # yarn generate, initialize prisma client
-    command: ["sh", "-c", "yarn generate && yarn refresh-server"]
-  
+    command: ["sh", "-c", "yarn generate && yarn refresh-server:dev"]
+
   update-rankings:
     image: hackernews-clone_server
     volumes:
-      - ./server/src/services/updateRankings.ts:/app/src/services/updateRankings.ts 
+      - ./server/src/services/updateRankings.ts:/app/src/services/updateRankings.ts
     depends_on:
       - server
-    command: ["sh", "-c", "yarn generate && yarn update-rankings"]
+    command: ["sh", "-c", "yarn generate && yarn update-rankings:dev"]
 
   db:
     image: postgres:12.0-alpine
