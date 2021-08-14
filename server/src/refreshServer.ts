@@ -18,7 +18,7 @@ const PORT = 3000;
 (function refreshServer() {
   app.use(
     cors({
-      origin: "http://localhost:1234",
+      origin: process.env.CLIENT_URL,
       credentials: true,
     })
   );
