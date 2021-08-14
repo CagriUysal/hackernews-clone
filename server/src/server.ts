@@ -19,7 +19,7 @@ const server = new ApolloServer({
     appendCommentUpvote,
   }),
   cors: {
-    origin: "http://localhost:1234",
+    origin: process.env.CLIENT_URL,
     credentials: true,
   },
 });

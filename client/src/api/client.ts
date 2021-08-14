@@ -12,7 +12,7 @@ import { getAccessToken, setAccessToken } from "./accessToken";
 import refreshAccessToken from "../utils/refreshAccessToken";
 
 const httpLink = new HttpLink({
-  uri: "http://localhost:4000",
+  uri: process.env.API_URL,
   credentials: "include",
 });
 

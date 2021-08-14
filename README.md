@@ -6,19 +6,9 @@ A full stack hackernews clone build with React, GraphQL, Prisma and Postgres.
 
 ## Install
 
-First create `.env` file in the _server_ folder. File should contain,
+To quick start, rename `.env.example` files to `.env` in both `client` and `server` directories.
 
-```
-ACCESS_TOKEN_SECRET=
-REFRESH_TOKEN_SECRET=
-COOKIE_NAME=
-DATABASE_URL=
-```
-
-You can rename `.env.example` to `.env` for quick start.
-
-If you are going to change _DATABASE_URL_ variable, you should also configure `docker-compose.yml` accordingly.
-Check [Connection URLs](https://www.prisma.io/docs/reference/database-reference/connection-urls) to learn more.
+If you want to use different values for _URLs_ in _.env_, you should also configure `docker-compose.yml` accordingly.
 
 To start development, run,
 

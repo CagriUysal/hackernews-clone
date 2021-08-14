@@ -1,5 +1,5 @@
 export default async function refreshAccessToken(): Promise<Response> {
-  const response = await fetch("http://localhost:3000/refresh", {
+  const response = await fetch(process.env.REFRESH_TOKEN_URL!, {
     method: "POST",
     credentials: "include",
   });
