@@ -39,11 +39,12 @@
     "generate": "prisma generate",
     "initDB": "yarn migrate && yarn generate",
     "dev": "nodemon --watch src -e ts,json --exec 'ts-node --project tsconfig.json ./src/server.ts'",
-    "build": "ts-node --project tsconfig.json ./src/server.ts",
+    "build": "tsc",
+    "serve": "yarn build && NODE_ENV=production node dist/server.js",
     "refresh-server:dev": "nodemon --watch src -e ts,json  --exec 'ts-node --project tsconfig.json ./src/refreshServer.ts'",
-    "refresh-server:build": "ts-node --project tsconfig.json ./src/refreshServer.ts",
+    "refresh-server:serve": "yarn build && NODE_ENV=production node dist/refreshServer.js",
     "update-rankings:dev": "nodemon --watch src/services/updateRankings.ts --exec 'ts-node --project tsconfig.json ./src/services/updateRankings.ts'",
-    "update-rankings:build": "ts-node --project tsconfig.json ./src/services/updateRankings.ts",
+    "update-rankings:serve": "yarn build && NODE_ENV=production node dist/services/updateRankings.js",
     "mock": "ts-node src/db/mock/mock.ts"
   },
   "prisma": {
