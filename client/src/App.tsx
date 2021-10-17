@@ -48,7 +48,7 @@ const App: FunctionComponent = () => {
         const { accessToken } = await response.json();
 
         setAccessToken(accessToken);
-        refetch(); // update `ME` query
+        await refetch(); // update `ME` query
       } catch (err) {
         console.log(err);
       } finally {
